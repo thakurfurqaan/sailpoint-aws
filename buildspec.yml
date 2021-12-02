@@ -11,12 +11,12 @@ phases:
 #       - yum install -y maven
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION)
+#       - echo Logging in to Amazon ECR...
+#       - $(aws ecr get-login --region $AWS_DEFAULT_REGION)
   build:
     commands:
-      - echo Build started on `date`
-      - echo Building the Docker image...
+#       - echo Build started on `date`
+#       - echo Building the Docker image...
       - mvn install
   post_build:
     commands:
