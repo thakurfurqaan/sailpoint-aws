@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2016 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+
+    <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'APPLICATION';
+
+        function getFieldValue(field) {
+            var val = null;
+            var fieldName = Ext.getDom(field);
+            if ( fieldName ) {
+               val = fieldName.value;
+            }
+            return val;
+        }
+        
+        function toggleAggregateTerminatedAccounts() {
+            var effectiveDateRow = Ext.getDom('aggregateTerminatedAccountsDate');
+            
+            // If the checkbox is enabled show the row for effective date
+            var aggregateTerminatedAccountsEnabled = Ext.getDom('editForm:enableAggregateTerminatedAccounts');
+            if ( aggregateTerminatedAccountsEnabled && aggregateTerminatedAccountsEnabled.checked == true) {
+                if ( effectiveDateRow ) {                   
+                	effectiveDateRow.style.display = "";
+                }               
+            } else {        
+            	document.getElementById ("editForm:effectiveDate").value="";
+            	effectiveDateRow.style.display = "none";
+            }
+            
+         }
+        
+        Ext.onReady(function () {
+           Ext.QuickTips.init();
+
+           // This is our validation hook
+           Page.on('beforeSave', function() {
+               if (!hasCredentialConfiguration()) {
+                   var URL = getFieldValue('editForm:url');
+                   Validator.validateNonBlankString(URL, "#{msgs.con_form_HANA_UrlNotNull}");
+
+                   var userID = getFieldValue('editForm:user');
+                   Validator.validateNonBlankString(userID, "#{msgs.con_form_HANA_UserNotNull}");
+
+                   var password = getFieldValue('editForm:password');
+                   Validator.validateNonBlankString(password, "#{msgs.con_form_HANA_PasswordNotNull}");
+
+                   var DriverClass = getFieldValue('editForm:driverClass');
+                   Validator.validateNonBlankString(DriverClass, "#{msgs.con_form_HANA_DriverNotNull}");
+                   
+                   var aggregateTerminatedAccountsEnabled = Ext.getDom('editForm:enableAggregateTerminatedAccounts');
+                   if(aggregateTerminatedAccountsEnabled && aggregateTerminatedAccountsEnabled.checked == true){
+                	   var effectiveDate = getFieldValue('editForm:effectiveDate');
+                	   if(effectiveDate && effectiveDate.length > 0){
+                		   var datePattern =/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/;
+                           if (effectiveDate.match(datePattern)) {
+                        	   var splitDate=effectiveDate.split('/');
+                        	   if((splitDate[0]<=0 || splitDate[0]>12) || (splitDate[1]<=0 || splitDate[1]>31)) {
+                        		   Validator.addError("#{msgs.con_form_HANA_Effective_DateValidationError}");
+                        	   }
+                        	   //Example : var selectedDate = new Date(year, month - 1, day);
+                        	   //Note: We are performing "month - 1" because javascript counts months from 0 to 11.
+                        	   //January is 0. December is 11
+                        	   var selectedDate = new Date(splitDate[2], splitDate[0] - 1, splitDate[1]);
+                        	   var now = new Date();
+                        	   if (selectedDate > now) {
+                        		   Validator.addError("#{msgs.con_form_HANA_Effective_DateShouldNotBeInFutureError}");
+                        	   }
+                           }else{
+                        	   Validator.addError("#{msgs.con_form_HANA_Effective_DateValidationError}");
+                           }
+                	   }
+                   }
+
+                   var errors = Validator.getErrors();
+                   if (errors && errors.length > 0) {
+                       Validator.displayErrors('appErrorsTop');
+                       return false;
+                   }
+               }
+               //return false cancel the save
+               return true;
+           });
+           toggleAggregateTerminatedAccounts();
+        });
+
+       //--><!]]>
+    </script>
+    <f:view>
+
+      <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_HANA_Conn_Settings}"/><br/><br/>
+
+
+      <div id="accountSettings" class='spContent'>
+        <table class="spTable" style="border:0px" cellspacing="0">
+
+           <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_HANA_User}"/>
+            </td>
+            <td valign="top">
+            <h:outputText size="1" style="color: red;" value="*"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpUserName" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{msgs.help_con_form_HANA_User}"/>
+            </td>
+            <td>
+              <h:inputText id="user"
+                           value="#{applicationObject.attributes['user']}"
+                           size="50"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_HANA_Password}"/>
+            </td>
+            <td valign="top">
+            <h:outputText size="1" style="color: red;" value="*"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpPassword" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{msgs.help_con_form_HANA_Password}"/>
+            </td>
+             <td>
+               <sp:inputSecret id="password"
+                               size="50"
+                               autocomplete="off"
+                               value="#{applicationObject.attributes['password']}" redisplay="true"
+                               disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                               readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/> 
+             </td> 
+          </tr>
+
+           <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_HANA_Url}"/>
+            </td>
+            <td valign="top">
+            <h:outputText size="1" style="color: red;" value="*"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpUrl" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{msgs.help_con_form_HANA_URL}"/>
+            </td>
+            <td>
+              <h:inputText id="url"
+                           value="#{applicationObject.attributes['url']}"
+                           size="50"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td> 
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_HANA_Driver}"/>
+            </td>
+            <td valign="top">
+            <h:outputText size="1" style="color: red;" value="*"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpDriver" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{msgs.help_con_form_HANA_Driver}"/>
+            </td>
+            <td>
+              <h:inputText id="driverClass"
+                           value="#{applicationObject.attributes['driverClass']}"
+                           size="50"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+           <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_page_size}"/>
+            </td>
+            <td valign="top">
+               <h:outputText size="1" style="color: red;" value=""/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpPageSize" styleClass="helpIcon"
+                              url="/images/icons/dashboard_help_16.png"
+                              alt="#{msgs.help_con_form_page_size}"/>
+            </td>
+            <td>
+              <h:inputText id="chunkToFetch" value="#{applicationObject.attributes['chunkToFetch']}"
+                           size="10"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           validatorMessage="#{msgs.page_size_limit_not_valid}">
+                           <f:validateLongRange minimum="1" maximum="5000"/>
+               </h:inputText>
+            </td>
+          </tr>
+          <tr>
+              <td class='titleColumn certScheduleTitleCol'>
+                <h:outputText style='padding:5px' value="#{msgs.con_form_HANA_Aggregate_Terminated_Accounts}"/>
+              </td>
+              <td valign="top">
+               <h:outputText size="1" style="color: red;" value=""/>
+              </td>
+              <td class="certScheduleHelpCol">
+                <h:graphicImage id="imgHlpenableAggregateTerminatedAccounts" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                alt="#{msgs.help_con_form_HANA_Aggregate_Terminated_Accounts}"/>
+              </td>
+              <td>
+                <h:selectBooleanCheckbox id='enableAggregateTerminatedAccounts' onclick='toggleAggregateTerminatedAccounts()'
+                                         value="#{applicationObject.attributes['manageTerminatedAccounts']}"
+                                         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+              </td>
+          </tr>
+          <tr id='aggregateTerminatedAccountsDate'>
+                <td class='titleColumn certScheduleTitleCol'>
+                  <h:outputText style='padding:5px' value="#{msgs.con_form_HANA_Effective_Date}"/>
+                </td>
+                <td valign="top">
+                  <h:outputText size="1" style="color: red;" value=""/>
+                </td>
+                <td class="certScheduleHelpCol">
+                  <h:graphicImage id="imgHlpenableAggregateTerminatedAccountsDate" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                  alt="#{msgs.help_con_form_HANA_Effective_Date}"/>
+                </td>
+                <td>
+                  <h:inputText id="effectiveDate"
+                           value="#{applicationObject.attributes['effectiveDateForTerminatedAccounts']}"
+                           size="50"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                </td>
+          </tr>
+        </table>
+      </div>
+    </f:view>
+</ui:composition>
+
+</body>
+</html>

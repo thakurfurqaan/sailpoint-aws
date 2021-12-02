@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE ImportAction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ImportAction name="connectorRegistryUpdateAction">
+  <Application connector="sailpoint.connector.OpenConnectorAdapter" featuresString="PROVISIONING, SYNC_PROVISIONING, UNLOCK, ENABLE, SEARCH" icon="internetIcon" name="JIVE" type="JIVE">
+    <Attributes>
+      <Map>
+        <entry key="connectorClass" value="openconnector.connector.JiveConnector"/>
+        <entry key="DeprecatedConnector" value="true"/>
+        <entry key="formPath" value="JiveAttributesForm.xhtml"/>
+      </Map>
+    </Attributes>
+    <Schemas>
+      <Schema displayAttribute="username" identityAttribute="id" includePermissions="true" nativeObjectType="Person" objectType="account">
+        <AttributeDefinition name="id" type="string"/>
+        <AttributeDefinition name="username" type="string"/>
+        <AttributeDefinition name="name" type="string"/>
+        <AttributeDefinition name="location" type="string"/>
+        <AttributeDefinition name="Department" type="string"/>
+        <AttributeDefinition name="Company" type="string"/>
+        <AttributeDefinition name="Title" type="string"/>
+        <AttributeDefinition name="Biography" type="string"/>
+        <AttributeDefinition name="Expertise" type="string"/>
+        <AttributeDefinition name="type" type="string"/>
+        <AttributeDefinition name="displayName" type="string"/>
+        <AttributeDefinition name="published" type="date"/>
+        <AttributeDefinition name="thumbnailUrl" type="string"/>
+        <AttributeDefinition name="followingCount" type="int"/>
+        <AttributeDefinition name="followerCount" type="int"/>
+        <AttributeDefinition name="jive" type="string"/>
+        <AttributeDefinition name="phoneNumbers" type="string">
+          <Description>Required to populate the values for 'Phone Number' and 'Mobile Phone Number' of user.</Description>
+        </AttributeDefinition>
+        <AttributeDefinition name="updated" type="date"/>
+        <AttributeDefinition name="emails" type="string">
+          <Description>Required to populate the values for 'Email' and 'Alternate Email' of user.</Description>
+        </AttributeDefinition>
+        <AttributeDefinition name="addresses" type="string"/>
+        <AttributeDefinition entitlement="true" managed="true" multi="true" name="groups" remediationModificationType="None" schemaObjectType="group" type="string"/>
+        <AttributeDefinition name="work_country" type="string"/>
+        <AttributeDefinition name="work_locality" type="string"/>
+        <AttributeDefinition name="work_postalCode" type="string"/>
+        <AttributeDefinition name="work_region" type="string"/>
+        <AttributeDefinition name="work_street_1" type="string"/>
+        <AttributeDefinition name="work_street_2" type="string"/>
+        <AttributeDefinition name="givenName" type="string"/>
+        <AttributeDefinition name="familyName" type="string"/>
+        <AttributeDefinition name="home_country" type="string"/>
+        <AttributeDefinition name="home_locality" type="string"/>
+        <AttributeDefinition name="home_postalCode" type="string"/>
+        <AttributeDefinition name="home_region" type="string"/>
+        <AttributeDefinition name="home_street_1" type="string"/>
+        <AttributeDefinition name="home_street_2" type="string"/>
+        <AttributeDefinition name="Email" type="string">
+          <Description>Primary email address of user.</Description>
+        </AttributeDefinition>
+        <AttributeDefinition name="Alternate Email" type="string">
+          <Description>Alternate email address of user.</Description>
+        </AttributeDefinition>
+        <AttributeDefinition name="Phone Number" type="string">
+          <Description>Primary phone number of user.</Description>
+        </AttributeDefinition>
+        <AttributeDefinition name="Mobile Phone Number" type="string">
+          <Description>Mobile phone number of user.</Description>
+        </AttributeDefinition>
+      </Schema>
+      <Schema displayAttribute="name" featuresString="PROVISIONING" identityAttribute="id" nativeObjectType="securityGroups"
+              objectType="group" descriptionAttribute="description">
+        <AttributeDefinition name="id" type="string"/>
+        <AttributeDefinition name="name" type="string"/>
+        <AttributeDefinition name="type" type="string"/>
+        <AttributeDefinition name="description" type="string"/>
+        <AttributeDefinition name="administratorCount" type="int"/>
+        <AttributeDefinition name="memberCount" type="int"/>
+        <AttributeDefinition name="published" type="date"/>
+        <AttributeDefinition name="updated" type="date"/>
+        <AttributeDefinition name="federated" type="boolean"/>
+        <AttributeDefinition multi="true" name="Admins" type="string"/>
+        <AttributeDefinition multi="true" name="Members" type="string"/>
+      </Schema>
+    </Schemas>
+    <Templates>
+      <Template name="account" schemaObjectType="account" usage="Create">
+        <Field displayName="con_prov_policy_jive_username" helpKey="help_con_prov_policy_jive_username" name="username" required="true" reviewRequired="true" type="string"/>
+        <Field displayName="con_prov_policy_jive_firstname" helpKey="help_con_prov_policy_jive_firstname" name="givenName" required="true" reviewRequired="true" type="string"/>
+        <Field displayName="con_prov_policy_jive_lastname" helpKey="help_con_prov_policy_jive_lastname" name="familyName" required="true" reviewRequired="true" type="string"/>
+        <Field displayName="con_prov_policy_jive_email" helpKey="help_con_prov_policy_jive_email" name="Email" required="true" reviewRequired="true" type="string"/>
+        <Field displayName="con_prov_policy_jive_password" helpKey="help_con_prov_policy_jive_password" name="password" required="true" reviewRequired="true" type="secret"/>
+      </Template>
+      <Template name="create group" schemaObjectType="group" usage="Create">
+        <Field displayName="con_prov_policy_jive_groupname" helpKey="help_con_prov_policy_jive_groupname" name="name" required="true" reviewRequired="true" section="" type="string"/>
+        <Field displayName="con_prov_policy_jive_group_description" helpKey="help_con_prov_policy_jive_group_description" name="description" reviewRequired="true" section="" type="string"/>
+      </Template>
+      <Template name="update group" schemaObjectType="group" usage="Update">
+        <Field displayName="con_prov_policy_jive_id" helpKey="help_con_prov_policy_jive_id" name="id" readOnly="true" reviewRequired="true" section="" type="string"/>
+        <Field displayName="con_prov_policy_jive_groupname" helpKey="help_con_prov_policy_jive_groupname_update" name="name" reviewRequired="true" section="" type="string"/>
+        <Field displayName="con_prov_policy_jive_type" helpKey="help_con_prov_policy_jive_type" name="type" readOnly="true" reviewRequired="true" section="" type="string"/>
+        <Field displayName="con_prov_policy_jive_group_description" helpKey="help_con_prov_policy_jive_group_description_update" name="description" reviewRequired="true" section="" type="string"/>
+        <Field displayName="con_prov_policy_jive_federated" helpKey="help_con_prov_policy_jive_federated" name="federated" readOnly="true" reviewRequired="true" section="" type="boolean"/>
+        <Field displayName="con_prov_policy_jive_administrator_count" helpKey="help_con_prov_policy_jive_administrator_count" name="administratorCount" readOnly="true" reviewRequired="true" section="" type="int"/>
+        <Field displayName="con_prov_policy_jive_member_count" helpKey="help_con_prov_policy_jive_member_count" name="memberCount" readOnly="true" reviewRequired="true" section="" type="int"/>
+        <Field displayName="con_prov_policy_jive_published" helpKey="help_con_prov_policy_jive_published" name="published" readOnly="true" reviewRequired="true" section="" type="date"/>
+        <Field displayName="con_prov_policy_jive_updated" helpKey="help_con_prov_policy_jive_updated" name="updated" readOnly="true" reviewRequired="true" section="" type="date"/>
+        <Field displayName="con_prov_policy_jive_admins" helpKey="help_con_prov_policy_jive_admins" multi="true" name="administrators" readOnly="true" reviewRequired="true" section="" type="string"/>
+        <Field displayName="con_prov_policy_jive_members" helpKey="help_con_prov_policy_jive_members" multi="true" name="members" readOnly="true" reviewRequired="true" section="" type="string"/>
+      </Template>
+    </Templates>
+  </Application>
+</ImportAction>

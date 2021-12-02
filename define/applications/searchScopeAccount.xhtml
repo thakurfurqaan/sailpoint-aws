@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC
+"-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2015 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+<body>
+    <ui:composition>
+        <script type="text/javascript">
+            <!--//--><![CDATA[//><!--
+            helpKey = 'APPLICATION';
+            Ext.onReady(function () {
+                Ext.QuickTips.init();
+            });
+            //--><!]]>
+        </script>
+        <f:view style="width: 1300px">
+            <p:outputPanel id="accountScopeTable">
+                <table class="width90" cellpadding="0" cellspacing="0">
+                    <tr>
+                    
+                        <h:selectBooleanCheckbox style="margin-bottom: 20px;" onclick="Ext.getDom('editForm:autoPartitioningWarningBtn').click();" value="#{applicationObject.attributes['allowAutoPartitioning']}" onchange="SailPoint.DiscoverDomains.togglePartitionCount(this.checked,'autocount')"
+                        disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                        readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                           
+                        <h:outputText  style="color: #037da1;display: inline-block;font-size: 14px; margin-bottom: 10px;" value="#{msgs.con_form_AD_auto_partitioning_enable}"/>
+                       
+                        <h:graphicImage id="imgHlpAllowPartition"
+                                styleClass="helpIcon" 
+                                url="/images/icons/dashboard_help_16.png" 
+                                alt="#{help.help_con_form_AD_auto_partitioning}"/>
+
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                             <p:outputPanel id="autoPartitioningPanel">
+                             <div id="autoPartitioningDiv" class="failText" style= "margin-left: 20px;text-indent:20px">
+                             <h:outputText value="#{(accountSearchScope.autoPartitioningWarning) &amp;&amp; (contactSearchScope.autoPartitioningWarning) ? msgs.con_form_AD_both_auto_partitioning_warning : (accountSearchScope.autoPartitioningWarning) ? msgs.con_form_AD_auto_partitioning_warning :(contactSearchScope.autoPartitioningWarning) ? msgs.con_form_AD_contact_auto_partitioning_warning : ''}" rendered="#{applicationObject.attributes['allowAutoPartitioning'] eq true}" />
+                             </div>
+                             </p:outputPanel>
+                                
+                             <p:commandButton id="autoPartitioningWarningBtn"
+                               value="partitionWarning"
+                               style="display:none"
+                               action="#{accountSearchScope.showAutoPartitioningWarningMessage}"
+                               actionListener="#{contactSearchScope.showAutoPartitioningWarningMessage}"                             
+                               update="@([id$=autoPartitioningPanel])" >
+                              </p:commandButton>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="autocount"  style="display:#{applicationObject.attributes['allowAutoPartitioning'] ? 'block' :'none'}">
+                            <h:outputText  style="color: #037da1;display: inline-block;font-size: 14px; margin-bottom: 10px;" value="#{msgs.con_form_AD_auto_partition_count}"/>
+                            <h:graphicImage id="imgHlpPartitionCount"
+                                styleClass="helpIcon"
+                                url="/images/icons/dashboard_help_16.png"
+                                alt="#{help.help_con_form_AD_auto_partitioning_count}"/>
+                            <h:selectOneMenu value="#{applicationObject.attributes['autoPartitionCount']}">
+                                <f:selectItem itemValue="256" itemLabel="256" />
+                                <f:selectItem itemValue="128" itemLabel="128" />
+                                <f:selectItem itemValue="64" itemLabel="64" />
+                                <f:selectItem itemValue="32" itemLabel="32" />
+                                <f:selectItem itemValue="16" itemLabel="16" />
+                            </h:selectOneMenu>
+                       </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_AD_account_search_scope}"/>
+                            <h:outputText styleClass="requiredText" value="*"/>
+                            <h:graphicImage 
+                            id="searchAccImgTemp" styleClass="helpIcon"
+                            url="/images/icons/dashboard_help_16.png"
+                            alt="#{help.help_con_form_AD_search_account}"
+                            style="display: none;" />
+							<h:graphicImage id="imgHlpsearchAcc"
+                                styleClass="helpIcon" 
+                                url="/images/icons/dashboard_help_16.png" 
+                                alt="#{help.help_con_form_AD_search_account}"/>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="spTabledContent">
+                                <table class="spTable" cellspacing="0" > 
+                                    <thead>
+                                        <tr>
+                                            <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                <th style="text-align:center; width: 5px;"><h:selectBooleanCheckbox id="selectAllToggleAccounts" value="false" onclick="CheckboxSelector.toggleAll(this.id, this.checked, 'toggleable');"/></th>
+                                            </ui:fragment> 
+                                            <th><h:outputText  value="#{msgs.con_form_AD_search_dn}"/><h:graphicImage id="imgHlpSearchDn" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_search_dn}"/></th>
+                                            <th style="text-align:left"><h:outputText value="#{msgs.con_form_AD_iterate_search_filter}"/><h:graphicImage id="imgHlpSearchFilter" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_iterate_search_filter}"/></th>
+                                         
+                                            <th style="text-align:left"><h:outputText value="#{msgs.con_form_AD_group_membership_search_dn}"/><h:graphicImage id="imgHlpGroupSearchDN" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_group_membership_search_dn}"/></th>
+                                            <th style="text-align:left"><h:outputText value="#{msgs.con_form_AD_group_member_filter_string}"/><h:graphicImage id="imgHlpGroupFilter" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_group_member_filter_string}"/></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                <th/>
+                                                <td>
+                                                    <h:inputText value="#{accountSearchScope.accountScope.object.searchDN}" style="width: 250px; margin-left:0px; margin-right:0px;"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText value="#{accountSearchScope.accountScope.object.iterateSearchFilter}" style="width: 300px; margin-left:0px;"/>
+                                                </td>
+                                              
+                                                <td>
+                                                    <h:inputText value="#{accountSearchScope.accountScope.object.groupMembershipSearchDN}" style="width: 270px; margin-left:0px;"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText value="#{accountSearchScope.accountScope.object.groupMemberFilterString}" style="width: 290px; margin-left:0px;"/>
+                                                </td>
+                                            </ui:fragment>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <p:repeat value="#{accountSearchScope.scopes}" var="scopeObj">
+                                            <tr>
+                                                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                    <td class="centeredColumn">
+                                                        <h:selectBooleanCheckbox styleClass="toggleable" id="checkbox" value="#{accountSearchScope.selectedScopes[scopeObj.id]}"/>
+                                                    </td>
+                                                </ui:fragment>
+                                                <td>
+                                                    <h:inputText value="#{scopeObj.object.searchDN}" style="width: 250px; margin-left:0px;"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText value="#{scopeObj.object.iterateSearchFilter}" style="width: 300px; margin-left:0px;"/>
+                                                </td>
+                                               
+                                                <td>
+                                                    <h:inputText value="#{scopeObj.object.groupMembershipSearchDN}" style="width: 270px; margin-left:0px;"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText value="#{scopeObj.object.groupMemberFilterString}" style="width: 290px; margin-left:0px;"/>
+                                                </td>
+                                            </tr>
+                                        </p:repeat>
+                                    </tbody>
+                                </table>
+
+                                <div class="buttonRow">
+                                        <p:commandButton id='removeAccountScope' value="#{msgs.button_delete}" styleClass="secondaryBtn" action="#{accountSearchScope.removeAccountScope}" update="@([id$=accountScopeTable], [id$=autoPartitioningPanel])"/>
+                                        <p:commandButton id='addAccountScope' value="#{msgs.button_add}" styleClass="primaryBtn" action="#{accountSearchScope.addAccountScope}" update="@([id$=accountScopeTable], [id$=autoPartitioningPanel])"/>
+                                </div>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_AD_contact_search_scope}"/>
+                            <h:graphicImage id="imgHlpsearchCon"
+                            styleClass="helpIcon" 
+                            url="/images/icons/dashboard_help_16.png" 
+                            alt="#{help.help_con_form_AD_search_contact}"/>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <div class="spTabledContent">
+                                <table class="spTable" cellspacing="0" > 
+                                    <thead>
+                                        <tr>
+                                            <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                <th style="text-align:center; width: 5px;">
+                                                    <h:selectBooleanCheckbox id="selectAllToggleContact" value="false" onclick="CheckboxSelector.toggleAll(this.id, this.checked, 'contactTableToggleable');"/>
+                                                </th>
+                                            </ui:fragment> 
+                                            <th>
+                                                <h:outputText  value="#{msgs.con_form_AD_search_dn}"/><h:graphicImage id="imgHlpContactSearchDn" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_search_dn_contact}"/>
+                                            </th>
+                                            <th style="text-align:left">
+                                                <h:outputText value="#{msgs.con_form_AD_iterate_search_filter}"/><h:graphicImage id="imgHlpContactSearchFilter" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_iterate_search_filter_contact}"/>
+                                            </th>
+                                            <th style="text-align:left">
+                                                <h:outputText value="#{msgs.con_form_AD_group_membership_search_dn}"/><h:graphicImage id="imgHlpContactGroupSearchDN" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_group_membership_search_dn_contact}"/>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                            <th/>
+                                                <td>
+                                                <h:inputText value="#{contactSearchScope.contactScope.object.searchDN}" style="width: 370px; margin-left:0px; margin-right:0px;"/>
+                                                </td>
+                                                <td>
+                                                <h:inputText value="#{contactSearchScope.contactScope.object.iterateSearchFilter}" style="width: 370px; margin-left:0px;"/>
+                                                </td>
+                                                <td>
+                                                <h:inputText value="#{contactSearchScope.contactScope.object.groupMembershipSearchDN}" style="width: 370px; margin-left:0px;"/>
+                                                </td>
+
+                                            </ui:fragment>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <p:repeat value="#{contactSearchScope.scopes}" var="scopeObj">
+                                            <tr>
+                                                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                    <td class="centeredColumn">
+                                                        <h:selectBooleanCheckbox styleClass="contactTableToggleable" id="checkbox" value="#{contactSearchScope.selectedScopes[scopeObj.id]}"/>
+                                                    </td>
+                                                </ui:fragment>
+                                                <td>
+                                                    <h:inputText value="#{scopeObj.object.searchDN}" style="width: 370px; margin-left:0px;"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText value="#{scopeObj.object.iterateSearchFilter}" style="width: 370px; margin-left:0px;"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText value="#{scopeObj.object.groupMembershipSearchDN}" style="width: 370px; margin-left:0px;"/>
+                                                </td>
+                                            </tr>
+                                        </p:repeat>
+                                    </tbody>
+                                </table>
+
+                                <div class="buttonRow">
+                                    <p:commandButton id='removeContactScope' value="#{msgs.button_delete}" styleClass="secondaryBtn" action="#{contactSearchScope.removeContactScope}" update="@([id$=accountScopeTable], [id$=autoPartitioningPanel])"/>
+                                    <p:commandButton id='addContactScope' value="#{msgs.button_add}" styleClass="primaryBtn" action="#{contactSearchScope.addContactScope}" update="@([id$=accountScopeTable], [id$=autoPartitioningPanel])"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </p:outputPanel>
+        </f:view>
+    </ui:composition>
+</body>
+</html>

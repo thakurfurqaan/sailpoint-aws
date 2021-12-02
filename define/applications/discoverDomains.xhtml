@@ -1,0 +1,507 @@
+<!DOCTYPE html PUBLIC
+"-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2015 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<body>
+
+
+        <ui:composition>
+                <ui:define name="headerItems"/>
+                        <sp:script>
+                                <src>#{base.requestContextPath}/scripts/ext-4.1.0/ux/form/MultiSelect.js?load=#{debug.revision}</src>
+                                <src>#{base.requestContextPath}/scripts/ext-4.1.0/ux/form/ItemSelector.js?load=#{debug.revision}</src>
+                                <src>#{base.requestContextPath}/scripts/sailpoint/web/discoverDomains.js?load=#{debug.revision}</src>                               
+                        </sp:script>                       
+                        
+                        <f:view> 
+                        
+                                <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_AD_forest_config}"/>
+                                <h:outputText styleClass="requiredText" value="*"/>
+                                <h:graphicImage id="imgHlpDomain2"
+                                                styleClass="helpIcon" 
+                                                url="/images/icons/dashboard_help_16.png" 
+                                                alt="#{help.help_con_form_AD_forest_conf}"/>
+                                                
+                                          
+                                                 
+                                           <p:outputPanel id="forestResultsPanel">
+                                                      <div id="forestResultsDiv" class="#{manageDomain.forestSuccess ? 'successText' : 'failText'}">
+                                                                <h:outputText value="#{manageDomain.forestTableOperationResult}"/>
+                                                                  </div>
+                                           </p:outputPanel>
+                                  <p:outputPanel id="forestTable">
+                                        <table class="width90" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                        <td>
+                                                                <div class="spTabledContent">
+                                                                        <table class="spTable" cellspacing="0">
+                                                                                <thead>
+                                                                                        <tr>
+                                                                                                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                                                                    <th style="text-align:center; width: 5px;"><h:selectBooleanCheckbox id="selectAllToggleForForests" value="false" onclick="CheckboxSelector.toggleAll(this.id, this.checked, 'forestTableToggleable');"/></th>
+                                                                                                </ui:fragment>
+                                                                                                <th style="text-align:left;width:130px"><h:outputText value="#{msgs.con_form_AD_forest_name}"/><h:graphicImage id="imgHlpForestName" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_gcforest_name}"/></th>
+                                                                                                <th style="text-align:left;width:215px"><h:outputText value="#{msgs.con_form_AD_gc}"/><h:graphicImage id="imgHlpForestGC" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_gc}"/></th>
+                                                                                                <th style="text-align:left;width:180px"><h:outputText value="#{msgs.con_form_AD_user}"/><h:graphicImage id="imgHlpForestUser" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_gcuser}"/></th>
+                                                                                                <th style="text-align:left;width:180px"><h:outputText value="#{msgs.con_form_AD_password}"/></th>
+                                                                                                <th style="text-align:center;width:100px"><h:outputText value="#{msgs.con_form_AD_authenticationtype}"/><h:graphicImage id="imgHlpForestAuthType1" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_authenticationtype}"/></th>
+                                                                                                <th style="text-align:left;width:100px"><h:outputText value="#{msgs.con_form_AD_ssl}"/><h:graphicImage id="imgHlpForestSsl" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_Forest_ssl}"/></th>
+                                                                                                <th style="text-align:left;width:140px"><h:outputText value="#{msgs.con_form_AD_manage_all_domains}"/>
+                                                                                                <h:graphicImage id="imgHlpDomain23"
+                                                                                                    styleClass="helpIcon" 
+                                                                                                    url="/images/icons/dashboard_help_16.png" 
+                                                                                                    alt="#{help.help_con_form_AD_forest_conf_manage_all_domain}"/>
+                                                                                                </th>
+                                                                                                <th style="text-align:left;width:140px"><h:outputText value="#{msgs.con_form_AD_discover_domains}"/><h:graphicImage id="imgHlpDiscoverDomain" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_discover_domains}"/></th>
+                                                                                        </tr>
+                                                                                </thead>                                                                                
+                                                                                <tfoot>
+                                                                                        <tr>
+                                                                                                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                                                                        <th/>
+                                                                                                        <td>
+                                                                                                                <h:inputText id="footForestName"  value="#{manageDomain.forestDataObj.object.forestName}" style="width: 130px; margin-left:0px; margin-right:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                                <h:inputText value="#{manageDomain.forestDataObj.object.gcServer}" style="width: 215px; margin-left:0px; margin-right:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                                <h:inputText value="#{manageDomain.forestDataObj.object.user}" style=" width: 175px; margin-left:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                                <sp:inputSecret value="#{manageDomain.forestDataObj.object.password}" style=" width: 175px; margin-left:0px;" redisplay="true" autocomplete="off"/>
+                                                                                                        </td>
+                                                                                                        <td class="centeredColumn" style="width: 100px;">
+                                                                                                                <h:selectOneMenu value="#{manageDomain.forestDataObj.object.authenticationType}"
+                                                                                                                        id="forestAuthenticationType"
+                                                                                                                        disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                                                                                                        onchange="SailPoint.DiscoverDomains.toggleTls(this.value,this.id, 'forestUseTLS')"
+                                                                                                                        readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">                             
+                                                                                                                        <f:selectItem itemValue="simple" itemLabel="#{msgs.con_form_AD_authenticationtype_simple}"/>                                 
+                                                                                                                        <f:selectItem itemValue="strong" itemLabel="#{msgs.con_form_AD_authenticationtype_strong}"/>
+                                                                                                                </h:selectOneMenu>  
+                                                                                                        </td>
+                                                                                                        <td class="centeredColumn" style="width: 100px;">
+                                                                                                                <h:selectBooleanCheckbox id="forestUseTLS" value="#{manageDomain.forestDataObj.object.useSSL}" style="text-align:center"
+                                                                                                                onchange="SailPoint.DiscoverDomains.toggleAuthenticationType(this.checked, this.id, 'forestAuthenticationType')"/>
+                                                                                                        </td>
+                                                                                                        <td class="centeredColumn" style="width: 140px;">
+                                                                                                                 <h:selectBooleanCheckbox value="false" style="text-align:center" disabled="true"/>
+                                                                                                        </td>
+                                                                                                         <td align="center" valign="middle" width="140">
+                                                                                                            <p:commandButton id="discoverButtonTfoot"
+                                                                                                                    value="#{msgs.button_discover}"
+                                                                                                                    styleClass="secondaryBtn"
+                                                                                                                    update="@([id$=forestTable])"
+                                                                                                                    disabled = "true"
+                                                                                                                    />
+                                                                                                        </td> 
+                                                                                                </ui:fragment> 
+                                                                                        </tr>
+                                                                                </tfoot>
+                                                                                <tbody>
+                                                                                 
+                                                                                        <p:repeat value="#{manageDomain.forestDataList}" var="forest" id="forestInfo"  rowKeyVar="index">
+                                                                                                <tr>
+                                                                                                        <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                                                                                <td class="centeredColumn" style="width: 5px;">
+                                                                                                                <h:selectBooleanCheckbox styleClass="forestTableToggleable" id="checkbox" value="#{manageDomain.selectedForest[forest.id]}" />
+                                                                                                                </td>
+                                                                                                        </ui:fragment>
+                                                                                                        <td style="width: 130px;">
+                                                                                                                <h:inputText value="#{forest.object.forestName}" disabled="true"  style="width: 130px; margin-left:0px; margin-right:0px;"/>      
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                                <h:inputText id="gcServer" value="#{forest.object.gcServer}" style="width: 215px; margin-left:0px; margin-right:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td style="width: 170px;">
+                                                                                                                <h:inputText value="#{forest.object.user}"  style="width: 175px; margin-left:0px;"/>      
+                                                                                                        </td>
+                                                                                                        <td style="width: 170px;">
+                                                                                                                <sp:inputSecret value="#{forest.object.password}" style="width: 175px; margin-left:0px;" redisplay="true" autocomplete="off"/>
+                                                                                                        </td>
+                                                                                                        <td class="centeredColumn" style="width: 100px;">
+                                                                                                                <h:selectOneMenu value="#{forest.object.authenticationType}"
+                                                                                                                        id="authenticationType"
+                                                                                                                        onchange="SailPoint.DiscoverDomains.toggleTls(this.value,this.id, 'useTLS')"
+                                                                                                                        readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                                                                                                        disabled="#{!forest.object.authEnabled}">    
+                                                                                                                        <f:selectItem itemValue="simple" itemLabel="#{msgs.con_form_AD_authenticationtype_simple}"/>                                 
+                                                                                                                        <f:selectItem itemValue="strong" itemLabel="#{msgs.con_form_AD_authenticationtype_strong}"/>
+                                                                                                                </h:selectOneMenu>  
+                                                                                                        </td>
+                                                                                                        <td class="centeredColumn" style="width: 100px;">
+                                                                                                                <h:selectBooleanCheckbox id="useTLS" value="#{forest.object.useSSL}" style="text-align:center"
+                                                                                                                  onchange="SailPoint.DiscoverDomains.toggleAuthenticationType(this.checked, this.id, 'authenticationType')"
+                                                                                                                    disabled="#{!forest.object.tlsEnabled}">
+                                                                                                                    <p:commandButton id="useTLSUnchecked"
+                                                                                                                        value="UseTLSBtnChkd"
+                                                                                                                        style="display:none"
+                                                                                                                        action="#{manageDomain.toggleForestAuthenticationType}"
+                                                                                                                        onclick="Ext.select('.discoverDomainSpinner').setStyle('display', 'inline');"
+                                                                                                                        oncomplete="Ext.select('.discoverDomainSpinner').setStyle('display', 'none');"
+                                                                                                                        update="@([id$=forestTable])">
+                                                                                                                          <f:setPropertyActionListener name="selectedForestName" value="#{forest.object.forestName}" target="#{manageDomain.selectedForestName}"/>
+                                                                                                                          <f:setPropertyActionListener name="useTLSOperation" value="false" target="#{manageDomain.useTLSOperation}"/>
+                                                                                                                    </p:commandButton>
+                                                                                                                    <p:commandButton id="useTLSChecked"
+                                                                                                                        value="UseTLSBtnUnchkd"
+                                                                                                                        style="display:none"
+                                                                                                                        action="#{manageDomain.toggleForestAuthenticationType}"
+                                                                                                                        onclick="Ext.select('.discoverDomainSpinner').setStyle('display', 'inline');"
+                                                                                                                        oncomplete="Ext.select('.discoverDomainSpinner').setStyle('display', 'none');"
+                                                                                                                        update="@([id$=forestTable])">
+                                                                                                                          <f:setPropertyActionListener name="selectedForestName" value="#{forest.object.forestName}" target="#{manageDomain.selectedForestName}"/>
+                                                                                                                          <f:setPropertyActionListener name="useTLSOperation" value="true" target="#{manageDomain.useTLSOperation}"/>
+                                                                                                                    </p:commandButton>
+                                                                                                                </h:selectBooleanCheckbox>
+                                                                                                        </td>
+                                                                                                       
+                                                                                                        <td class="centeredColumn">
+                                                                                                                 <h:selectBooleanCheckbox id="manageAllDomain" value ="#{forest.object.manageAllDomain}" onclick="SailPoint.DiscoverDomains.ManageAllDomain(this.checked,this.id)" style="text-align:center"/>
+                                                                                                                  <p:commandButton id="manageAllDomainBtn"
+                                                                                                                        value="#{msgs.button_discover}"
+                                                                                                                        style="display:none"
+                                                                                                                        action="#{manageDomain.discoverDomains}"
+                                                                                                                        onclick="SailPoint.DiscoverDomains.startDiscover()"
+                                                                                                                        oncomplete="SailPoint.DiscoverDomains.endDiscover()"
+                                                                                                                        update="@([id$=forestResultsPanel], [id$=domainsTable], [id$=domainConfiguration], [id$=forestTable])">
+                                                                                                                          <f:setPropertyActionListener name="selectedForestNameTest" value="#{forest.object.forestName}" target="#{manageDomain.selectedForestName}"/>
+                                                                                                                          <f:setPropertyActionListener name="manageAllDomainOperation" value="true" target="#{manageDomain.manageAllDomainOperation}"/>
+                                                                                                                   </p:commandButton>
+                                                                                                        </td>
+                                                                                                        
+                                                                                                         <td align="center" valign="middle" width="140">
+                                                                                                            <p:commandButton id="discoverDomainButton"
+                                                                                                                    value="#{msgs.button_discover}"
+                                                                                                                    styleClass="secondaryBtn"
+                                                                                                                    action="#{manageDomain.discoverDomains}"
+                                                                                                                    onclick="SailPoint.DiscoverDomains.startDiscover()"
+                                                                                                                    oncomplete="SailPoint.DiscoverDomains.endDiscover()"
+                                                                                                                    update="@([id$=forestResultsPanel], [id$=domainsTable],[id$=domainConfiguration], [id$=forestTable])"
+                                                                                                                    rendered="#{forest.object.manageAllDomain eq 'false'}">
+                                                                                                              <f:setPropertyActionListener name="selectedForestName" value="#{forest.object.forestName}" target="#{manageDomain.selectedForestName}"/>
+                                                                                                              <f:setPropertyActionListener name="manageAllDomainOperation" value="false" target="#{manageDomain.manageAllDomainOperation}"/>
+                                                                                                            </p:commandButton>
+                                                                                                              
+                                                                                                               <p:commandButton id="previewAllDomainBtn"
+                                                                                                                    value="#{forest.object.previewDomains ?  'Hide' : msgs.button_previewAllDomains}"
+                                                                                                                    styleClass="secondaryBtn"
+                                                                                                                    action="#{manageDomain.previewDomains}"
+                                                                                                                    onclick="Ext.select('.discoverDomainSpinner').setStyle('display', 'inline');"
+                                                                                                                    oncomplete="Ext.select('.discoverDomainSpinner').setStyle('display', 'none');"
+                                                                                                                    update="@([id$=domainsTable],[id$=domainConfiguration],[id$=forestTable])"
+                                                                                                                    rendered="#{forest.object.manageAllDomain eq 'true'}">
+                                                                                                                 <f:setPropertyActionListener name="selectedForestName33" value="#{forest.object.forestName}" target="#{manageDomain.selectedForestName}"/>
+                                                                                                              </p:commandButton>
+                                                                                                        </td>
+                                                                                                       
+                                                                                                </tr>
+                                                                                        </p:repeat>
+                                                                                         
+                                                                                </tbody>
+                                                                        </table>
+                                                                        <div class="buttonRow">
+                                                                                <p:commandButton id='removeForestData' value="#{msgs.button_delete}" styleClass="secondaryBtn" action="#{manageDomain.removeForestData}" update="@([id$=forestTable],[id$=forestResultsPanel])"/>
+                                                                                <p:commandButton id='addForestData' value="#{msgs.button_add}" styleClass="primaryBtn" action="#{manageDomain.addForestData}" update="@([id$=forestTable],[id$=forestResultsPanel])"/>
+                                                                        </div>
+                                                                         <div id="itemselector" class='spContent'/>
+                                                                </div>
+                                                        </td>
+                                                </tr>
+                                        </table>
+                                </p:outputPanel>
+                                                                                             
+                                <div id="discoverDomainSpinner" class="discoverDomainSpinner">
+                                           <h:graphicImage id="imgHlpDomain346"
+                                                        url="/images/spinner_24.gif" 
+                                                        alt=""/>
+                                </div>                                 
+                                                 
+                                <h:panelGrid id="domainConfiguration">
+                                
+                                <h:panelGroup style= "display:#{(not empty manageDomain.forestDataList &amp;&amp; manageDomain.showDomainConfiguration) || (empty manageDomain.forestDataList) ?  '' : 'none' }">
+                                <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_AD_domain_conf}"/>
+                                                <h:outputText styleClass="requiredText" value="*"/>
+                                                <h:graphicImage id="imgHlpDomain34"
+                                                        styleClass="helpIcon" 
+                                                        url="/images/icons/dashboard_help_16.png" 
+                                                        alt="#{help.help_con_form_AD_domain_conf}"
+                                                        />
+                               </h:panelGroup>
+                               
+                                <h:panelGroup rendered="#{(not empty manageDomain.forestDataList &amp;&amp; manageDomain.showDomainConfiguration) || (empty manageDomain.forestDataList)}">
+                                  
+                               
+                                          
+                                                        
+                                        <p:outputPanel id="domainResultsPanel">
+                                                                                        <div id="domainResultsDiv" class="#{manageDomain.domainSuccess ? 'successText' : 'failText'}">
+                                                                                                <h:outputText value="#{manageDomain.domainResult}"/>
+                                                                                        </div>
+                                        </p:outputPanel>
+                                                        
+                                <p:outputPanel id="domainsTable">
+                                        <table class="width90" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                        <td>
+                                                                <div class="spTabledContent">
+                                                                        <table class="spTable" cellspacing="0">
+                                                                                <thead>
+                                                                                        <tr>
+                                                                                                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                                                                    <th style="text-align:center; width: 5px;"><h:selectBooleanCheckbox id="selectAllToggleForDomains" value="false" onclick="SailPoint.DiscoverDomains.toggleAll(this.id, this.checked, 'domainTableToggleable');"/></th>
+                                                                                                </ui:fragment>
+                                                                                                <th style="text-align:left;  width: 130px;"><h:outputText value="#{msgs.con_form_AD_forest_name}"/><h:graphicImage id="imgHlpAdForestName" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_domain_forest_name}"/></th>
+                                                                                                <th style="text-align:left;  width: 230px;"><h:outputText value="#{msgs.con_form_AD_domain}"/><h:graphicImage id="imgHlpAdDomain" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_domain_domainDN}"/></th>
+                                                                                                <th style="text-align:left;  width: 150px;"><h:outputText value="#{msgs.con_form_AD_net_bios}"/><h:graphicImage id="imgHlpADNetbios" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_domain_netbios}"/></th>
+                                                                                                <th style="text-align:left;  width: 160px;"><h:outputText value="#{msgs.con_form_AD_user}"/><h:graphicImage id="imgHlpAdUser" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_domain_user}"/></th>
+                                                                                                <th style="text-align:left;  width: 160px;"><h:outputText value="#{msgs.con_form_AD_password}"/></th>
+                                                                                                <th style="text-align:left;  width: 190px;"><h:outputText value="#{msgs.con_form_AD_servers}"/></th>
+                                                                                                <th style="text-align:center;width: 90px;"><h:outputText value="#{msgs.con_form_AD_authenticationtype}"/><h:graphicImage id="imgHlpForestAuthType2" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_authenticationtype}"/></th>
+                                                                                                <th style="text-align:left;  width: 130px;"><h:outputText value="#{msgs.con_form_AD_ssl}"/><h:graphicImage id="imgHlpDomainSsl" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_ssl}"/></th>
+                                                                                        </tr>
+                                                                                </thead>
+                                                                                <tfoot>
+                                                                                        <tr>
+                                                                                                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                                                                        <th/>
+                                                                                                        <td style="width: 130px;" >
+                                                                                                                <h:inputText id="footDomainForestName" value="#{manageDomain.domainDataObj.object.domainForestName}" style="width: 125px; margin-left:0px; margin-right:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td style="width: 230px;">
+                                                                                                                <h:inputText value="#{manageDomain.domainDataObj.object.domainDN}" style="width: 225px; margin-left:0px; margin-right:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td style="width: 150px;">
+                                                                                                                <h:inputText value="#{manageDomain.domainDataObj.object.netBIOS}" style="width: 145px; margin-left:0px; margin-right:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td  style="width: 160px;">
+                                                                                                                <h:inputText value="#{manageDomain.domainDataObj.object.user}" style=" width: 155px; margin-left:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td style="width: 160px;">
+                                                                                                                <sp:inputSecret value="#{manageDomain.domainDataObj.object.password}" style=" width: 155px; margin-left:0px;" redisplay="true" autocomplete="off"/>
+                                                                                                        </td>
+                                                                                                        <td  style="width: 190px;">
+                                                                                                                <h:inputTextarea rows="2" cols="5" value="#{manageDomain.domainDataObj.object.serverList}"
+                                                                                                                        converter="NewLineList" style="resize:none; width: 190px; margin-left:0px;"/> 
+                                                                                                        </td>
+                                                                                                        <td class="centeredColumn" style="width: 90px;">
+                                                                                                                <h:selectOneMenu value="#{manageDomain.domainDataObj.object.authenticationType}"
+                                                                                                                        id="domainAuthenticationType"
+                                                                                                                        onchange="SailPoint.DiscoverDomains.toggleTls(this.value,this.id, 'domainUseTLS')"
+                                                                                                                        readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">                             
+                                                                                                                        <f:selectItem itemValue="simple" itemLabel="#{msgs.con_form_AD_authenticationtype_simple}"/>                                 
+                                                                                                                        <f:selectItem itemValue="strong" itemLabel="#{msgs.con_form_AD_authenticationtype_strong}"/>
+                                                                                                                </h:selectOneMenu>  
+                                                                                                        </td>
+                                                                                                         <td class="centeredColumn" style="width: 130px;">
+                                                                                                                <h:selectBooleanCheckbox id="domainUseTLS" value="#{manageDomain.domainDataObj.object.useSSL}" style="text-align:center"
+                                                                                                                onchange="SailPoint.DiscoverDomains.toggleAuthenticationType(this.checked, this.id, 'domainAuthenticationType')"/>
+                                                                                                        </td>
+                                                                                                                <h:inputHidden value="#{manageDomain.domainDataObj.object.domainIterateSearchFilter}" style="width: 225px; margin-left:0px;"/>
+                                                                                                                
+                                                                                                </ui:fragment> 
+                                                                                        </tr>
+                                                                                </tfoot>
+
+                                                                                <tbody>
+                                                                                
+                                                                                <p:repeat value="#{manageDomain.domainDataList}" var="domain" id="domainInfo" rowKeyVar="index">
+                                                                                <p:repeat value="#{manageDomain.forestDataList}" var="forest" id="domainforestInfo" rowKeyVar="index">
+                                                                                                <h:panelGroup rendered="#{((fn:toLowerCase(domain.object.domainForestName) == fn:toLowerCase(forest.object.forestName)) &amp;&amp; ((forest.object.manageAllDomain ne true) || forest.object.previewDomains eq true))}">
+                                                                                                 <tr>
+                                                                                                        <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                                                                                <td class="centeredColumn" style="width: 5px;">
+                                                                                                                <h:selectBooleanCheckbox styleClass="domainTableToggleable" disabled="#{forest.object.previewDomains eq true}" id="checkbox" value="#{manageDomain.selectedDomains[domain.id]}" />
+                                                                                                                </td>
+                                                                                                        </ui:fragment>
+                                                                                                        <td style="width: 130px;">
+                                                                                                                <h:inputText  value="#{domain.object.domainForestName}" disabled="true" style="width: 125px; margin-left:0px; margin-right:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td style="width: 230px;">
+                                                                                                                <h:inputText value="#{domain.object.domainDN}" disabled="#{forest.object.previewDomains eq true}"  style="width: 225px; margin-left:0px; margin-right:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td style="width: 150px;">
+                                                                                                                <h:inputText value="#{domain.object.netBIOS}" disabled="#{forest.object.previewDomains eq true}"  style="width: 145px; margin-left:0px; margin-right:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td style="width: 160px;">
+                                                                                                                <h:inputText value="#{domain.object.user}" disabled="#{forest.object.previewDomains eq true}"  style="width: 145px; margin-left:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td style="width: 160px;">
+                                                                                                                <sp:inputSecret value="#{domain.object.password}" disabled="#{forest.object.previewDomains eq true}"  style="width: 155px; margin-left:0px;" redisplay="true" autocomplete="off"/>
+                                                                                                        </td>
+                                                                                                        <td style="width : 190px;">
+                                                                                                                <h:inputTextarea id="servers" rows="2" cols="2" value="#{domain.object.serverList}"
+                                                                                                                converter="NewLineList" style="resize:none; width:190px; margin-left:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td class="centeredColumn" style="width: 90px;">
+                                                                                                                <h:selectOneMenu value="#{domain.object.authenticationType}"
+                                                                                                                        id="authenticationType"
+                                                                                                                        onchange="SailPoint.DiscoverDomains.toggleTls(this.value,this.id, 'useTLS')"
+                                                                                                                        
+                                                                                                                        disabled="#{!domain.object.authEnabled}">                             
+                                                                                                                        <f:selectItem itemValue="simple" itemLabel="#{msgs.con_form_AD_authenticationtype_simple}"/>                                 
+                                                                                                                        <f:selectItem itemValue="strong" itemLabel="#{msgs.con_form_AD_authenticationtype_strong}"/>
+                                                                                                                </h:selectOneMenu>  
+                                                                                                        </td>
+                                                                                                        <td class="centeredColumn" style="width: 130px;">
+                                                                                                                <h:selectBooleanCheckbox id="useTLS" value="#{domain.object.useSSL}" style="text-align:center" 
+                                                                                                                 onchange="SailPoint.DiscoverDomains.toggleAuthenticationType(this.checked, this.id, 'authenticationType')"
+                                                                                                                 disabled="#{!domain.object.tlsEnabled}">
+                                                                                                                 <p:commandButton id="useTLSUnchecked"
+                                                                                                                        value="UseTLSBtn"
+                                                                                                                        style="display:none"
+                                                                                                                        action="#{manageDomain.toggleDomainAuthenticationType}"
+                                                                                                                        onclick="Ext.select('.discoverDomainSpinner').setStyle('display', 'inline');"
+                                                                                                                        oncomplete="Ext.select('.discoverDomainSpinner').setStyle('display', 'none');"
+                                                                                                                        update="@([id$=domainsTable])">
+                                                                                                                          <f:setPropertyActionListener name="selectedDomainDN" value="#{domain.object.domainDN}" target="#{manageDomain.selectedDomainName}"/>
+                                                                                                                          <f:setPropertyActionListener name="useTLSOperation" value="false" target="#{manageDomain.useTLSOperation}"/>
+                                                                                                                    </p:commandButton>
+                                                                                                                    <p:commandButton id="useTLSChecked"
+                                                                                                                        value="UseTLSBtn"
+                                                                                                                        style="display:none"
+                                                                                                                        action="#{manageDomain.toggleDomainAuthenticationType}"
+                                                                                                                        onclick="Ext.select('.discoverDomainSpinner').setStyle('display', 'inline');"
+                                                                                                                        oncomplete="Ext.select('.discoverDomainSpinner').setStyle('display', 'none');"
+                                                                                                                        update="@([id$=domainsTable])">
+                                                                                                                          <f:setPropertyActionListener name="selectedDomainDN" value="#{domain.object.domainDN}" target="#{manageDomain.selectedDomainName}"/>
+                                                                                                                          <f:setPropertyActionListener name="useTLSOperation" value="true" target="#{manageDomain.useTLSOperation}"/>
+                                                                                                                    </p:commandButton>
+                                                                                                                 </h:selectBooleanCheckbox>
+                                                                                                        </td>
+                                                                                                                <h:inputHidden value="#{domain.object.domainIterateSearchFilter}" style="width: 225px; margin-left:0px;"/>
+                                                                                                </tr>
+                                                                                             </h:panelGroup>
+                                                                                        </p:repeat>
+                                                                                        </p:repeat>
+                                                                                    
+                                                                                </tbody>
+                                                                        </table>
+
+                                                                        <div class="buttonRow">
+                                                                                <p:commandButton id='removeDomainData' value="#{msgs.button_delete}" styleClass="secondaryBtn" action="#{manageDomain.removeDomainData}" update="@([id$=domainsTable],[id$=domainResultsPanel])"/>
+                                                                                <p:commandButton id='addDomainData' value="#{msgs.button_add}" styleClass="primaryBtn" action="#{manageDomain.addDomainData}" update="@([id$=domainsTable],[id$=domainResultsPanel])" />
+                                                                        </div>
+                                                                         <div id="itemselector" class='spContent'/>
+                                                                </div>
+                                                        </td>
+                                                </tr>
+                                        </table>
+                                </p:outputPanel>
+                                </h:panelGroup>
+                                </h:panelGrid>
+                                <span class="sectionHeader">Exchange Configuration</span>
+                                <h:graphicImage id="imgHlpExchange"
+                                                styleClass="helpIcon" 
+                                                url="/images/icons/dashboard_help_16.png" 
+                                                alt="#{help.help_con_form_AD_exchange_conf}"/>
+                                                                           <p:outputPanel id="exchangeResultsPanel">
+                                                      <div id="exchangeResultsDiv" class="#{manageDomain.exchangeSuccess ? 'successText' : 'failText'}">
+                                                                <h:outputText value="#{manageDomain.exchangeTableOperationResult}"/>
+                                                                  </div>
+                                               </p:outputPanel>
+                                               
+                                  <p:outputPanel id="exchengeTable">
+                                        <table class="width90" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                        <td>
+                                                                <div class="spTabledContent">
+                                                                        <table class="spTable" cellspacing="0">
+                                                                                <thead>
+                                                                                        <tr>
+                                                                                        <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                                                                    <th style="text-align:center; width: 5px;"><h:selectBooleanCheckbox id="selectAllToggleForExchange" value="false" onclick="CheckboxSelector.toggleAll(this.id, this.checked, 'exchangeTableToggleable');"/></th>
+                                                                                                </ui:fragment>
+                                                                                                <th style="text-align:left; width: 180px;"><h:outputText value="#{msgs.con_form_AD_exchange_forest}"/><h:graphicImage id="imgHlpExchangeForest" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_exchange_forest}"/></th>
+                                                                                                <th style="text-align:left; width: 220px;"><h:outputText value="#{msgs.con_form_AD_exchange_hosts}"/><h:graphicImage id="imgHlpExchangeHost" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_exchange_host}"/></th>
+                                                                                                <th style="text-align:left; width: 240px;"><h:outputText value="#{msgs.con_form_AD_user}"/><h:graphicImage id="imgHlpExchangeUser" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_exchange_user}"/></th>
+                                                                                                <th style="text-align:left; width: 240px;"><h:outputText value="#{msgs.con_form_AD_password}"/></th>
+                                                                                                <th style="text-align:left; width: 200px;"><h:outputText value="#{msgs.con_form_AD_exchange_account_forest}"/><h:graphicImage id="imgHlpExchangeAccountForest" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_exchange_account_forest}"/></th>
+                                                                                                <th style="text-align:center; width: 150px"><h:outputText value="#{msgs.con_form_AD_ssl}"/><h:graphicImage id="imgHlpExchangeTLS" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_AD_exchange_tls}"/></th>
+                                                                                        </tr>
+                                                                                </thead>
+                                                                                <tfoot>
+                                                                                        <tr>
+                                                                                                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                                                                        <th/>
+                                                                                                        <td>
+                                                                                                                <h:inputText value="#{manageDomain.exchangeDataObj.object.exchangeForest}" style="width: 175px; margin-left:0px; margin-right:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                        <h:inputTextarea value="#{manageDomain.exchangeDataObj.object.exchHost}" 
+                                                                                                                                 converter="NewLineList" rows="2" cols="2" style="resize:none; width: 205px; margin-left:0px; margin-right:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                                <h:inputText value="#{manageDomain.exchangeDataObj.object.user}" style=" width: 235px; margin-left:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                                <sp:inputSecret value="#{manageDomain.exchangeDataObj.object.password}" style=" width: 235px; margin-left:0px;" redisplay="true" autocomplete="off"/>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                                <sp:inputText value="#{manageDomain.exchangeDataObj.object.accountForestList}" style=" width: 195px; margin-left:0px;" redisplay="true"/>
+                                                                                                        </td>
+                                                                                                        <td class="centeredColumn">
+                                                                                                                <h:selectBooleanCheckbox value="#{manageDomain.exchangeDataObj.object.useTLS}" style="text-align:center"/>
+                                                                                                        </td>
+                                                                                                </ui:fragment> 
+                                                                                        </tr>
+                                                                                </tfoot>
+
+                                                                                <tbody>
+                                                                                 
+                                                                                        <p:repeat value="#{manageDomain.exchangeDataList}" var="exchange" id="exchangeInfo"  rowKeyVar="index">
+                                                                                                <tr>
+                                                                                                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                                                                                <td class="centeredColumn" style="width: 5px;">
+                                                                                                                <h:selectBooleanCheckbox styleClass="exchangeTableToggleable" id="checkbox" value="#{manageDomain.selectedExchange[exchange.id]}" />
+                                                                                                                </td>
+                                                                                                        </ui:fragment>
+                                                                                                        <td>
+                                                                                                                <h:inputText value="#{exchange.object.exchangeForest}" disabled="true"  style="width: 175px; margin-left:0px; margin-right:0px;"/>      
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                        <h:inputTextarea value="#{exchange.object.exchHost}" 
+                                                                                                                                 converter="NewLineList" rows="2" cols="2" style="resize:none; width: 205px; margin-left:0px; margin-right:0px;"/>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                                <h:inputText value="#{exchange.object.user}"  style="width: 235px; margin-left:0px;"/>      
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                                <sp:inputSecret value="#{exchange.object.password}" style="width: 235px;margin-left:0px;" redisplay="true" autocomplete="off"/>
+                                                                                                        </td>
+                                                                                                       <td>
+                                                                                                                <sp:inputText value="#{exchange.object.accountForestList}" style=" width: 195px;margin-left:0px;" redisplay="true" />
+                                                                                                        </td>
+                                                                                                        <td class="centeredColumn">
+                                                                                                                <h:selectBooleanCheckbox value="#{exchange.object.useTLS}" style="text-align:center"/>
+                                                                                                        </td>
+                                                                                                </tr>
+                                                                                        </p:repeat>
+                                                                                         
+                                                                                </tbody>
+                                                                        </table>
+                                                                        <div class="buttonRow">
+                                                                                <p:commandButton id='removeexchangeData' value="#{msgs.button_delete}" styleClass="secondaryBtn" action="#{manageDomain.removeExchangeData}" update="@([id$=exchengeTable],[id$=exchangeResultsPanel])"/>
+                                                                                <p:commandButton id='addexchangeData' value="#{msgs.button_add}" styleClass="primaryBtn" action="#{manageDomain.addExchangeData}" update="@([id$=exchengeTable],[id$=exchangeResultsPanel])"/>
+                                                                        </div>
+                                                                         <div id="itemselector" class='spContent'/>
+                                                                </div>
+                                                        </td>
+                                                </tr>
+                                        </table>
+                                </p:outputPanel>
+                        </f:view>
+                </ui:composition>
+        </body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+
+<body>
+<ui:composition>
+
+    <table class="paddedTbl" style="margin: 5px">
+        <tr>
+            <td align="right">
+                <h:outputText value="#{msgs.sys_config_pam_application} "/>
+            </td>
+            <td align="left">
+                <div id="pamApplicationDiv"></div>
+                <input type="hidden" value='#{sp:getDisplayNameForName("Application", systemConfig.pamApplicationName)}'
+                       id="applicationDisplayNameInput"/>
+                <t:inputHidden id="applicationNameInput"
+                               value="#{systemConfig.pamApplicationName}"></t:inputHidden>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                <h:outputText value="#{msgs.sys_config_pam_provisioning_enabled}"/>
+            </td>
+            <td>
+                <h:selectBooleanCheckbox id="pamProvisioningEnabled" value="#{systemConfig.pamProvisioningEnabled}" />
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                <h:outputText value="#{msgs.sys_config_pam_selection_identities_max}"/>
+            </td>
+            <td>
+                <h:inputText id="pamMaxSelectableIdentities" size="4"
+                             value="#{systemConfig.pamMaxSelectableIdentities}">
+                    <f:validateLongRange minimum="1" maximum="500"/>
+                </h:inputText>
+                <h:message for="pamMaxSelectableIdentities" styleClass="formError"/>
+            </td>
+        </tr>
+        <tr>
+            <td align="right"><h:outputText value="#{msgs.sys_config_pam_provisioning_identity_workflow}"/></td>
+            <td>
+                <h:selectOneMenu
+                        value='#{systemConfig.pamWorkflowIdentityProvisioning}'>
+                    <f:selectItems value="#{systemConfig.pamProvisioningWorkflows}"/>
+                </h:selectOneMenu>
+            </td>
+        </tr>
+    </table>
+</ui:composition>
+</body>
+</html>

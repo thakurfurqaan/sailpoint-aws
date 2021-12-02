@@ -1,0 +1,303 @@
+/*******************************
+ * Dashboard                   *
+ *******************************/
+#dashboardControls {
+  text-align: left;
+  margin: 7px 0 15px 20px;
+  padding-left: 20px;
+  overflow: hidden;
+  float: right;
+}
+
+.dashTable {
+  background: url('../../../images/bg_stripes.png') !important;
+  border-style: solid;
+  border-color: #CCCCCC;
+  border-width: 1px 1px 1px 1px;
+  width: 100%;
+}
+
+.dashToolBar {
+  background: url('../../../images/bg_stripes.png') !important;
+  border-style: solid;
+  border-color: #CCCCCC;
+  border-width: 1px 1px 1px 1px;
+  padding: 7px 5px 2px 5px !important;
+}
+
+.selectedYellow {
+  background-color: #fee871;
+}
+
+.dashboardLayoutTable {
+  width: 100%;
+  text-align: center;
+}
+
+.dashColumn {
+  text-align: center;
+  height: 100%;
+  float: left;
+  margin: 2px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 15px;
+}
+
+.dMedium1 {
+  width: 49%;
+}
+
+.dMedium2 {
+  width: 49%;
+}
+
+.dXtraLarge1 {
+  width: 98%;
+  margin-left: 3px;
+}
+
+.TwoColEvenTop .dMedium1, .TwoColEvenTop .dMedium2 {
+  padding-top: 0;
+}
+
+.TwoColEvenTop .dXtraLarge1 {
+  padding-bottom: 0;
+}
+
+.TwoColEvenBottom .dMedium1, .TwoColEvenBottom .dMedium2 {
+  padding-bottom: 0;
+}
+
+.TwoColEvenBottom .dXtraLarge1 {
+  padding-top: 0;
+}
+
+/*
+ * Note: The dashContent, dashContentHeader, dashContentBody, and
+ * dashContentFooter classes should be used as subclasses to the baseWindow
+ * classes.
+ */
+.dashContentPanel {
+  overflow-y: visible;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.dashContentFooter, .dashContentBody {
+
+}
+
+.dashContentRemoveBtn, .dashContentExpandBtn {
+  cursor: pointer;
+  float: right;
+}
+
+.dashContentRemoveBtn.required {
+  cursor: default;
+}
+
+.dashContentNoBorder {
+  text-align: left;
+  margin: 2px;
+}
+
+.dashContentHover {
+  border-style: dashed dashed dashed dashed;
+  border-width: 2px 2px 2px 2px;
+  border-color: #FF3333 #990000 #FF3333 #990000;
+  cursor: move;
+  z-index: 100;
+}
+
+.dashChoicesHeader {
+  background: #4a75a0 url('../../../images/gradients/lightTeal.png') repeat-x;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333333;
+}
+
+.dashContentItem, .lightBlueBoxHeading, .yellowBoxHeading, .dashContentItemRequired {
+  background-repeat: repeat-x;
+  border-color: #BBBBBB;
+  border-width: 1px;
+  border-style: solid;
+  padding: 2px;
+  margin-bottom: 2px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: normal;
+  color: #333333;
+  height: 25px;
+}
+
+.dSelected, .yellowBoxHeading {
+  background: #fede63 url('../../../images/gradients/mediumOrange.png') repeat-x;
+}
+
+.dUnselected, .lightBlueBoxHeading {
+  background: #cfdcec url('../../../images/gradients/lightBlue.png') repeat-x;
+}
+
+.dashboardUndo {
+  float: left;
+  background: #f5e9b6 url('../../../images/gradients/lightOrange.png') repeat-x;
+  padding: 4px;
+  border: 1px solid gray;
+  font-weight: bold;
+  cursor: default;
+  font-size: 12px;
+  color: #111111;
+}
+
+#undoDiv {
+  margin: 0 0 10px 0;
+}
+
+#dashboardTypeSelector {
+  display: block;
+  float: left;
+  margin-right: 10px;
+  padding-right: 10px;
+  border-right: 1px #999 solid;
+}
+
+#dashboardEditLink {
+  display: block;
+  float: left;
+  background: url('../../../images/icons/dashboard_edit_16.png') left center no-repeat;
+  padding-left: 20px;
+  margin-right: 10px;
+  padding-right: 10px;
+}
+
+#dashboardEditLink a {
+  line-height: 18px;
+}
+
+.preferencesPageSectionTable {
+  border: 1px #ccc solid;
+}
+
+/* Dashboard charts */
+.chartSelect {
+  width: 150px
+}
+
+.chartSelectLarge {
+  width: 250px;
+}
+
+.chartSuggest,
+.chartSuggest .x-grid-cell-inner, .x-grid-hd-inner {
+  font-size: 10px !important;
+  line-height: 12px;
+}
+
+.chartSuggest td, th {
+  padding: 0;
+}
+
+/* END Dashboard charts */
+
+.idField {
+  display: none;
+}
+
+/* Statistics text for certification widgets */
+.openItem, .completedItem, .delegatedItem, .overdueItem {
+  background: url('../../../images/icons/cert_widget_open_item.png') no-repeat;
+  padding-left: 14px;
+}
+
+.completedItem {
+  background: url('../../../images/icons/cert_widget_completed_item.png') no-repeat;
+}
+
+.overdueItem {
+  background: url('../../../images/icons/cert_widget_overdue_item.png') no-repeat;
+}
+
+.delegatedItem {
+  background: url('../../../images/icons/delegated_item_12.png') no-repeat;
+}
+
+/*END Statistics text*/
+
+.dashContentItemRequired .handle {
+  cursor: default;
+}
+
+/* Mouse-over on contentMyCertifications.xhtml */
+.pageInfoOrange, .pageInfoOrange th {
+  background: #fede63 url("../../../images/gradients/mediumOrange.png") repeat-x;
+  color: #666666;
+}
+
+.dashContentPanel .x-toolbar-default-docked-top {
+  border-top: none !important;
+}
+
+.configLinkDiv {
+  background-color: #f0f0f0;
+  float: right;
+  padding: 8px 10px 8px 18px;
+  margin-right: 10px;
+}
+
+.paddedLayoutImg {
+  padding: 10px 0px 10px 0px;
+}
+
+.sortable-placeholder {
+  border-style: dotted;
+  border-width: 1px;
+  height: 25px;
+  margin-top: 1px;
+  margin-bottom: 2px;
+}
+
+.div-table {
+  display: table;
+  width: 100%;
+  border: 1px solid #C9BFBF;
+  border-spacing: 5px; /*cellspacing:poor IE support for  this*/
+}
+
+.div-head-row {
+  display: table-header-group;
+  text-indent: 3px;
+  font-size: 15px;
+  font-weight: bold;
+  height: 30px;
+  background-image: none;
+  background-color: #f0f0f0;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #ededed));
+  background-image: -webkit-linear-gradient(top, #ffffff, #ededed);
+  background-image: -moz-linear-gradient(top, #ffffff, #ededed);
+  background-image: -o-linear-gradient(top, #ffffff, #ededed);
+  background-image: linear-gradient(top, #ffffff, #ededed);
+}
+
+.div-head-col {
+  text-align: center;
+  text-indent: 3px;
+  font-size: 15px;
+  font-weight: bold;
+  height: 30px;
+  width: 50%;
+  padding: 3px;
+  float: left;
+}
+
+.div-table-row {
+  display: table-row;
+  width: 100%;
+  clear: both;
+}
+
+.div-table-col {
+  float: left;
+  display: table-column;
+  width: 49%;
+}

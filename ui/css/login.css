@@ -1,0 +1,13 @@
+@media (min-width:768px) {
+  body {
+      background: #edeff3 url('../images/watermark.png') no-repeat;
+  }
+}
+
+.login-welcome {
+  color: #10A2CE;
+}
+
+.compliance-only {
+   text-indent: -9999px;
+}

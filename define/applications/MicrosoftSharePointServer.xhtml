@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+<script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'APPLICATION';
+        function getFieldValue(field) {
+            var val = null;
+            var fileName = Ext.getDom(field);
+            if ( fileName ) {
+               val = fileName.value;
+            }
+            return val;
+        }
+        // Function to check null value
+        function checkNullValues(field){
+            var siteCollections = getFieldValue(field);
+            // Split "string" on new lines so we can look for empty
+            var lines = siteCollections.split(/\r\n|\r|\n/g);
+            var siteCollectionsRectified = '';
+            if ( lines ) {
+               for ( var i = 0; i < lines.length ; i++ ) {
+                    var line = lines[i];
+                    if ( line && line.length > 0 ) {
+                       siteCollectionsRectified += line + '\n';
+                    }
+                }
+            }
+            return siteCollectionsRectified;
+        }
+        // method for disabling includeSiteCollections text area
+        function disableIncludetextArea(){
+            var include = Ext.getDom('editForm:includeSiteCollections');
+            include.disabled = true;
+            include.value    = null;
+            include.readOnly = true;
+          }
+        // method for disabling excludeSiteCollections text area
+        function disableExcludetextArea(){
+            var exclude = Ext.getDom('editForm:excludeSiteCollections');
+            exclude.disabled = true;
+            exclude.value    = null;
+            exclude.readOnly = true;
+          }
+        Ext.onReady(function (){
+            Ext.QuickTips.init();
+
+            });
+             Page.on('beforeSave', function() {
+                 var exclude = getFieldValue('editForm:excludeSiteCollections');
+                 var include = getFieldValue('editForm:includeSiteCollections');
+                 if( include != '' && exclude != ''){
+                     Validator.validateNonBlankString(include,exclude, "You can mention either include or exclude site Collections!..Not both!");
+                }
+                // Check null for exclude Site Collections
+                var excludeSiteCollections = checkNullValues('editForm:excludeSiteCollections')
+                Ext.getDom('editForm:excludeSiteCollections').value = excludeSiteCollections;
+
+                // Check null for include Site Collections
+                var includeSiteCollections = checkNullValues('editForm:includeSiteCollections')
+                Ext.getDom('editForm:includeSiteCollections').value = includeSiteCollections;
+
+                var errors = Validator.getErrors();
+                if (errors && errors.length > 0) {
+                    Validator.displayErrors('appErrorsTop');
+                    return false;
+                }
+                return true;
+             });
+             Page.on('configSettingsLoaded', function() {
+                 var exclude = Ext.getDom('editForm:excludeSiteCollections').value;
+                 var include = Ext.getDom('editForm:includeSiteCollections').value;
+                 if( include == null && exclude == null  ){
+                    // This is should be for first time i.e. when both are empty, enable both text areas
+                    Ext.getDom('editForm:includeSiteCollections').disabled = false;
+                    Ext.getDom('editForm:excludeSiteCollections').disabled = false;
+                }
+                else if( include != '' ){
+                    // if includeSiteCollections is provided then disable excludeSiteCollections text area
+                    Ext.getDom('editForm:excludeSiteCollections').value    = null;
+                    Ext.getDom('editForm:excludeSiteCollections').disabled = true;
+                    Ext.getDom('editForm:excludeSiteCollections').readOnly = true;
+                }
+                else if( exclude != '' ){
+                    // Similarly, if excludeSiteCollections is provided then disable includeSiteCollections text area
+                    Ext.getDom('editForm:includeSiteCollections').value    = null;
+                    Ext.getDom('editForm:includeSiteCollections').disabled = true;
+                    Ext.getDom('editForm:includeSiteCollections').readOnly = true;
+                 }
+                else if( include != '' && exclude != ''){
+                    return false;
+                }
+             });
+       //--><!]]>
+    </script>
+    <f:view>
+      <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_sharepoint_settings}"/><br/><br/>
+      <div id="accountSettings" class='spContent'>
+        <table class="spTable" style="border:0px" cellspacing="0">
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_sharepoint_url}"/>
+               <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpUrl" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_SharePoint_Server_URL}"/>
+
+            </td>
+            <td valign="center">
+              <h:inputText id="SharePointServer"
+                           value="#{applicationObject.attributes['SharePointServer']}"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_sharepoint_user}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpUser" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_SharePoint_User}"/>
+            </td>
+            <td>
+              <h:inputText value="#{applicationObject.attributes['user']}"
+                           size="50"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_sharepoint_password}"/>
+             <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpPassword" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_SharePoint_Password}"/>
+            </td>
+             <td>
+               <sp:inputSecret size="30" 
+                               value="#{applicationObject.attributes['password']}" redisplay="true"
+                               autocomplete="off"
+                               disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                               readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/> 
+             </td>
+          </tr>
+
+        <ui:include src="iqserviceconfig.xhtml">
+            <ui:param name="IQServiceHostHelpTextKey" value="#{help.help_con_form_iq_service_host}"></ui:param>
+            <ui:param name="IQServiceInfoRequired" value="true"></ui:param>
+        </ui:include>
+
+       <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_page_size}"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpPageSize" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_page_size}"/>
+            </td>
+            <td>
+              <h:inputText value="#{applicationObject.attributes['pageSize']}"
+                           size="10"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+        </tr>
+        </table>
+        <ui:fragment>
+        <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_site_collections_settings}"/><br/><br/>
+        <table class="spTable" style="border:0px" cellspacing="0">
+         <tr>
+               <td class='titleColumn certScheduleTitleCol'>
+                  <h:outputText style='padding:5px' value="#{msgs.con_form_include_site_collections}"/>
+               </td>
+               <td class="certScheduleHelpCol">
+                  <h:graphicImage id="imgHlpIncludeSiteCollections" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                  alt="#{msgs.help_con_form_sharepoint_server_include_site_sollections}"/>
+               </td>
+               <td>
+                  <h:inputTextarea id="includeSiteCollections"
+                                   converter="NewLineList"
+                                   onchange="disableExcludetextArea()"
+                                   value="#{applicationObject.attributes['includeSiteCollections']}"
+                                   rows="5" style="width:23%"
+                                   disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                   readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+               </td>
+         </tr>
+         <tr>
+               <td class='titleColumn certScheduleTitleCol'>
+                  <h:outputText style='padding:5px' value="#{msgs.con_form_exclude_site_collections}"/>
+               </td>
+               <td class="certScheduleHelpCol">
+                  <h:graphicImage id="imgHlpExcludeSiteCollections" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                  alt="#{msgs.help_con_form_sharepoint_server_exclude_site_sollections}"/>
+               </td>
+               <td>
+                  <h:inputTextarea id="excludeSiteCollections"
+                                   converter="NewLineList"
+                                   onchange="disableIncludetextArea()"
+                                   value="#{applicationObject.attributes['excludeSiteCollections']}"
+                                   rows="5" style="width:23%"
+                                   disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                   readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+               </td>
+         </tr>
+        </table>
+       </ui:fragment>
+      </div>
+    </f:view>
+</ui:composition>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2018 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<body>
+  <ui:composition>
+    <ui:fragment rendered="#{(!empty taskResult.basicAttributes)}">
+      <div align="center">
+        <ui:include src="taskResultsStatsInclude.xhtml">
+          <ui:param name="attributes" value="#{taskResult.basicAttributes}" />
+          <ui:param name="captionName" value="#{taskResult.object.name}" />
+        </ui:include>
+      </div>
+    </ui:fragment>
+  </ui:composition>
+
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+
+    <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'APPLICATION';
+
+        function getFieldValue(field) {
+            var val = null;
+            var fileName = Ext.getDom(field);
+            if ( fileName ) {
+               val = fileName.value;
+            }
+            return val;
+        }
+        Ext.onReady(function () {
+           Ext.QuickTips.init();
+           var modeOfAgg = getSelectedRadioInput("editForm:usersToAggregate");
+           if (!modeOfAgg) {
+               var radioInputs = Ext.getDom(document.getElementsByName("editForm:usersToAggregate"));
+               radioInputs.item(3).checked = true;
+            }
+
+           // This is our validation hook
+           Page.on('beforeSave', function() {
+               if (!hasCredentialConfiguration()) {
+                   var host = getFieldValue('editForm:url');
+                   Validator.validateNonBlankString(host, "The Oracle Applications Server URL must be specified!");
+
+                   var user= getFieldValue('editForm:user');
+                   Validator.validateNonBlankString(user, "The user that should be used connect to Oracle Applications Server must be specified!");
+
+                   var pw = getFieldValue('editForm:password');
+                   Validator.validateNonBlankString(pw, "User's password must be specified!");
+
+                   var driverClass = getFieldValue('editForm:driverClass');
+                   Validator.validateNonBlankString(driverClass, "Driver Class must be specified!");
+                   
+                   var oracleASPValue = getFieldValue('editForm:oracleEBSAsp').trim();
+                   if(oracleASPValue){
+                       Validator.validateDelimitedKeyValuePair(oracleASPValue, "Invalid additional connection parameters. They should be in the form of key=value pair.");            
+                   } 
+
+                   var useEffectiveDate = getFieldValue("editForm:useEffectiveDate");
+                   if (useEffectiveDate == 'true') {
+                       var effectiveDate = getFieldValue('editForm:effectiveDate');
+                       if (effectiveDate && effectiveDate.length > 0) {
+                           var datePattern = "[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}";
+                              if (!effectiveDate.match(datePattern)) {
+                                 Validator.addError("Invalid date format for field 'HRMS Person Records Effective From'. Date format should be MM/DD/YYYY.");
+                              }
+                       }
+                       Validator.validateNonBlankString(effectiveDate, "'HRMS Person Records Effective From' value must be specified!");
+                   }
+                   var errors = Validator.getErrors();
+                   if (errors && errors.length > 0) {
+                       Validator.displayErrors('appErrorsTop');
+                       return false;
+                   }
+               }
+               //return false will kill cancel the save
+               return true;
+           });
+
+        });
+
+       //--><!]]>
+    </script>
+    <f:view>
+
+      <h:outputText styleClass="sectionHeader" value="#{msgs.oracleEBS_conn_settings}"/><br/><br/>
+
+
+      <div id="accountSettings" class='spContent'>
+        <table class="spTable" style="border:0px" cellspacing="0">
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.connection_user}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpUser" styleClass="helpIcon"
+                              url="/images/icons/dashboard_help_16.png"
+                              alt="Connection User"/>
+            </td>
+            <td>
+              <h:inputText value="#{applicationObject.attributes['user']}"
+                           id="user"
+                           size="20"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.connection_password}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpPassword" styleClass="helpIcon"
+                              url="/images/icons/dashboard_help_16.png"
+                              alt="The password of the connection user"/>
+            </td>
+             <td>
+               <sp:inputSecret size="50"
+                               id="password"
+                               autocomplete="off"
+                               required="false"
+                               value="#{applicationObject.attributes['password']}" redisplay="true"
+                               disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                               readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+             </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.database_url}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpHostName" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                              alt="URL to the database"/>
+
+            </td>
+            <td valign="center">
+              <h:inputText id="url"
+                           value="#{applicationObject.attributes['url']}"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.jdbc_driver}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpDriverClass" styleClass="helpIcon"
+                              url="/images/icons/dashboard_help_16.png"
+                              alt="JDBC Driver Class"/>
+            </td>
+            <td>
+              <h:inputText id="driverClass" 
+                           value="#{applicationObject.attributes['driverClass']}"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.oracleEBS_ProxyUser}"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpProxyUser" styleClass="helpIcon"
+                              url="/images/icons/dashboard_help_16.png"
+                              alt="E-Business Proxy User for Audit purpose"/>
+            </td>
+            <td>
+              <h:inputText id="sptProxyEBSUser"
+                           value="#{applicationObject.attributes['sptProxyEBSUser']}"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.oracleEBS_advanced_security_properties}"/>
+            </td>
+            <td class="certScheduleHelpCol" >
+              <h:graphicImage id="imgHlpAsp" 
+                              styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_OracleEBS_advanced_security_properties}"/>
+            </td>
+            <td>
+              <h:inputTextarea converter="NewLineList" onchange='textArea()' id="oracleEBSAsp" value="#{applicationObject.attributes['additionalConnProperties']}"
+                           rows="4" style="width:300px;"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+        </table>
+     <ui:fragment>
+       <h:inputHidden id = "useEffectiveDate" value="#{applicationObject.attributes['useEffectiveDate']}" />
+       <h:panelGroup id="useEffectiveDatePanel" rendered="#{applicationObject.attributes['useEffectiveDate'] eq 'true'}" >
+       <div id='aggregation_settings' >
+       <br/><h:outputText styleClass="sectionHeader" value="#{msgs.oracleEBS_aggregation_filters}"/><br/>
+       <!--  UsersToAggregate settings -->
+       <table class="spTable" style="border:0px" cellspacing="0">
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px'  value="#{msgs.oracleEBS_agg_settings}"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpUsersToAggregate" styleClass="helpIcon"
+                              url="/images/icons/dashboard_help_16.png"
+                              alt="#{help.help_con_form_OracleEBS_aggregation_filters}" />
+            </td>
+            <td>
+              <h:selectOneRadio  id="usersToAggregate" style="font-size:12px;color:#666666;"
+                                 value="#{applicationObject.attributes['usersToAggregate']}" layout="pageDirection">
+                            <f:selectItem itemLabel="&nbsp;&nbsp;&nbsp;#{msgs.oracleEBS_form_users_To_aggregate_employee}" itemValue="employee" />
+                            <f:selectItem itemLabel="&nbsp;&nbsp;&nbsp;#{msgs.oracleEBS_form_users_To_aggregate_contractor}" itemValue="contractor"/>
+                            <f:selectItem itemLabel="&nbsp;&nbsp;&nbsp;#{msgs.oracleEBS_form_users_To_aggregate_employeeAndContractor}" itemValue="employeeAndContractor"/>
+                            <f:selectItem itemLabel="&nbsp;&nbsp;&nbsp;#{msgs.oracleEBS_form_users_To_aggregate_allEBSUsers}" itemValue="allEBSUsers"/>
+              </h:selectOneRadio>
+            </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.oracleEBS_effectiveDate}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpeffectiveDate" styleClass="helpIcon"
+                              url="/images/icons/dashboard_help_16.png"
+                              alt="#{help.help_con_form_OracleEBS_effectiveDate}" />
+            </td>
+            <td>
+              <h:inputText id="effectiveDate"
+                           value="#{applicationObject.attributes['effectiveDate']}"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+        </table>
+      </div>
+      </h:panelGroup>
+     </ui:fragment>
+  </div>
+
+    </f:view>
+</ui:composition>
+
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+
+    <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'APPLICATION';
+
+        function getFieldValue(field) {
+            var val = null;
+            var fileName = Ext.getDom(field);
+            if ( fileName ) {
+               val = fileName.value;
+            }
+            return val;
+        }
+        
+        Ext.onReady(function () {
+           Ext.QuickTips.init();
+           
+
+           // This is our validation hook
+           Page.on('beforeSave', function() {
+               if (!hasCredentialConfiguration()) {
+                   var clientSecret = getFieldValue('editForm:client_secret');
+                   Validator.validateNonBlankString(clientSecret, "#{msgs.con_form_box_clntSecnotnull}");
+
+                   var clientId = getFieldValue('editForm:client_id');
+                   Validator.validateNonBlankString(clientId, "#{msgs.con_form_box_clntIdnotnull}");
+
+                   var enterpriseId = getFieldValue('editForm:enterprise_id');
+                   Validator.validateNonBlankString(enterpriseId, "#{msgs.con_form_box_entIdnull}");
+
+                   var publicKeyId = getFieldValue('editForm:publickey_id');
+                   Validator.validateNonBlankString(publicKeyId, "#{msgs.con_form_box_pubKeyIdnotnull}");
+
+                   var privateKeyExists = getFieldValue('editForm:privateKeyExists');
+                   if (!privateKeyExists) {
+                       var privateKey = getFieldValue('editForm:private_key');
+                       Validator.validateNonBlankString(privateKey, "#{msgs.con_form_box_prvtKeynotnull}");
+                   }
+
+                   var privateKeyPassword = getFieldValue('editForm:private_key_password');
+                   Validator.validateNonBlankString(privateKeyPassword, "#{msgs.con_form_box_prvtKeyPassnotnull}");
+
+                   var errors = Validator.getErrors();
+                   if (errors && errors.length > 0) {
+                       Validator.displayErrors('appErrorsTop');
+                       return false;
+                   }
+               }
+
+               //return false will kill cancel the save
+               return true;
+           });
+
+        });
+
+       //--><!]]>
+    </script>
+    <f:view>
+
+      <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_box_Settings}"/><br/><br/>
+
+
+      <div id="accountSettings" class='spContent'>
+        <table class="spTable" style="border:0px" cellspacing="0">
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_box_EnterpriseId}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpEnterpriseId" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{msgs.con_help_box_enterprise_id}"/>
+
+            </td>
+            <td>
+              <sp:inputText id="enterprise_id"
+                           value="#{applicationObject.attributes['enterprise_id']}"
+                           redisplay="true"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_box_PublicKeyId}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpPublicKeyId" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{msgs.con_help_box_public_key_id}"/>
+
+            </td>
+            <td>
+              <sp:inputText id="publickey_id"
+                           value="#{applicationObject.attributes['publickey_id']}"
+                           redisplay="true"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_box_ClientId}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpClientId" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{msgs.con_help_box_ClientId}"/>
+            </td>
+            <td>
+              <h:inputText id="client_id"
+                           value="#{applicationObject.attributes['client_id']}"
+                           redisplay="true"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_jwt_client_secret}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpClientSecret" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{msgs.con_help_box_ClientSecret}"/>
+
+            </td>
+            <td>
+              <sp:inputSecret id="client_secret"
+                           value="#{applicationObject.attributes['client_secret']}"
+                           redisplay="true"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_jwt_private_key}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpPrivateKey" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_jwt_private_key}"/>
+
+            </td>
+            <td>
+              <ui:include src="privateKey.xhtml"/>
+            </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_jwt_private_key_password}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpPrivateKeyPassword" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_jwt_private_key_password}"/>
+
+            </td>
+            <td>
+              <sp:inputSecret id="private_key_password"
+                           value="#{applicationObject.attributes['private_key_password']}"
+                           redisplay="true"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_box_PageSize}"/>
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpPageSize" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{msgs.con_help_box_PageSize}"/>
+
+            </td>
+            <td>
+              <h:inputText id="PageSize"
+                           value="#{applicationObject.attributes['page_size']}"
+                           size="5"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           type="number">
+                            <f:validateLongRange minimum="1" maximum="1000" />
+                           </h:inputText>
+                           <h:message for="PageSize" />
+            </td>
+          </tr>
+        </table>
+
+      </div>
+
+
+    </f:view>
+</ui:composition>
+
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+<body>
+
+<ui:composition>
+
+      <script type="text/javascript">
+        Ext.onReady(function() {
+            var appTab = Ext.getCmp('appTab'), templateTab, introTab, titleDiv;
+
+            templateTab = appTab.queryById('templateContent');
+            if (templateTab) {
+                introTab = templateTab.queryById('formEditorIntroContent');
+                if (introTab) {
+                    introTab.destroy(true);
+                }
+                templateTab.add(createComponentForDiv(
+                        'formEditorIntroContent', 
+                        'formEditorIntro')
+                );
+            }
+        });
+      </script>
+
+      <div id="formEditorIntro">
+      <table class="" style="width:98%"><tr><td>
+        <h:outputFormat value="#{msgs.form_editor_intro}">
+          <f:param value="#{beanType}"/>
+        </h:outputFormat>
+      </td></tr></table>
+      </div>
+
+      <p:outputPanel id="formsList">
+
+      <t:dataList value="#{formEditor.objectTypes}" var="objectType">
+        <script type="text/javascript">
+          Ext.onReady(function() {
+              var appTab = Ext.getCmp('appTab'), isCollapsed = false,
+                           templateTab, objTypeTab;
+
+              templateTab = appTab.queryById('templateContent');
+              if (templateTab) {
+                  initApplicationDependency();
+
+                  objTypeTab = templateTab.queryById('#{objectType}_formUsageContent');
+                  if (objTypeTab) {
+                      //store the collapsed state
+                      isCollapsed = objTypeTab.getCollapsed();
+                      templateTab.remove(objTypeTab, true);
+                  }
+
+                  templateTab.add(createCollapsiblePanelForDiv(
+                          '#{objectType}_formUsageContent', 
+                          '#{msgs.app_object_type_panel_header} #{objectType}',
+                          '#{objectType}_formUsageDiv',
+                          isCollapsed)
+                  );
+              }
+
+          });
+        </script>
+
+        <div id="#{objectType}_formUsageDiv" >
+
+        <table class="spTable" style="width:100%" id="formUsageList_#{objectType}">
+          <tr>
+            <th width="10%">#{msgs.type}</th>
+            <th>#{msgs.name}</th>
+            <th colspan="2">#{msgs.description}</th>
+          </tr>
+
+          <t:dataList value="#{formEditor.objectUsages[objectType]}" var="usage">
+            <tr>
+              <td>#{sp:localizedUsage(usage)}</td>
+              <ui:fragment rendered="#{!(sp:mapValueByPair(formEditor.formByObjectTypeUsageMap, objectType, usage) eq null)}">
+
+                <td width="20%">
+                  <a href="javascript:editPolicy(
+                    '#{sp:mapValueByPair(formEditor.formByObjectTypeUsageMap, objectType, usage).id}',
+                    '#{objectType}',
+                    '#{usage}',
+                    '#{sp:mapValue(formEditor.formRefMap,
+                      sp:mapValueByPair(formEditor.formByObjectTypeUsageMap,
+                        objectType,
+                        usage).id)}');">
+                      #{(sp:mapValueByPair(formEditor.formByObjectTypeUsageMap, objectType, usage)).name}
+                  </a>
+                </td>
+                <td width="60%">#{sp:mapValueByPair(formEditor.formByObjectTypeUsageMap, objectType, usage).description}</td>
+                <td width="10%">
+                  <a href="javascript:deletePolicy('#{sp:mapValueByPair(formEditor.formByObjectTypeUsageMap, objectType, usage).id}', '#{objectType}', '#{usage}');" class="deleteLink">#{msgs.delete_policy}</a>
+                </td>
+
+              </ui:fragment>
+
+              <ui:fragment rendered="#{sp:mapValueByPair(formEditor.formByObjectTypeUsageMap, objectType, usage) eq null}">
+                <td width="20%"></td>
+                <td width="60%"></td>
+                <td align="left" width="10%">
+                  <a href="javascript:addPolicy('#{sp:mapValueByPair(formEditor.formByObjectTypeUsageMap, objectType, usage).id}', '#{objectType}', '#{usage}');" class="addLink">#{msgs.add_policy}</a>
+                </td>
+              </ui:fragment>
+            </tr>
+
+          </t:dataList>
+        </table>
+        <div class="spacerDiv"/>
+        <p:outputPanel id="appDependencyPanel" rendered="#{ objectType eq 'account'}">
+          <div style="margin-left: 10px" >
+            <span class="textBold">#{msgs.app_dependencies}</span>
+            <h:graphicImage id="imgHlpAppDepend" 
+                styleClass="helpIcon" 
+                url="/images/icons/dashboard_help_16.png" 
+                alt="#{help.help_app_dependencies}"/>
+          <div id="applicationDependency"/>
+            <div id="applicationDependencyData" style="display:none">#{sp:basicJSONData(applicationObject.object.dependencies)}</div>
+            <div id="applicationDependencyExclusionIds" style="display:none">#{applicationObject.object.id}</div>
+          </div>
+          <div class="spacerDiv"/>
+        </p:outputPanel>
+
+        </div>
+
+        <div class="spacerDiv"/>
+      </t:dataList>
+      </p:outputPanel>
+
+      <script type="text/javascript">
+      makeTableMulticolored(Ext.getDom('formUsageListTbl'),true,false, "even", "odd");
+      </script>
+
+    <div class="spacerDiv"></div>
+
+    <script type="text/javascript">
+      // form IDs are wiped out on each request.  The role editor keeps
+      // the FormEditBean in the session so it can use IDs.  Others don't
+      // do that so they rely on usages instead.  We're not consistent because
+      // Role forms don't have usages.
+      function addPolicy(formId, objectType, usage) {
+          Ext.getDom('editForm:formId').value = formId;
+          Ext.getDom('editForm:formUsage').value = usage;
+          Ext.getDom('editForm:formObjectType').value = objectType;
+          Ext.getDom('editForm:formAddBtn').click();
+      }
+
+      function editPolicy(formId, objectType, usage, refId) {
+          Ext.getDom('editForm:formId').value = formId;
+          Ext.getDom('editForm:formUsage').value = usage;
+          Ext.getDom('editForm:formObjectType').value = objectType;
+          Ext.getDom('editForm:formRefId').value = refId;
+          Ext.getDom('editForm:formLoadBtn').click();
+      }
+
+      function deletePolicy(formId, objectType, usage) {
+          Ext.MessageBox.confirm('#{msgs.delete}?', Ext.String.format('#{msgs.form_editor_delete_policy}', usage), function(btn){
+              if(btn === 'yes') {
+                  Ext.getDom('editForm:formUsage').value = usage;
+                  Ext.getDom('editForm:formObjectType').value = objectType;
+                  Ext.getDom('editForm:formDeleteBtn').click();
+              }
+          });
+      }
+    </script>
+
+    <h:inputHidden id="applicationDependencyHidden" type="hidden" name="applicationDependencyHidden" value="#{applicationObject.object.dependencies}">
+      <f:converter converterId="sailpoint.object.ApplicationList"/>
+    </h:inputHidden>
+
+    <h:inputHidden value="#{formEditor.usage}" name="formUsage" id="formUsage"/>
+    <h:inputHidden value="#{formEditor.formRefId}" name="formRefId" id="formRefId"/>
+    <h:inputHidden value="#{formEditor.formRefName}" name="formRefName" id="formRefName"/>
+    <h:inputHidden value="#{formEditor.objectType}" name="formObjectType" id="formObjectType"/>
+    <p:commandButton action="#{formEditor.addForm}"
+                       id="formAddBtn"
+                       update="@([id$=formId],[id$=formName],[id$=formApplicationId],[id$=formApplicationName],[id$=formAttributes],[id$=createAttributesPanel])"
+                       oncomplete="SailPoint.component.ReferenceFormPopup.showApplication(
+                            '#{beanType}',
+                            Ext.getDom('editForm:formUsage').value,
+                            'Application');"
+                       value="#{msgs.form_editor_add_form}"
+                       style="display:none"/>
+
+    <p:commandButton action="#{formEditor.deleteForm}"
+                       id="formDeleteBtn"
+                       update="@([id$=formsList])"
+                       value="#{msgs.form_editor_delete_form}"
+                       style="display:none"/>
+
+    <p:commandButton action="#{formEditor.loadForm}"
+                       id="formLoadBtn"
+                       name="formLoadBtn"
+                       update="@([id$=formId],[id$=formName],[id$=formApplicationId],[id$=formApplicationName],[id$=formAttributes],[id$=createAttributesPanel])"
+                       oncomplete="SailPoint.component.ReferenceFormPopup.showApplication(
+                            '#{beanType}',
+                            Ext.getDom('editForm:formUsage').value,
+                            'Application',
+                            Ext.getDom('editForm:formRefId').value);"
+                       style="display:none"/> 
+    <p:commandButton action="#{formEditor.addFormReference}"
+                       id="addFormRefBtn"
+                       name="addFormRefBtn"
+                       update="@([id$=formsList])"
+                       style="display:none"/>
+</ui:composition>
+
+</body>
+</html>

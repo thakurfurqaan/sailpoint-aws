@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:p="http://primefaces.org/ui">
+<body>
+
+<ui:composition>
+  <div class="baseWindow expandPanel" style="#{styleOverride}">
+    <table class="expandPanelTable">
+      <thead><tr><th>
+        <div class="baseWindowHeader expandPanelHeader" >
+          <h:graphicImage
+            class="dashContentExpandBtn"
+            url="/images/icons/minus.png"
+            id="expandPanelPersistStateExpandBtn" />
+          <ui:insert name="panelTitle" />
+        </div>
+      </th></tr></thead>
+      <tbody><tr><td>
+        <div id="expandPanelPersistStateContent" class="baseWindowBody persistStatePanel paddedContainer-xs" style="#{displaySummaryStyle}">
+          <ui:insert name="panelBody" />
+        </div>
+      </td></tr></tbody>
+      <tfoot><tr><td>
+        <div class="baseWindowFooter expandPanelFooter"><img src="#{base.requestContextPath}/images/blank.gif" style="display:none"/></div>
+      </td></tr></tfoot>
+    </table>
+  </div>
+
+          
+  <script type="text/javascript">
+    
+   var ExpandingPanelPersistState = {
+   
+       
+     init: function() {          
+       var expanderPersistState = Ext.get('editForm:expandPanelPersistStateExpandBtn');
+       var contentPersistState = Ext.get('expandPanelPersistStateContent');
+       if (contentPersistState){
+         contentPersistState.setVisibilityMode(Ext.Element.DISPLAY);
+         //initial state
+         var initialVisible = contentPersistState.isVisible();
+         ExpandingPanelPersistState.setExpandButtonImage(!initialVisible, expanderPersistState);
+         if (expanderPersistState){
+           expanderPersistState.on('click', function (e) {
+                      //inner function has access to outer function variables
+                      var expanderLockPersistState = false;
+                      if(!expanderLockPersistState) {
+                        expanderLockPersistState = true;
+                        var summaryVisible = contentPersistState.isVisible();
+                        if (contentPersistState.isVisible()) {
+                          contentPersistState.slideOut();
+                        }
+                        else {
+                          contentPersistState.slideIn();
+                        }
+                        //set expand button image and save minimized state as per what is needed after the toggle affect will complete
+                        ExpandingPanelPersistState.setExpandButtonImage(summaryVisible, expanderPersistState);
+                        ExpandingPanelPersistState.setTrackSummaryDisplay(summaryVisible);         
+                        setTimeout("expanderLockPersistState = false", 1000);
+                      }
+                   }, false);
+         }
+       }
+     },
+    
+     setExpandButtonImage: function(expandButtonImage, expanderPersistState) {
+       if(expandButtonImage &amp;&amp; expanderPersistState)
+        {
+          Ext.getDom(expanderPersistState).src = CONTEXT_PATH + "/images/icons/plus.png";
+        }
+        else
+        {
+          Ext.getDom(expanderPersistState).src = CONTEXT_PATH + "/images/icons/minus.png";
+        }
+      }, 
+    
+     setTrackSummaryDisplay: function(trackSummaryLastStateMinimized) {
+       var trackElement = Ext.getDom("editForm:trackLastStateMinimized");
+       if (trackElement)
+       {
+         trackElement.value = trackSummaryLastStateMinimized.toString();
+       }
+       ExpandingPanelPersistState.persistSummaryLastState();
+     },
+    
+     persistSummaryLastState: function() {
+       var trackBtn = Ext.getDom('editForm:persistLastStateMinimizedBtn');
+       if(trackBtn != null){
+         trackBtn.click();
+       }  
+     }
+   };
+   
+   Ext.onReady(function() {
+     ExpandingPanelPersistState.init();
+   }); 
+   
+  </script>
+</ui:composition>
+</body>
+</html>

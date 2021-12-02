@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<!-- (c) Copyright 2019 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<sailpoint>
+    
+    <ImportAction name="merge">
+      <Configuration name="WebResource">
+        <Attributes>
+          <Map>
+            <entry key="webResources">
+              <value>
+                <List>
+                    <!--
+                      IAI Configuration
+                     -->
+                    <WebResource rights="FullAccessIAIConfiguration" url="systemSetup/index.*">
+                      <ChildResources>
+                        <String>systemSetup/iaiConfig.*</String>
+                      </ChildResources>
+                    </WebResource>
+                    <WebResource rights="FullAccessIAIConfiguration" url="systemSetup/iaiConfig.*"/>
+                </List>
+              </value>
+            </entry>
+          </Map>
+        </Attributes>
+      </Configuration>
+    </ImportAction>
+</sailpoint>

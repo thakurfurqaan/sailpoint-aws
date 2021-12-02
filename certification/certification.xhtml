@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2016 SailPoint Technologies, Inc., All Rights Reserved. -->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+
+<ui:composition template="/ngAppPage.xhtml">
+  <sp:loadBundle basename="sailpoint.web.messages.iiqMessages" var="msgs"/>
+
+  <ui:define name="title">#{msgs.ui_certifications_title}</ui:define>
+  <ui:define name="headerItems">
+
+    <sp:style serveOffset="#{base.requestContextPath}/ui/css">
+      <src>ng-sortable.css</src>
+    </sp:style>
+
+    <ui:include src="../ui/scriptData.xhtml" />
+    <ui:include src="../ui/jspmInclude.xhtml" />
+
+    <script type="text/javascript">
+      System.import('#{base.requestContextPath}/ui/js/certification/CertificationAppModule.js');
+    </script>
+
+  </ui:define>
+
+  <ui:define name="body">
+    <div class="sp-ui-app">
+      <sp-register-config sp-config-key="uiCertificationItemWorksheetColumns"
+                          sp-column-configs="#{sp:getColumnConfigJSON('uiCertificationItemWorksheetColumns')}" />
+
+      <sp-register-config sp-config-key="uiCertificationItemReturnedItemsColumns"
+                          sp-column-configs="#{sp:getColumnConfigJSON('uiCertificationItemReturnedItemsColumns')}" />
+
+      <sp-register-config sp-config-key="uiCertificationItemPolicyViolationsColumns"
+                          sp-column-configs="#{sp:getColumnConfigJSON('uiCertificationItemPolicyViolationsColumns')}" />
+
+      <sp-register-config sp-config-key="uiAdditionalCertificationInfoColumns"
+                          sp-column-configs="#{sp:getColumnConfigJSON('uiAdditionalCertificationInfoColumns')}" />
+
+      <sp-register-config sp-config-key="contextualHelpAccessReviewDetailURL"
+                          sp-config-value="#{sp:getContextualHelpJSON('accessReviewDetailURL')}" />
+  
+      <sp-register-config sp-config-key="contextualHelpAccessReviewSummaryCardURL"
+                          sp-config-value="#{sp:getContextualHelpJSON('accessReviewSummaryCardURL')}" />
+
+      <promise-tracker-mask></promise-tracker-mask>
+
+      <div ui-view="" />
+    </div>
+  </ui:define>
+
+</ui:composition>
+</body>
+</html>

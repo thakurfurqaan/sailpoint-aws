@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Application PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ImportAction name="connectorRegistryUpdateAction">
+  <Application connector="sailpoint.connector.OpenConnectorAdapter" featuresString="NO_AGGREGATION, PROVISIONING, UNLOCK, ENABLE, PASSWORD" name="ServiceNow Service Desk" type="ServiceNow Service Desk">
+    <Attributes>
+      <Map>
+        <entry key="connectorClass" value="openconnector.connector.servicedesk.ServiceNowServiceDeskConnector"/>
+        <!-- Authentication -->
+        <entry key="url" value=""/>
+        <entry key="username" value=""/>
+        <entry key="password" value=""/>
+        <entry key='authType' value=''/>
+        <!-- Catalog Item -->
+        <entry key="catalogItem">
+          <value>
+            <Map>
+              <entry key="Procurement_System" value=""/>
+            </Map>
+          </value>
+        </entry>
+        <!-- Request Properties Map-->
+        <entry key='request'>
+          <value>
+            <Map>
+              <entry key='req_description' value="The Service Request created by SailPoint ServiceNow Service Integration Module (SIM)."/>
+              <entry key='short_description' value="SailPoint Access Request $!plan.arguments.identityRequestId"/>
+              <entry key='description' value="SailPoint Access Request"/>
+            </Map>
+          </value>
+        </entry>
+        <!-- Status Map-->
+        <entry key="statusMap">
+          <value>
+            <Map>
+              <entry key="requested" value="Queued"/>
+              <entry key="in_process" value="Queued"/>
+              <entry key="closed_complete" value="Committed"/>
+              <entry key="closed_incomplete" value="Failed"/>
+              <entry key="closed_cancelled" value="Failed"/>
+              <entry key="closed_rejected" value="Failed"/>
+            </Map>
+          </value>
+        </entry>
+        <!-- Advance Settings -->
+        <entry key="advanceDescription">
+          <value>
+            <String>#if($request.operation == 'Create')
+Create Account on application $request.resource
+#else
+For $request.id in application $request.resource
+#end
+#if ($request.items)
+#foreach ($item in $request.items)
+$!item.Operation $item.name: $item.value
+#end
+#else
+$!request.Operation Account
+#end</String>
+          </value>
+        </entry>
+        <entry key="serviceNowAppName" value=""/>
+      </Map>
+    </Attributes>
+    <ProvisioningConfig>
+      <ManagedResource>
+        <ApplicationRef>
+          <Reference class="sailpoint.object.Application" name="Procurement_System"/>
+        </ApplicationRef>
+      </ManagedResource>
+      <PlanInitializerScript>
+        <Source>
+          <![CDATA[
+            import sailpoint.object.Identity;
+            import sailpoint.object.Link;
+            import sailpoint.object.IntegrationConfig;
+            import sailpoint.object.Application;
+            import sailpoint.api.IdentityService;
+
+            /**
+             * Fields
+             */
+            String applicationType = "ServiceNow";
+            // Identity attribute on SailPoint/ UserID on ServiceNow
+            String userId = "sys_id";
+
+            /**
+             * Get ServiceNow Account name for identity using application type - ServiceNow
+             */
+            private String getLinkByAppType(Identity identity) {
+                if (identity == null) {
+                    return null;
+                }
+
+                List links = identity.getLinks();
+                String linkName = null;
+                if (links != null ) {
+                    for (Link link : links) {
+                        String appType = link.getApplication().getType();
+                        if (appType != null && appType.equals(applicationType)) {
+                            if(link.getAttribute(userId) != null) {
+                                String userName = link.getAttribute(userId);
+                                if(userName != null) {
+                                    linkName = userName;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return linkName;
+            }
+
+            /**
+             * Get ServiceNow Account name for Identity using application name
+             */
+            private String getLinkByAppName(Identity identity, String serviceNowAppName) {
+                if (identity == null) {
+                    return null;
+                }
+
+                String linkName = null;
+                if (serviceNowAppName != null) {
+                    Application app = context.getObjectByName(Application.class, serviceNowAppName);
+                    IdentityService identService = new IdentityService(context);
+                    List links = identService.getLinks(identity, app);
+                    Link link = null;
+                    if (links != null && links.size() > 0) {
+                        link = links.get(0);
+                    }
+
+                    if (link != null) {
+                        String userName = (String) link.getAttribute(userId);
+                        if (userName != null) {
+                            linkName = userName;
+                        }
+                    }
+                }
+
+                return linkName;
+            }
+
+            ////////////////////////////////////////////////////////////////
+            // Main
+            ////////////////////////////////////////////////////////////////
+            Map arguments = (Map)plan.getArguments();
+            List requesterList = plan.getRequesters();
+            Identity requester = null;
+            if (requesterList != null) {
+                requester = requesterList.get(0);
+                if (requester != null && requester.getName() != null) {
+                    requester = context.getObjectByName(Identity.class, requester.getName());
+                }
+            }
+
+            String appName = integration.getName();
+            if (appName != null) {
+                Application appObject = context.getObjectByName(Application.class, appName);
+                serviceNowAppName = appObject.getAttributeValue("serviceNowAppName");
+            }
+
+            // Get ServiceNow Account name
+            if (serviceNowAppName != null) {
+                openedBy = getLinkByAppName(requester, serviceNowAppName);
+                requestedFor = getLinkByAppName(identity, serviceNowAppName);
+            } else {
+                openedBy = getLinkByAppType(requester);
+                requestedFor = getLinkByAppType(identity);
+            }
+
+            if (requestedFor != null) {
+                arguments.put("requested_for", requestedFor);
+            }
+
+            if (openedBy != null) {
+                arguments.put("opened_by", openedBy);
+            }
+          ]]>
+        </Source>
+      </PlanInitializerScript>
+    </ProvisioningConfig>
+  </Application>
+</ImportAction>

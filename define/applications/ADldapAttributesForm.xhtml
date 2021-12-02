@@ -1,0 +1,140 @@
+
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2015 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+
+    <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'APPLICATION';
+
+        function getFieldValue(fieldname) {
+            var val = null;
+            var field = Ext.getDom(fieldname);
+            if ( field ) {
+               val = field.value;
+            }
+            return val;
+        }
+
+        Ext.onReady(function () {
+           Ext.QuickTips.init();
+
+           var accountPanel = new Ext.Panel({
+               title : '#{sp:escapeJavascript(msgs.label_account)}',
+               contentEl: 'accountSettings'
+           }); 
+
+           var groupPanel = new Ext.Panel({
+               title : '#{sp:escapeJavascript(msgs.label_group)}',
+               contentEl: 'groupSettings'
+           }); 
+
+           var mainPanel = new Ext.TabPanel({
+               id: 'ADLdapTabPanel',
+               cls: 'ADLdapTabPanel', 
+               activeTab: 0,
+               deferredRender:false,
+               layoutOnTabChange:true,
+               defaults:{autoScroll: true},
+               width: 1230,
+               plain: true,
+               renderTo: 'tabbedConfigPanelDiv',
+               items : [ accountPanel, groupPanel ]
+           }); 
+           mainPanel.show();
+
+            // Used to resize the tabPanel when the Configuration tab is shown
+            Page.on('configSettingsLoaded', function() {
+                Ext.getCmp('ADLdapTabPanel').doComponentLayout();
+            });
+        });
+
+       //--><!]]>
+    </script>
+    <f:view>
+
+      <h:outputText styleClass="sectionHeader" value="#{applicationObject.type} #{msgs.con_form_ldap_config_title}"/><br/><br/>
+
+      
+      <div id="ldapSettings" class='spContent'>
+        
+            <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_AD_iqservice_config}"/> 
+                <h:graphicImage id="imgHlpIQservice" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_iq_service_conf}"/>
+
+                    <table class="width90" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td>
+                                <div class="spTabledContent">
+                                    <table class="spTable" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                               <th style="text-align:left; width: 243px;"><h:outputText value="#{msgs.iq_service_host}"/><h:graphicImage id="imgHlpIQServiceHost" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_iq_service_host}"/></th>
+                                                <th style="text-align:left; width: 243px;"><h:outputText value="#{msgs.iq_service_port}"/><h:graphicImage id="imgHlpIQServicePort" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_iq_service_port}"/></th>
+                                                <th style="text-align:left; width: 243px;"><h:outputText value="#{msgs.iq_service_user}"/><h:graphicImage id="imgHlpIQServiceUser" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_iq_service_user}"/></th>
+                                                <th style="text-align:left; width: 243px;"><h:outputText value="#{msgs.iq_service_password}"/><h:graphicImage id="imgHlpIQServicePassword" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_iq_service_password}"/></th>
+                                                <th style="text-align:center; width: 243px"><h:outputText value="#{msgs.iq_service_use_tls_ad}"/><h:graphicImage id="imgHlpIQServiceTLS" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_iq_service_tls}"/></th>                 
+                                            </tr>
+                                    </thead>
+                                    <tbody>
+                                            <tr>
+                                                   <td>
+                                                      <h:inputText value="#{applicationObject.IQServiceHost}"  style="width: 243px; margin-left:0px; margin-right:0px;"/>      
+                                                   </td>
+                                                   <td>
+                                                      <h:inputText value="#{applicationObject.IQServicePort}"  style="resize:none; width: 243px; margin-left:0px; margin-right:0px;"/>
+                                                   </td>
+                                                   <td>
+                                                      <h:inputText value="#{applicationObject.IQServiceUser}"  style="resize:none; width: 243px; margin-left:0px; margin-right:0px;"/>
+                                                   </td>
+                                                   <td>
+                                                      <sp:inputSecret value="#{applicationObject.IQServicePassword}" autocomplete="off" redisplay="true" style="resize:none; width: 243px; margin-left:0px; margin-right:0px;"/>
+                                                   </td>
+                                                   <td class="centeredColumn">
+                                                     <h:selectBooleanCheckbox value="#{applicationObject.useTLSForIQService}" style="text-align:center"/>
+                                                    </td>                                       
+                                            </tr>
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+              </div>
+
+      <div class='spContent'>
+            <ui:include src="discoverDomains.xhtml"/>
+      </div>
+
+
+      <div id='tabbedConfigPanelDiv'/>
+      <div style="display:none; border:0px" >
+        <div id="accountSettings" class='spContent'>
+                <ui:include src="searchScopeAccount.xhtml"/>
+        </div>
+      </div>
+
+      <div style="display:none; border:0px">
+        <div id="groupSettings" class='spContent'>
+                <ui:include src="searchScopeGroup.xhtml"/>
+        </div>
+      </div>
+
+    </f:view>
+</ui:composition>
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui" xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+	<f:view>
+		<div class="spContentTitle"><span class="textBold"><h:outputText
+			value="#{msgs.con_form_delimited_rules}" /></span></div>
+		<div class="spContent"><p:outputPanel
+			id="connectorRulesPanelRadioButton">
+			<table cellspacing="0" cellpadding="5" class="paddedTbl">
+
+				<tr>
+					<td><span class="textBold"><h:outputText
+						value="#{msgs.con_form_provision_type}" /></span></td>
+					<td><h:graphicImage
+						id="imgHlppeopleSoftHRMSModifyProvisioningRuleType_#{nameSpace}"
+						styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+						alt="#{msgs.con_help_provisionRuleType}" /></td>
+					<td colspan="2"><h:selectOneRadio
+						id="peopleSoftHRMSparseType_#{nameSpace}" style="width:400px"
+						onclick="ApplicationPage.changeParsingType(this, 'globalRule', 'operationRule');"
+						value="#{applicationObject.attributes[sp:concat(schemaType,'provisionRule')]}">
+						<f:selectItem
+							itemLabel="#{msgs.con_form_globalRule_provisionRuleType}"
+							itemValue="globalRule" />
+						<f:selectItem
+							itemLabel="#{msgs.con_form_operationRule_provisionRuleType}"
+							itemValue="operationRule" />
+					</h:selectOneRadio></td>
+				</tr>
+			</table>
+		</p:outputPanel> <p:outputPanel id="connectorRulesPanelGlobalRule">
+			<div id='globalRule_#{nameSpace}'>
+			<table class="paddedTbl" style="border: 0px" cellspacing="0">
+				<tr>
+					<td><span class="textBold"><h:outputText
+						value="#{msgs.con_form_provision}" /></span></td>
+					<td><h:graphicImage id="imgHlpProvisionRuleGL_#{nameSpace}"
+						styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+						alt="#{msgs.con_help_sap_provision}" /></td>
+					<td><h:selectOneMenu id="peoplesofthrProvisionRule"
+						style="width:300px"
+						value="#{applicationObject.attributes['peoplesofthrProvisionRule']}"
+						disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+						readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+						<f:selectItems value="#{applicationObject.peopleSoftHRMSProvisionRules}" />
+					</h:selectOneMenu></td>
+					<ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}">
+						<td><input type="button" value="#{msgs.button_ellipsis}"
+							class="ruleEditorBtn"
+							onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:peoplesofthrProvisionRule').value,
+                                                         'PeopleSoftHRMSProvision',
+                                                         Ext.get('editForm:refreshConnectorRulesButtonGL'))" />
+						</td>
+					</ui:fragment>
+				</tr>
+
+			</table>
+			</div>
+			<p:commandButton id="refreshConnectorRulesButtonGL"
+				style="display:none" immediate="true"
+				update="@([id$=connectorRulesPanelGlobalRule])" />
+		</p:outputPanel> <p:outputPanel id="connectorRulesPanelOperationRule">
+			<div id='operationRule_#{nameSpace}'>
+			<table class="paddedTbl" style="border: 0px" cellspacing="0">
+				<tr>
+					<td><span class="textBold"><h:outputText
+						value="#{msgs.con_form_operation_provisioning_Enable}" /></span></td>
+					<td><h:graphicImage
+						id="imgHlppeopleSoftHRMSEnableProvisioningRule_#{nameSpace}"
+						styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+						alt="#{msgs.con_help_sap_enable_operation_provisioning}" /></td>
+					<td><h:selectOneMenu id="peoplesofthrEnableProvisioningRule"
+						style="width:300px"
+						value="#{applicationObject.attributes['peoplesofthrEnableProvisioningRule']}"
+						disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+						readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+						<f:selectItems
+							value="#{applicationObject.peopleSoftHRMSEnableProvisioningRules}" />
+					</h:selectOneMenu></td>
+					<ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}">
+						<td><input type="button" value="#{msgs.button_ellipsis}"
+							class="ruleEditorBtn"
+							onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:peoplesofthrEnableProvisioningRule').value,
+                                                         'PeopleSoftHRMSOperationProvisioning',
+                                                         Ext.get('editForm:refreshConnectorRulesButtonOL'))" />
+						</td>
+					</ui:fragment>
+				</tr>
+				<tr>
+					<td><span class="textBold"><h:outputText
+						value="#{msgs.con_form_operation_provisioning_Disable}" /></span></td>
+					<td><h:graphicImage
+						id="imgHlppeopleSoftHRMSDisableProvisioningRule_#{nameSpace}"
+						styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+						alt="#{msgs.con_help_sap_disable_operation_provisioning}" /></td>
+					<td><h:selectOneMenu id="peoplesofthrDisableProvisioningRule"
+						style="width:300px"
+						value="#{applicationObject.attributes['peoplesofthrDisableProvisioningRule']}"
+						disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+						readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+						<f:selectItems
+							value="#{applicationObject.peopleSoftHRMSDisableProvisioningRules}" />
+					</h:selectOneMenu></td>
+					<ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}">
+						<td><input type="button" value="#{msgs.button_ellipsis}"
+							class="ruleEditorBtn"
+							onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:peoplesofthrDisableProvisioningRule').value,
+                                                         'PeopleSoftHRMSOperationProvisioning',
+                                                         Ext.get('editForm:refreshConnectorRulesButtonOL'))" />
+						</td>
+					</ui:fragment>
+				</tr>
+				<!-- Delete Operation -->
+				<tr>
+					<td><span class="textBold"><h:outputText
+						value="#{msgs.con_form_operation_provisioning_Delete}" /></span></td>
+					<td><h:graphicImage
+						id="imgHlppeopleSoftHRMSDeleteProvisioningRule_#{nameSpace}"
+						styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+						alt="#{msgs.con_help_sap_delete_operation_provisioning}" /></td>
+					<td><h:selectOneMenu id="peoplesofthrDeleteProvisioningRule"
+						style="width:300px"
+						value="#{applicationObject.attributes['peoplesofthrDeleteProvisioningRule']}"
+						disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+						readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+						<f:selectItems
+							value="#{applicationObject.peopleSoftHRMSDeleteProvisioningRules}" />
+					</h:selectOneMenu></td>
+					<ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}">
+						<td><input type="button" value="#{msgs.button_ellipsis}"
+							class="ruleEditorBtn"
+							onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:peoplesofthrDeleteProvisioningRule').value,
+                                                         'PeopleSoftHRMSOperationProvisioning',
+                                                         Ext.get('editForm:refreshConnectorRulesButtonOL'))" />
+						</td>
+					</ui:fragment>
+				</tr>
+				<!-- Unlock Operation -->
+				<tr>
+					<td><span class="textBold"><h:outputText
+						value="#{msgs.con_form_operation_provisioning_Unlock}" /></span></td>
+					<td><h:graphicImage
+						id="imgHlppeopleSoftHRMSUnlockProvisioningRule_#{nameSpace}"
+						styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+						alt="#{msgs.con_help_sap_unlock_operation_provisioning}" /></td>
+					<td><h:selectOneMenu id="peoplesofthrUnlockProvisioningRule"
+						style="width:300px"
+						value="#{applicationObject.attributes['peoplesofthrUnlockProvisioningRule']}"
+						disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+						readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+						<f:selectItems
+							value="#{applicationObject.peopleSoftHRMSUnlockProvisioningRules}" />
+					</h:selectOneMenu></td>
+					<ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}">
+						<td><input type="button" value="#{msgs.button_ellipsis}"
+							class="ruleEditorBtn"
+							onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:peoplesofthrUnlockProvisioningRule').value,
+                                                         'PeopleSoftHRMSOperationProvisioning',
+                                                         Ext.get('editForm:refreshConnectorRulesButtonOL'))" />
+						</td>
+					</ui:fragment>
+				</tr>
+				<!-- Create Operation -->
+				<tr>
+					<td><span class="textBold"><h:outputText
+						value="#{msgs.con_form_operation_provisioning_Create}" /></span></td>
+					<td><h:graphicImage
+						id="imgHlppeopleSoftHRMSCreateProvisioningRule_#{nameSpace}"
+						styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+						alt="#{msgs.con_help_sap_create_operation_provisioning}" /></td>
+					<td><h:selectOneMenu id="peoplesofthrCreateProvisioningRule"
+						style="width:300px"
+						value="#{applicationObject.attributes['peoplesofthrCreateProvisioningRule']}"
+						disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+						readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+						<f:selectItems
+							value="#{applicationObject.peopleSoftHRMSCreateProvisioningRules}" />
+					</h:selectOneMenu></td>
+					<ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}">
+						<td><input type="button" value="#{msgs.button_ellipsis}"
+							class="ruleEditorBtn"
+							onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:peoplesofthrCreateProvisioningRule').value,
+                                                         'PeopleSoftHRMSOperationProvisioning',
+                                                         Ext.get('editForm:refreshConnectorRulesButtonOL'))" />
+						</td>
+					</ui:fragment>
+				</tr>
+				<!-- Modify Operation -->
+				<tr>
+					<td><span class="textBold"><h:outputText
+						value="#{msgs.con_form_operation_provisioning_Modify}" /></span></td>
+					<td><h:graphicImage
+						id="imgHlppeopleSoftHRMSModifyProvisioningRule_#{nameSpace}"
+						styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+						alt="#{msgs.con_help_sap_modify_operation_provisioning}" /></td>
+					<td><h:selectOneMenu id="peoplesofthrModifyProvisioningRule"
+						style="width:300px"
+						value="#{applicationObject.attributes['peoplesofthrModifyProvisioningRule']}"
+						disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+						readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+						<f:selectItems
+							value="#{applicationObject.peopleSoftHRMSModifyProvisioningRules}" />
+					</h:selectOneMenu></td>
+					<ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}">
+						<td><input type="button" value="#{msgs.button_ellipsis}"
+							class="ruleEditorBtn"
+							onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:peoplesofthrModifyProvisioningRule').value,
+                                                         'PeopleSoftHRMSOperationProvisioning',
+                                                         Ext.get('editForm:refreshConnectorRulesButtonOL'))" />
+						</td>
+					</ui:fragment>
+				</tr>
+			</table>
+			</div>
+			<p:commandButton id="refreshConnectorRulesButtonOL"
+				style="display:none" immediate="true"
+				update="@([id$=connectorRulesPanelOperationRule])" />
+		</p:outputPanel></div>
+
+	</f:view>
+</ui:composition>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+/**
+ * Style overrides for the PAM collector form
+ */
+
+.pamUnstructuredConfig > .sectionHeader {
+    margin-top: 10px;
+}
+
+.pamUnstructuredConfig #accountSettings {
+    padding: 0;
+    margin: 0;
+}
+
+.pamUnstructuredConfig .spContent table.spTable > tbody > tr > td.certScheduleTitleCol {
+    width: 1%;
+    text-align: left;
+}
+
+.pamUnstructuredConfig .spContent table.spTable > tbody > tr > td.certScheduleTitleCol > span {
+    padding-left: 0 !important;
+}

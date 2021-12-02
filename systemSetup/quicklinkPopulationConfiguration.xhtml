@@ -1,0 +1,367 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:p="http://primefaces.org/ui">
+<body>
+
+<ui:composition>
+
+    <table id="nameTable" class="spTable noBorder">
+      <caption><h:outputText styleClass="m-l-xs" value="#{msgs.qlp_editor_details}"/></caption>
+      <thead>
+        <tr>
+          <td width="20%">
+            <h:outputText styleClass="m-l-sm" value="#{msgs.label_name}"/>
+            <h:outputText styleClass="requiredText" value="*"/>            
+          </td>
+          <td width="80%">
+            <h:outputText value="#{msgs.label_description}"/>
+          </td>
+        </tr>
+      </thead>
+      <tr>
+        <td >
+          <h:inputText id="name" value="#{dsEditor.currentDTO.name}" size="30" maxlength="300" styleClass="m-l-sm m-r-sm"
+            onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);"/>
+        </td>
+        <td >
+          <h:inputText id="description" value="#{dsEditor.currentDTO.description}" size="90" maxlength="300" 
+            onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);"/>
+        </td>
+      </tr>
+    </table>
+        
+    <div class="spacerDiv"/>
+ 
+    <table id="IdentityPoolTable" class="spTable noBorder">
+      <caption><h:outputText styleClass="m-l-xs" value="#{msgs.qlp_editor_membership}"/></caption>
+      <tr>
+        <td colspan="2" width="100%">
+          <div class="m-l-sm m-t-sm">
+            <strong>#{msgs.qlp_editor_membership_rule}</strong>
+          </div>
+          <div id="selectorDiv" class="m-l-sm m-t-sm">
+            <ui:include src="../include/selector.xhtml">
+              <ui:param name="listener" value="#{dsEditor}"/> 
+              <ui:param name="selector" value="#{dsEditor.selector}" />
+              <ui:param name="qlpEnableDirty" value="true" />
+              <ui:param name="showAdditionalItems" value="true" />
+              <ui:param name="showNewOperators" value="true"/>
+            </ui:include>
+          </div>
+        </td>
+      </tr>    
+      <tr>
+        <td rowspan="2" width="50%">
+          <div class="m-l-sm m-t-sm">
+            <strong>#{msgs.qlp_editor_included_identities}</strong>
+          </div>
+          <div id="inclusionsMultiSuggest" class="m-l-sm m-t-sm"/>
+            <t:inputHidden id="inclusionsSuggest" value="#{dsEditor.currentDTO.inclusions}" forceId="true"
+              onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);">
+              <sp:convertList />
+            </t:inputHidden>
+          
+            <div id="inclusionsMultiSuggestData" style="display:none">
+              #{sp:basicJSONDataCustomFieldsConverted(dsEditor.currentDTO.inclusions, null,'IdentityNameListConverter')}
+            </div>
+        </td>
+        <td rowspan="2" width="50%">
+          <div class="m-l-sm m-t-sm">
+            <strong>#{msgs.qlp_editor_excluded_identities}</strong>
+          </div>
+          <div id="exclusionsMultiSuggest" class="m-l-sm m-t-sm"/>
+            <t:inputHidden id="exclusionsSuggest" value="#{dsEditor.currentDTO.exclusions}" forceId="true"
+              onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);">
+              <sp:convertList />
+            </t:inputHidden>
+          
+            <div id="exclusionsMultiSuggestData" style="display:none">
+              #{sp:basicJSONDataCustomFieldsConverted(dsEditor.currentDTO.exclusions, null,'IdentityNameListConverter')}
+            </div>
+        </td>
+      </tr>
+    </table>
+        
+    <div class="spacerDiv"/>
+
+    <c:set var="requestControls" value="#{dsEditor.currentDTO.populationRequestControlMap}" scope="request" />
+    
+    <table id="RequestControlsTable" class="spTable noBorder">
+      <caption><h:outputText styleClass="m-l-xs" value="#{msgs.qlp_editor_request_authority}"/></caption>
+
+      <tr>
+        <td colspan="3">
+          <div class="m-l-sm">
+            <h:selectOneRadio id="PopulationDefinitionType" value="#{requestControls['populationDefinitionType']}"
+              onclick="SailPoint.systemSetup.QuickLinkPopulationEditor.applyAllowAll();"
+              onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);">
+              <f:selectItems value="#{dsEditor.populationDefinitionTypes}"/>            
+            </h:selectOneRadio>
+            
+            <ui:remove><!-- ************ BEGIN SPECIFIC USERS ************ --></ui:remove>
+            <div id="definePopOptionDiv">
+              <h:selectOneMenu id="MatchAnyOrAll" value="#{requestControls['matchAnyOrAll']}"
+                onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);">
+                <f:selectItems value="#{dsEditor.matchAnyOrAllOptions}" />
+              </h:selectOneMenu>
+              <h:graphicImage id="imgHlpMatchAnyOrAll" width="12px" 
+                              alt="#{help.help_lcm_match_any_or_all}"
+                              height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px"
+                              url="/images/icons/dashboard_help_16.png" />
+                            
+              <hr/>
+              <h:selectBooleanCheckbox id="EnableAttributeControl" value="#{requestControls['enableAttributeControl']}"
+                                       onclick="SailPoint.systemSetup.QuickLinkPopulationEditor.applyAttributeControl();"
+                                       onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);"/>
+              #{msgs.lcm_request_controls_shared_attributes}
+              <h:graphicImage id="imgHlpEnableAttributeControl" width="12px" 
+                              alt="#{help.help_lcm_enable_attribute_control}"
+                              height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px"
+                              url="/images/icons/dashboard_help_16.png" />
+              <div  id="AttributeSelectorRow" class="m-t-sm m-l-sm">
+                <table class="spTable noBorder eraseTdPadding">
+                  <tr>
+                    <td>
+                      <div id="AttributeSelectorPanel" class="eraseTdPadding"/>
+                      <div id="AttributeSelectorErrors"/>
+                      <h:inputHidden id="AttributeControlFilter" value="#{requestControls['attributeFilterControl']}"
+                        onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);"/>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              
+              <hr/>
+              <h:selectBooleanCheckbox id="EnableSubordinateControl" value="#{requestControls['enableSubordinateControl']}"
+                                       onclick="SailPoint.systemSetup.QuickLinkPopulationEditor.applySubordinateControl();"
+                                       onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);"/>
+              #{msgs.lcm_request_controls_subordinate}
+              <h:graphicImage id="imgHlpEnableSubordinateControl" width="12px" 
+                              alt="#{help.help_lcm_enable_subordinate_control}"
+                              height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px"
+                              url="/images/icons/dashboard_help_16.png" />
+              <div id="SubordinateChoicesRow" class="m-t-sm m-l-sm">
+                <table class="eraseTdPadding">
+                  <tr>
+                    <td>
+                      <h:selectOneRadio id="SubordinateChoice" layout="pageDirection" value="#{requestControls['subordinateChoice']}" styleClass="radioSelect"
+                                        onclick="SailPoint.systemSetup.QuickLinkPopulationEditor.applySubordinateControl();"
+                                        onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);">
+                        <f:selectItems value="#{dsEditor.subordinateChoiceOptions}"/>
+                      </h:selectOneRadio>
+                    </td>
+                    <td style="vertical-align:top;">
+                      <h:graphicImage id="imgHlpSubordinateChoices" width="12px" 
+                                alt="#{help.help_lcm_subordinate_choices}"
+                                height="12px" style="cursor:pointer;padding: 7px 7px 0px 7px;vertical-align:top"
+                                url="/images/icons/dashboard_help_16.png" />
+                    </td>
+                  </tr>
+                </table>
+                <div id="SubordinateHierarchyLevelRow" class="m-l-sm">
+                  <h:inputText id="SubordinateMaxHierarchy" size="2" value="#{requestControls['maxHierarchyDepth']}"
+                    onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);"/>
+                  #{msgs.lcm_request_controls_max_hierarchy_level}
+                  <h:graphicImage id="imgHlpSubordinateHierarchyLevelRow" width="12px" 
+                                  alt="#{help.help_lcm_subrodinate_hierarchy_level}"
+                                  height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px"
+                                  url="/images/icons/dashboard_help_16.png" />
+                </div>
+              </div>
+              
+              <hr/>
+              <h:selectBooleanCheckbox id="EnableCustomControl" value="#{requestControls['enableCustomControl']}"
+                                       onclick="SailPoint.systemSetup.QuickLinkPopulationEditor.applyCustomControl();"
+                                       onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);"/>
+              #{msgs.lcm_request_controls_custom}
+              <h:graphicImage id="imgHlpEnableCustomControl" width="12px" 
+                              alt="#{help.help_lcm_enable_custom_control}"
+                              height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px"
+                              url="/images/icons/dashboard_help_16.png" />
+              <div id="CustomFilterRow" class="m-t-sm m-l-sm">
+                  <h:inputTextarea id="CustomFilterInput" cols="80" rows="5" value="#{requestControls['customControl']}"
+                    onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);"/>
+                  <div class="formError" style="display:none" id="CustomFilterError"/>
+              </div>
+            </div>
+            <ui:remove><!-- ************ END SPECIFIC USERS ************ --></ui:remove>
+            
+            <hr/>
+            <h:selectBooleanCheckbox id="IgnoreIIQScoping" value="#{requestControls['ignoreIIQScoping']}"
+              onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);"/>
+            #{msgs.lcm_request_controls_ignore_iiq_scoping} 
+            <h:graphicImage id="imgHlpIgnoreIIQScoping" width="12px" 
+                            alt="#{help.help_lcm_ignore_iiq_scoping}"
+                            height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px"
+                            url="/images/icons/dashboard_help_16.png" />
+          </div>
+        </td>
+      </tr>
+      
+    </table>
+
+    <div class="spacerDiv"/>
+        
+    <h:commandButton id="refreshRulesButton"
+                   style="display:none"
+                   onclick="Ext.getCmp('qlpEditorCmp').updateRuleSelectors();"/>
+
+    <p:outputPanel id="ObjectControlsPanel">
+      <table id="ObjectControlsTable" class="spTable noBorder">
+        <caption><h:outputText styleClass="m-l-xs" value="#{msgs.lcm_object_request_controls}"/></caption>
+        <tr>
+          <td>
+            <div class="m-l-sm">
+              <strong>#{msgs.qlp_editor_role_request_rule}</strong>
+              <h:graphicImage id="imgHlpRoleRequestControls" width="12px" 
+                              alt="#{help.help_lcm_role_request_controls}"
+                              height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px"
+                              url="/images/icons/dashboard_help_16.png" />
+            </div>
+          </td>
+          <td>
+            <div class="m-l-sm">
+              <strong>#{msgs.qlp_editor_application_request_rule}</strong>
+              <h:graphicImage id="imgHlpApplicationRequestControls" width="12px" 
+                              alt="#{help.help_lcm_entitlement_request_controls}"
+                              height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px"
+                              url="/images/icons/dashboard_help_16.png" />
+            </div>
+          </td>
+          <td>
+            <div class="m-l-sm">
+              <strong>#{msgs.qlp_editor_entitlement_request_rule}</strong>
+              <h:graphicImage id="imgHlpEntitlementRequestControls" width="12px" 
+                              alt="#{help.help_lcm_entitlement_request_managed_attribute_controls}"
+                              height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px"
+                              url="/images/icons/dashboard_help_16.png" />
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div id="RoleSelectorRuleDiv"/>
+            <h:inputHidden id="RoleSelectorRule" value="#{dsEditor.currentDTO.roleRequestControlId}"/>
+            <h:inputHidden id="RoleSelectorRuleName" value="#{dsEditor.currentDTO.roleRequestControlName}"/>
+            
+            <input type="button" value="#{msgs.button_edit_rule}" class="secondaryBtn m-l-sm m-t-sm"
+                   onclick="SailPoint.Rule.Editor.edit(Ext.getCmp('qlpEditorCmp').getRuleName('role'),
+                                                   'RequestObjectSelector',
+                                                     Ext.get('editorForm:refreshRulesButton'));" />
+          </td>
+          <td>
+            <div id="ApplicationSelectorRuleDiv"/>
+            <h:inputHidden id="ApplicationSelectorRule" value="#{dsEditor.currentDTO.applicationRequestControlId}"/>
+            <h:inputHidden id="ApplicationSelectorRuleName" value="#{dsEditor.currentDTO.applicationRequestControlName}"/>
+            
+            <input type="button" value="#{msgs.button_edit_rule}" class="secondaryBtn m-l-sm m-t-sm"
+                   onclick="SailPoint.Rule.Editor.edit(Ext.getCmp('qlpEditorCmp').getRuleName('application'),
+                                                   'RequestObjectSelector',
+                                                   Ext.get('editorForm:refreshRulesButton'));" />
+          </td>
+          <td>
+            <div id="ManagedAttributeSelectorRuleDiv"/>
+            <h:inputHidden id="#{type}ManagedAttributeSelectorRule" value="#{dsEditor.currentDTO.managedAttributeRequestControlId}"/>
+            <h:inputHidden id="#{type}ManagedAttributeSelectorRuleName" value="#{dsEditor.currentDTO.managedAttributeRequestControlName}"/>
+            
+            <input type="button" value="#{msgs.button_edit_rule}" class="secondaryBtn m-l-sm m-t-sm"
+                   onclick="SailPoint.Rule.Editor.edit(Ext.getCmp('qlpEditorCmp').getRuleName('managedAttribute'),
+                                                   'RequestObjectSelector',
+                                                   Ext.get('editorForm:refreshRulesButton'));" />
+          </td>
+        </tr>
+      </table>
+    </p:outputPanel>
+
+    <p:outputPanel id="ObjectRemoveControlsPanel">
+      <table id="ObjectRemoveControlsTable" class="spTable noBorder">
+        <caption><h:outputText styleClass="m-l-xs" value="#{msgs.lcm_object_remove_controls}"/></caption>
+        <tr>
+          <td></td>
+          <td></td>
+          <td>
+            <input type="button" value="#{msgs.lcm_object_match_remove_controls}" 
+                   id="ObjectRemoveControlsButton" class="secondaryBtn m-r-sm m-t-sm pull-right"
+                   onclick="Ext.getCmp('qlpEditorCmp').matchRemoveControl();"
+                   onchange="SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);"/>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="m-l-sm">
+              <strong>#{msgs.qlp_editor_role_request_rule}</strong>
+              <h:graphicImage id="imgHlpRoleRemoveControls" width="12px" 
+                              alt="#{help.help_lcm_role_remove_controls}"
+                              height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px"
+                              url="/images/icons/dashboard_help_16.png" />
+            </div>
+          </td>
+          <td>
+            <div class="m-l-sm">
+              <strong>#{msgs.qlp_editor_application_request_rule}</strong>
+              <h:graphicImage id="imgHlpApplicationRemoveControls" width="12px" 
+                              alt="#{help.help_lcm_entitlement_remove_controls}"
+                              height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px"
+                              url="/images/icons/dashboard_help_16.png" />
+            </div>
+          </td>
+          <td>
+            <div class="m-l-sm">
+              <strong>#{msgs.qlp_editor_entitlement_request_rule}</strong>
+              <h:graphicImage id="imgHlpEntitlementRemoveControls" width="12px" 
+                              alt="#{help.help_lcm_entitlement_remove_managed_attribute_controls}"
+                              height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px"
+                              url="/images/icons/dashboard_help_16.png" />
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div id="RoleSelectorRemoveRuleDiv"/>
+            <h:inputHidden id="RoleSelectorRemoveRule" value="#{dsEditor.currentDTO.roleRemoveControlId}"/>
+            <h:inputHidden id="RoleSelectorRemoveRuleName" value="#{dsEditor.currentDTO.roleRemoveControlName}"/>
+            
+            <input type="button" value="#{msgs.button_edit_rule}" class="secondaryBtn m-l-sm m-t-sm"
+                   onclick="SailPoint.Rule.Editor.edit(Ext.getCmp('qlpEditorCmp').getRuleName('roleRemove'),
+                                                   'RequestObjectSelector',
+                                                     Ext.get('editorForm:refreshRulesButton'));" />
+          </td>
+          <td>
+            <div id="ApplicationSelectorRemoveRuleDiv"/>
+            <h:inputHidden id="ApplicationSelectorRemoveRule" value="#{dsEditor.currentDTO.applicationRemoveControlId}"/>
+            <h:inputHidden id="ApplicationSelectorRemoveRuleName" value="#{dsEditor.currentDTO.applicationRemoveControlName}"/>
+            
+            <input type="button" value="#{msgs.button_edit_rule}" class="secondaryBtn m-l-sm m-t-sm"
+                   onclick="SailPoint.Rule.Editor.edit(Ext.getCmp('qlpEditorCmp').getRuleName('applicationRemove'),
+                                                   'RequestObjectSelector',
+                                                   Ext.get('editorForm:refreshRulesButton'));" />
+          </td>
+          <td>
+            <div id="ManagedAttributeSelectorRemoveRuleDiv"/>
+            <h:inputHidden id="#{type}ManagedAttributeSelectorRemoveRule" value="#{dsEditor.currentDTO.managedAttributeRemoveControlId}"/>
+            <h:inputHidden id="#{type}ManagedAttributeSelectorRemoveRuleName" value="#{dsEditor.currentDTO.managedAttributeRemoveControlName}"/>
+            
+            <input type="button" value="#{msgs.button_edit_rule}" class="secondaryBtn m-l-sm m-t-sm"
+                   onclick="SailPoint.Rule.Editor.edit(Ext.getCmp('qlpEditorCmp').getRuleName('managedAttributeRemove'),
+                                                   'RequestObjectSelector',
+                                                   Ext.get('editorForm:refreshRulesButton'));" />
+          </td>
+        </tr>
+      </table>
+    </p:outputPanel>
+    
+</ui:composition>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?><!DOCTYPE Application PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ImportAction name="connectorRegistryUpdateAction">
+<Application connector="sailpoint.connector.SAPGRCConnector" featuresString="NO_AGGREGATION, NO_RANDOM_ACCESS" icon="internetIcon" name="SAP GRC" profileClass="" type="SAP GRC">
+  <Attributes>
+    <Map>
+      <entry key="connectorClass" value="sailpoint.connector.SAPGRCConnector"/>
+      <entry key="formPath" value="SAPGRCAttributesForm.xhtml"/>
+      <entry key="grc_mitigation_search_keyword" value="Mitigation Control"/>
+      <entry key="encrypted" value="grc_password"/>
+    </Map>
+  </Attributes>
+ </Application>
+</ImportAction>

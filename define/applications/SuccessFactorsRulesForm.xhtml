@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2018 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+  <f:view>
+      <div class="spContentTitle">
+        <span class="textBold"><h:outputText value="#{msgs.con_form_delimited_rules}"/></span>
+      </div>
+      <div class="spContent">
+      <p:outputPanel id="connectorRulesPaneGeneralRule">
+      <table cellspacing="0" cellpadding="5" class="paddedTbl">
+         <tr>
+          <td>
+            <span class="textBold"><h:outputText value="#{msgs.con_form_success_factors_operation_provisioning_modify}"/></span>
+          </td>
+          <td>
+            <h:graphicImage id="imgHlpSFfModifyProvisioningRule_#{nameSpace}"
+                            styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                            alt="#{msgs.con_help_success_factors_provisioning}"/>
+          </td>
+          <td>
+            <h:selectOneMenu id="successFactorsOperationProvisioning" style="width:300px"
+                               value="#{applicationObject.attributes['successFactorsOperationProvisioning']}"
+                               disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                               readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+              <f:selectItems value="#{applicationObject.successFactorsOperationProvisioning}" />
+            </h:selectOneMenu>
+          </td>
+          <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+          <td>
+              <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                     onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:successFactorsOperationProvisioning').value,
+                                                         'SuccessFactorsOperationProvisioning',
+                                                         Ext.get('editForm:refreshConnectorRulesButtonOL'))" />
+          </td>
+          </ui:fragment>
+        </tr>
+         </table>
+      </p:outputPanel>
+    </div>
+
+  </f:view>
+</ui:composition>
+
+</body>
+</html>

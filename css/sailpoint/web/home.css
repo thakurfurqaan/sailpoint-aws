@@ -1,0 +1,31 @@
+
+/* get rid of padding */
+.bodyDivContent {
+  padding: 0;
+}
+
+/* don' display title */
+#bodyDivTitle {
+  display: none;
+}
+
+.quickLinkCardContainer {
+  margin-top: 15px;
+}
+
+/* Get rid of left/right padding on loading mask since it already has margin from the container */
+.quickLinkCardContainer .loading-mask {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* TODO: quick styling to make less offensive, we will replace these styles later */
+.quickLinkCardContainer .formInfo,
+.quickLinkCardContainer .formWarn,
+.quickLinkCardContainer .formError {
+  margin: 15px;
+  border-radius: 4px;
+  background-image: none;
+  padding-left: 20px;
+}
+

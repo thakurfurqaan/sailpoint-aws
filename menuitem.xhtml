@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<head/>
+<body>
+<ui:composition>
+  <!-- menus with no sub items like Home and QuickLinks icon -->
+  <ui:fragment rendered="#{not menuitem.hasSubItems and null != menuitem.fullPath}">
+    <li role="presentation">
+      <a href="#{menuitem.fullPath}" role="menuitem" class="menuitem">
+        <!-- show label or icon -->
+        <ui:fragment rendered="#{null != menuitem.label}">
+          #{sp:localizeKey(menuitem.label)}
+        </ui:fragment>
+        <!-- icon menu with no sub items -->
+        <ui:fragment rendered="#{null == menuitem.label and menuitem.cssClass != null}">
+          <i role="presentation" aria-hidden="true" class="fa #{menuitem.cssClass} fa-lg nav-icon-no-submenu"></i>
+          <ui:fragment rendered="#{null != menuitem.ariaLabel}">
+            <span class="sr-only">#{sp:localizeKey(menuitem.ariaLabel)}</span>
+          </ui:fragment>
+        </ui:fragment>
+      </a>
+    </li>
+  </ui:fragment>
+
+  <!-- menus with sub items -->
+  <ui:fragment rendered="#{menuitem.hasSubItems}">
+    <li class="dropdown hidden-xs hidden-sm">
+      <a href="#" class="dropdown-toggle" role="menuitem" data-toggle="dropdown" aria-haspopup="true"
+         id="#{menuitem.cssClass == 'fa-cog' ? 'preferenceMenu' : ''}#{menuitem.cssClass == 'fa-wrench' ? 'debugMenu' : ''}">
+        <!-- show label if available -->
+        <ui:fragment rendered="#{null != menuitem.label}">
+          #{sp:localizeKey(menuitem.label)}
+        </ui:fragment>
+        <!-- no label probably means its an icon. icon with submenus is probably Admin menu cog icon -->
+        <ui:fragment rendered="#{null == menuitem.label and menuitem.cssClass != null}">
+          <i role="presentation" aria-hidden="true" class="fa #{menuitem.cssClass} fa-lg"></i>
+          <ui:fragment rendered="#{null != menuitem.ariaLabel}">
+            <span class="sr-only">#{sp:localizeKey(menuitem.ariaLabel)}</span>
+          </ui:fragment>
+        </ui:fragment>
+        <span class="sr-only">
+          #{msgs.menu_aria_help}
+        </span>
+        <!-- show caret only for menus with sub items -->
+        <span role="presentation" aria-hidden="true" class="caret"></span>
+      </a>
+      <ul class="dropdown-menu" role="menu" aria-expanded="false">
+        <ui:repeat value="#{menuitem.decoratedSubMenu}" var="submenuitem">
+          <ui:fragment rendered="#{submenuitem.separator}">
+            <li role="presentation" aria-hidden="true" class="divider"></li>
+          </ui:fragment>
+          <ui:fragment rendered="#{not submenuitem.separator}">
+            <li role="presentation">
+              <a href="#{submenuitem.fullPath}" role="menuitem" class="menuitem" target="#{submenuitem.target}">
+                #{sp:localizeKey(submenuitem.label)}
+              </a>
+            </li>
+          </ui:fragment>
+        </ui:repeat>
+      </ul>
+    </li>
+  </ui:fragment>
+</ui:composition>
+</body>
+</html>

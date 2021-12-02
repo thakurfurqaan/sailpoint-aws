@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+
+<ui:composition template="/ngAppPage.xhtml">
+    <sp:loadBundle basename="sailpoint.web.messages.iiqMessages" var="msgs"/>
+
+    <ui:define name="title">#{msgs.ui_my_approvals_title}</ui:define>
+    <ui:define name="headerItems">
+        <ui:include src="../ui/scriptData.xhtml"/>
+        <ui:include src="../ui/jspmInclude.xhtml"/>
+
+        <script type="text/javascript">
+            System.import('#{base.requestContextPath}/ui/js/approval/ApprovalAppModule.js');
+        </script>
+    </ui:define>
+
+    <ui:define name="body">
+        <div class="sp-ui-app">
+
+            <sp-register-config sp-config-key="workItemPriorityEditingEnabled"
+                                sp-config-value="#{sp:getSystemConfigurationValue('workItemPriorityEditingEnabled', false)}"/>
+
+            <sp-register-config sp-config-key="uiApprovalItemsColumnsRole"
+                                sp-column-configs="#{sp:getColumnConfigJSON('uiApprovalItemsColumnsRole')}"/>
+
+            <sp-register-config sp-config-key="uiApprovalItemsColumnsEntitlement"
+                                sp-column-configs="#{sp:getColumnConfigJSON('uiApprovalItemsColumnsEntitlement')}"/>
+
+            <sp-register-config sp-config-key="uiBatchRequestItemsTableColumns"
+                                sp-column-configs="#{sp:getColumnConfigJSON('uiBatchRequestItemsTableColumns')}"/>
+            
+	    <sp-register-config sp-config-key="attachmentsEnabled"
+                                sp-config-value="#{sp:getSystemConfigurationValue('attachmentsEnabled', false)}" />
+
+            <sp-register-config sp-config-key="attachmentsMaxFileSize"
+                                sp-config-value="#{sp:getSystemConfigurationValue('attachmentsMaxFileSize', 5)}" />
+
+            <sp-register-config sp-config-key="attachmentsAllowedFileTypes"
+                                sp-config-value="#{sp:getSystemConfigurationValue('attachmentsAllowedFileTypes', '[txt,jpg,png]')}" />
+
+	    <sp-register-config sp-config-key="uiIsRecommenderConfigured"
+                                sp-config-value="#{sp:isRecommenderConfigured()}"/>
+
+            <sp-register-config sp-config-key="lcmEnableApprovalRecommendations"
+                                sp-config-value="#{sp:getSystemConfigurationValue('lcmEnableApprovalRecommendations', false)}" />
+            <div ui-view="" />
+        </div>
+    </ui:define>
+</ui:composition>
+
+</body>
+</html>
+

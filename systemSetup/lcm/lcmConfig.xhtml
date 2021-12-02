@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2010 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://java.sun.com/jstl/core" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<!-- Added angular template to support ext-js as well as angular component -->
+<ui:composition template="/ngAppPage.xhtml">
+
+  <ui:define name="title"><h:outputText value="#{msgs.lifecycle_manager}"/></ui:define>
+  <ui:define name="headerItems">
+
+    <ui:include src="../../ui/scriptData.xhtml" />
+    <ui:include src="../../ui/jspmInclude.xhtml" />
+
+    <script type="text/javascript" defer="defer">
+      helpKey = 'LCM_CONFIG';
+    </script>
+    <link href="#{base.requestContextPath}/scripts/myfacescalendar/theme.css" rel="stylesheet" type="text/css"/>
+    <sp:style serveOffset="#{base.requestContextPath}/css/sailpoint/component">
+      <src>rule-editor.css</src>
+    </sp:style> 
+    <sp:style serveOffset="#{base.requestContextPath}/css/sailpoint/web/systemSetup">
+      <src>system-setup.css</src>
+    </sp:style>
+    <sp:style serveOffset="#{base.requestContextPath}/css/sailpoint/form">
+      <src>form-editor.css</src>
+    </sp:style>
+    <sp:script>
+      <src>#{base.requestContextPath}/scripts/json2.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/component/viewport.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/ComboBox.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/Suggest.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/MultiSuggest.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/systemSetup/lcm/attributeFilterBuilder.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/systemSetup/lcm/lifecycleActions.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/systemSetup/lcm/businessProcesses.js?#{debug.revision}</src>      
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/systemSetup/lcm/additionalOptions.js?#{debug.revision}</src>      
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/systemSetup/lcm/lcmConfig.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/grid/SelectionCollection.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/grid/CheckboxSelectionModel.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/grid/PagingGrid.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/grid/PagingCheckboxGrid.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/model/TemplateField.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/model/FormItem.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/component/PagingTreeStore.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/component/TreeGridPanel.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/FormItemTree.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/DynamicValue.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/AttributeFactory.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/DivisionPanel.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/FormItemEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/SectionEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/RowEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/FieldEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/ButtonEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/FormEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/FormEditorWindow.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/FormItemHelper.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/ApprovalPanel.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/WorkflowFormEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/plugin/FormItemDragDrop.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/grid/SortableGrid.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/ComboBox.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/MultiSelect.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/MultiText.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/component/RuleEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/component/RuleCombo.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/component/RowLayout.js?#{debug.revision}</src>
+    </sp:script>
+
+    <script>
+
+      function beforeSave() {
+          if(SailPoint.form.editor.FormEditor.EditorPanel) {
+              SailPoint.form.editor.FormEditor.EditorPanel.save();
+          }
+
+           Ext.getDom('editForm:saveButton').click();
+      }
+
+      Ext.onReady(function () {
+          var addtAcctApps = #{sp:basicJSONDataConverted(lcmConfig.additionalAccountApplicationIds, 'ApplicationListConverter')};
+          var acctOnlyApps = #{sp:basicJSONDataConverted(lcmConfig.accountOnlyApplicationIds, 'ApplicationListConverter')};
+          var disableAutoRefAcctApps = #{sp:basicJSONDataConverted(lcmConfig.disableAutoRefAccountStatusAppsIds, 'ApplicationListConverter')};
+          SailPoint.systemSetup.lcm.initTabPanel(addtAcctApps, acctOnlyApps, disableAutoRefAcctApps);
+
+          var iVal = #{empty sp:buildJSONFromIdentityName(lcmConfig.batchRequestApprover) ? "''" : sp:buildJSONFromIdentityName(lcmConfig.batchRequestApprover)};
+          var batchApproverSuggest = new SailPoint.IdentitySuggest({
+              id: 'batchApproverSuggestCmp',
+              renderTo: 'batchApproverSuggest',
+              initialData: [iVal],
+              extraParams: {context: 'Owner'},
+              binding: 'batchApproverInputVal',
+            valueField: 'name'
+          });
+          
+          
+          if(iVal &amp;&amp; iVal.displayableName){
+        	  batchApproverSuggest.setRawValue(iVal.displayableName); 
+              SailPoint.Suggest.IconSupport.setIconDiv(batchApproverSuggest, 'userIcon'); 
+          }
+
+          if (#{lcmConfig.requireBatchRequestApproval}) {
+            Ext.get('batchApproverInput').toggle();
+          }
+
+      });
+    </script>
+
+  </ui:define>
+  <ui:define name="body">
+  <f:view>
+    <ui:include src="/extAppPageTitle.xhtml" />
+    <h:form id="editForm" styleClass="form">  
+      <div id="hiddenContents" style="display:none">
+      
+        <div id="additionalOptionsContents">
+          <ui:include src="additionalOptions.xhtml"/>
+        </div>
+        
+        <div id="businessProcessesContents">
+          <ui:include src="businessProcesses.xhtml"/>
+        </div>
+
+        <h:commandButton id="saveButton" onclick="beforeSave();" action="#{lcmConfig.saveChangesAction}"/>
+    
+        <div id="identityPolicyContents">
+          <div class="pageInfo">
+            <h:outputText value="#{msgs.info_configure_identity_provisioning_policy}"/>
+          </div>
+
+          <ui:include src="/include/form/editor/formEditor.xhtml">
+            <ui:param name="formEditor" value="#{lcmConfig.identityPolicy.formEditor}"/>
+            <ui:param name="beanType" value="identity"/>
+            <ui:param name="showApplication" value="false"/>
+            <ui:param name="hideTitle" value="false"/>
+            <ui:param name="showUsageList" value="true"/>
+          </ui:include>
+
+          <p:outputPanel id="createAttributesPanel">
+            <input type="hidden" id="createAttributes" name="createAttributes" value="#{lcmConfig.identityPolicy.availableAttributes}" />
+            <input type="hidden" id="passwordRequired" name="passwordRequired" value="#{lcmConfig.identityPolicy.passwordRequired}" />
+          </p:outputPanel>
+        </div>
+      
+      </div>
+    </h:form>
+    
+    <h:form id="lcmRuleEditorForm">
+      <input type="button" style="display:none" id="lcmRuleEditorForm:refreshRulesButton" 
+             onclick="Ext.getCmp('lifecycleActionsPanel').updateRuleSelectors();"/>
+             
+         <p:commandButton id="refreshPasswordValidationRulesButton"
+            style="display:none"
+            immediate="true"
+            update="@([id$=passwordValidationRulePanel])"/>
+    </h:form>
+    </f:view>
+  </ui:define>
+</ui:composition>
+
+</body>
+</html>

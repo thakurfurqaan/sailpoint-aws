@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:sp="http://sailpoint.com/ui">
+  <sp:loadBundle basename="sailpoint.web.messages.iiqMessages" var="msgs"/>
+
+  <h:body>
+    <section ng-if="flowCtrl.isRemoveAccessTabEnabled()"
+             class="bg-light lt">
+      <div class="row text-center">
+        <div class="col-xs-12 m-t m-b">
+          <sp-tabset>
+            <sp-tab id="addAccessBtn" select="flowCtrl.showAddItemsTab()">
+              <uib-tab-heading>
+                <span class="hidden-xs">{{'ui_access_add_access' | spTranslate}}</span>
+                <span class="visible-xs-inline">{{'ui_access_add' | spTranslate}}</span>
+                <span id="addAccessCount" ng-if="flowCtrl.getAddedItemsCount()" class="badge bg-success">
+                  {{ flowCtrl.getAddedItemsCount() }}
+                </span>
+                <span class="sr-only" ng-if="flowCtrl.getAddedItemsCount()">{{'ui_access_items_selected_sr' | spTranslate}}</span>
+                <span class="sr-only" ng-if="'accessRequest.manageAccess.add' | isState">{{'ui_access_selected' | spTranslate}}</span>
+              </uib-tab-heading>
+            </sp-tab>
+            <sp-tab id="removeAccessBtn" select="flowCtrl.showRemoveItemsTab()">
+              <uib-tab-heading>
+                <span class="hidden-xs">{{'ui_access_remove_access' | spTranslate}}</span>
+                <span class="visible-xs-inline">{{'ui_access_remove' | spTranslate}}</span>
+                <span id="removeAccessCount" ng-if="flowCtrl.getRemovedItemsCount()" class="badge bg-danger">
+                  {{ flowCtrl.getRemovedItemsCount() }}
+                </span>
+                <span class="sr-only" ng-if="flowCtrl.getRemovedItemsCount()">{{'ui_access_items_selected_sr' | spTranslate}}</span>
+                <span class="sr-only" ng-if="'accessRequest.manageAccess.remove' | isState">{{'ui_access_selected' | spTranslate}}</span>
+              </uib-tab-heading>
+            </sp-tab>
+          </sp-tabset>
+        </div>
+      </div>
+    </section>
+
+    <div ui-view=""/>
+
+  </h:body>
+</html>

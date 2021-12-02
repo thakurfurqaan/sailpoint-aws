@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://java.sun.com/jsf/html">
+<body>
+
+<ui:composition>
+
+      <script type="text/javascript">
+
+        var correlationRuleData = [{label: '#{msgs.select_rule}', value: ''}];
+        
+        <ui:repeat value="#{applicationObject.compositeTierCorrelationRuleSelectList}" var="item">
+        	<h:outputText value="correlationRuleData.push({label: '#{item.label}', value: '#{item.value}'});" />
+        </ui:repeat>
+
+        <!--//--><![CDATA[//><!--
+
+        function layoutExpressionPanel() {
+        	var panel = Ext.getCmp('expressionPanel');
+            if (panel) {
+              panel.doLayout(false);
+            }
+            
+            return true;
+        }
+
+        function getFieldValue(field) {
+            var val = null;
+            var fileName = Ext.getDom(field);
+            if ( fileName ) {
+                val = fileName.value;
+            }
+            return val;
+        }
+        
+        Ext.onReady(function () {
+           Page.on('selectorPanelChanged', layoutExpressionPanel);
+
+           var mainPanel = Ext.create('SailPoint.define.applications.MainPanel', {id: 'mainPanel'});
+
+           mainPanel.show();
+
+
+           Page.on('configSettingsLoaded', function() {
+               var cmp = Ext.get(SailPoint.COMP_DEF_PANEL_CMP_ID);
+               if (!cmp) {
+                   var panel = new SailPoint.CompositeDefinitionPanel({
+                       id:SailPoint.COMP_DEF_PANEL_CMP_ID,
+                       dataStore:ApplicationPage.getCompositeStore(),
+                       accountRule:Page.initialAccountRule,
+                       remediationRule:Page.initialRemediationRule,
+                       renderTo : 'compositeTiersDiv'
+                   });
+               }
+               //Have to updateLayout because size is limited to 768 on the settings panel.
+               Ext.getCmp(SailPoint.COMP_DEF_PANEL_CMP_ID).updateLayout();
+
+           });
+
+            // This is our validation hook
+            Page.on('beforeSave', function() {
+                if (!hasCredentialConfiguration()) {
+                    var accntRule = getFieldValue(Ext.get('editForm:compositeAccountRule'));
+                    if (Validator.validateNonBlankString(accntRule, '#{msgs.app_err_validation_no_composite_primary_tier}')) {
+                        return true;
+                    } else {
+                        var store = ApplicationPage.getCompositeStore();
+                        if (store != null) {
+                            var er = store.validate();
+                            if (er && er.length > 0) {
+                                //Error was added when validating accntRule
+                                var errors = Validator.getErrors();
+                                if (errors && errors.length > 0) {
+                                    Validator.displayErrors('appErrorsTop');
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            });
+
+        });
+      //--><!]]>
+      </script>
+        <f:view>
+
+
+            <p:commandButton id="addObjectTypeBtn"
+                               style="display:none;"
+                               action="#{applicationObject.addGroupSchemaAction}"
+                               update="@([id$=attributesOutputPanel], [id$=schemaData], [id$=errorPanel])"
+                               oncomplete="refreshTabPanel();">
+            </p:commandButton>
+            <h:inputHidden id="hiddenSchemaObjectType" value="#{applicationObject.schemaObjectType}"/>
+
+            <div id='tabedConfigPanelDiv'/>
+            <div style="margin:10px;">
+
+                <div style="margin-bottom:10px;"><h:outputText styleClass="sectionHeader" value="#{msgs.app_tiers_hdr}"/></div>
+
+
+                <h:panelGrid columns="4" columnClasses="nowrap vertical-align" styleClass="paddedTbl">
+
+                  <!--  Account rule / composite rule  -->
+                  <h:outputText value="#{msgs.app_tiers_label_acct_rule}"/>
+                  <h:graphicImage id="imgHlpLogicalAccountRule"
+	                              styleClass="helpIcon"
+	                              url="/images/icons/dashboard_help_16.png"
+	                              alt="#{help.help_logical_rule}"/>
+
+	              <h:panelGroup>
+	                <h:selectOneMenu id="compositeAccountRule"
+                                   value="#{applicationObject.compositeAccountRule}"
+                                   style="width: 300px"
+                                    onchange="Page.fireEvent('accountRuleSelected', this.options[this.selectedIndex].value);">
+                      <f:selectItem itemValue="" itemLabel="#{msgs.select_rule}"/>
+                      <f:selectItems value="#{applicationObject.compositeAccountRuleSelectList}"/>
+                    </h:selectOneMenu>
+
+                    <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                              <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                                     onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:compositeAccountRule').value,
+                                                                         'CompositeAccount',
+                                                                         Ext.get('editForm:refreshCompositeTiersButton'))" />
+
+                    </ui:fragment>
+
+                  </h:panelGroup>
+
+                  <!--  Tier remdediation rule -->
+
+                  <h:outputText value="#{msgs.app_tiers_label_remediation_rule}"/>
+	              <h:graphicImage id="imgHlpLogicalRemedaitionRule"
+		                              styleClass="helpIcon"
+		                              url="/images/icons/dashboard_help_16.png"
+		                              alt="#{help.help_logical_provisioning_rule}"/>
+
+	              <h:panelGroup>
+		            <h:selectOneMenu id="compositeRemediationRule"
+	                                 value="#{applicationObject.compositeRemediationRule}"
+	                                 style="width: 300px"
+	                                 onchange="Page.fireEvent('remediationRuleSelected', this.options[this.selectedIndex].value);">
+	                  <f:selectItem itemValue="" itemLabel="#{msgs.select_rule}"/>
+	                  <f:selectItems value="#{applicationObject.compositeRemediationRuleSelectList}"/>
+	                </h:selectOneMenu>
+	                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+	                     <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+	                            onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:compositeRemediationRule').value,
+	                                                                         'CompositeRemediation',
+	                                                                         Ext.get('editForm:refreshCompositeTiersButton'))" />
+	                </ui:fragment>
+                  </h:panelGroup>
+
+                  <!--  Provisioning Delete option -->
+                  <h:outputText value="#{msgs.app_tiers_label_on_delete}"/>
+                  <h:graphicImage id="imgHlpCompositeDelete"
+	                              styleClass="helpIcon"
+	                              url="/images/icons/dashboard_help_16.png"
+	                              alt="#{help.help_logical_remove_during_provisioning}"/>
+
+                  <h:selectBooleanCheckbox  value="#{applicationObject.attributes['onDeleteRemoveEntitlements']}" disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+
+                  <!--  Perform retain over remove on entitlements -->       
+                  <h:outputText value="#{msgs.app_tiers_label_retain_over_remove}"/>
+                  <h:graphicImage id="imgHlpRemoveOverRetain" 
+                                  styleClass="helpIcon" 
+                                  url="/images/icons/dashboard_help_16.png" 
+                                  alt="#{help.help_logical_retain_over_remove}"/>                    
+                     
+                  <h:selectBooleanCheckbox  value="#{applicationObject.attributes['RetainEntitlementOverRemove']}" disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+ 
+                  <!-- MA discover filtering option  -->
+                  <h:outputText value="#{msgs.app_tiers_label_filter_mas}"/>
+                  <h:graphicImage id="imgHlpLogicalEntitlementFiltering"
+	                              styleClass="helpIcon"
+	                              url="/images/icons/dashboard_help_16.png"
+	                              alt="#{help.help_logical_missing_filter_entitlements}"/>
+
+                  <h:selectBooleanCheckbox onclick="Ext.getDom('editForm:logicalConfigDirty').value = 'true';" value="#{applicationObject.attributes['disableManagedEntitlementFiltering']}" disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+
+                  <!-- Link filtering option  -->
+                  <h:outputText value="#{msgs.app_tiers_label_filter_link}"/>
+                  <h:graphicImage id="imgHlpLogicalLinkEntitlementFiltering"
+	                              styleClass="helpIcon"
+	                              url="/images/icons/dashboard_help_16.png"
+	                              alt="#{help.help_logical_missing_filter_links}"/>
+
+                  <h:selectBooleanCheckbox onclick="Ext.getDom('editForm:logicalConfigDirty').value = 'true';"
+                                           value="#{applicationObject.attributes['disableLinkFiltering']}"
+                                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+
+                </h:panelGrid>
+
+                <p:outputPanel id="compositeTiersPanel">
+
+                <p:commandButton id="refreshCompositeTiersButton"
+                       style="display:none"
+                       immediate="true"
+                       update="@([id$=compositeAccountRule],[id$=compositeRemediationRule])"
+                       />
+
+
+                <div id="compositeTiersDiv" class="width100" style="height:350px;"></div>
+              </p:outputPanel>
+
+              <div id="selectorPanel" style="display:none;overflow:auto;" onclick="SailPoint.CompositeDefinitionPanel.showSaveButton();">
+                  <ui:include src="/include/selector.xhtml">
+                    <ui:param name="listener" value="#{applicationObject}"/>
+                    <ui:param name="selector" value="#{applicationObject.compositeSelector}" />
+                    <ui:param name="manageRight" value="ManageApplication" />
+                    <ui:param name="noMenu" value="true" />
+                    <ui:param name="noIdentityAttributes" value="true" />
+                    <ui:param name="noApplicationSuggest" value="true" />
+                    <ui:param name="enableValueSelect" value="true" />
+                  </ui:include>
+              </div>
+
+              <p:commandButton id="switchTiers"
+                                 style="display:none"
+                                 action="#{applicationObject.switchTiers}"
+                                 oncomplete="Ext.getDom('selectorPanel').style.display = ''; createAttributeValueSelectors(); layoutExpressionPanel();"
+                                 update="@([id$=currentTierApp],[id$=selectorPanel])"/>
+
+              <p:commandButton id="saveSelector"
+                                 style="display:none"
+                                 action="#{applicationObject.saveSelector}"
+                                 oncomplete="createAttributeValueSelectors();"
+                                 update="@([id$=currentTierApp],[id$=selectorPanel]"/>
+
+            </div>
+        </f:view>
+</ui:composition>
+
+</body>
+</html>

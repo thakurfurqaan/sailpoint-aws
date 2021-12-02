@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<!-- (c) Copyright 2018 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html lang="en"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+
+<ui:composition template="/ngAppPage.xhtml">
+
+    <ui:define name="title">#{msgs.ui_plugin_label_configuration}</ui:define>
+    <ui:define name="headerItems">
+        <ui:include src="../ui/scriptData.xhtml" />
+        <ui:include src="../ui/jspmInclude.xhtml" />
+
+        <c:if test="#{empty param['pn'] and empty param['pid']}">
+            <script type="text/javascript">
+                System.import('#{base.requestContextPath}/ui/js/plugin/PluginConfigAppModule.js');
+            </script>
+        </c:if>
+    </ui:define>
+
+    <ui:define name="body">
+        <header class="header bg-light lter">
+            <div class="row">
+                <div class="col-lg-12 m-t-sm">
+                    <ui:fragment>
+                        <h:form id="actionForm">
+                            <h:link styleClass="btn btn-sm btn-info" outcome="viewInstalledPlugins">
+                                <i class="fa fa-chevron-left"></i>
+                                #{msgs.ui_button_back}
+                            </h:link>
+                        </h:form>
+                    </ui:fragment>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="sp-alert-area" />
+                </div>
+            </div>
+        </header>
+        <c:choose>
+            <c:when test="#{empty param['pn'] and empty param['pid']}">
+                <div class="sp-ui-app">
+                    <div ui-view=""></div>
+                </div>
+            </c:when>
+            <c:when test="#{empty param['pn'] and !empty param['pid']}">
+                <div class="row m-t">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-xs-12 text-center">
+                                <h3 class="text-muted">
+                                    #{msgs.plugin_missing_pn}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </c:when>
+            <c:when test="#{!empty param['pn'] and empty param['pid']}">
+                <div class="row m-t">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-xs-12 text-center">
+                                <h3 class="text-muted">
+                                    #{msgs.plugin_missing_pid}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </c:when>
+            <c:when test="#{!empty plugins.configIncludeUrl}">
+                <ui:include src="${plugins.configIncludeUrl}" />
+            </c:when>
+            <c:otherwise>
+                <div class="row m-t">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-xs-12 text-center">
+                                <h3 class="text-muted">
+                                    #{msgs.plugin_page_not_found}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </c:otherwise>
+        </c:choose>
+    </ui:define>
+
+</ui:composition>
+
+</body>
+</html>

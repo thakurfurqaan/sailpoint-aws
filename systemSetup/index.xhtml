@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+
+<body>
+
+<ui:composition template="/appPage.xhtml">
+
+  <ui:define name="title">#{msgs.menu_label_global_settings}</ui:define>
+  <ui:define name="headerItems">
+    <script type="text/javascript" defer="defer">
+      <!--//--><![CDATA[//><!--
+      helpKey = 'ADVANCED_SETTINGS';
+      //--><!]]>
+    </script>
+  </ui:define>
+
+  <ui:define name="body">
+    <f:view>
+      <h:messages layout="table" infoClass="formInfo" warnClass="formWarn" errorClass="formError" fatalClass="formError"/>
+
+      <section id="systemSetup" class="container-fluid m-t m-b">
+        <div class="row">
+          <c:forEach var="sectionMenuItem" items="#{menu.adminIndexPageItems}">
+            <div class="col-sm-12">
+              <div class="panel system-setup-panel">
+                <div class="panel-body">
+                  <div class="list-group list-group-half b-l b-r b-t b-b">
+                    <c:forEach var="subMenuItem" items="#{sectionMenuItem.decoratedSubMenu}"
+                               begin="0" end="#{sp:ceil(sp:size(sectionMenuItem.decoratedSubMenu) / 2) - 1}">
+                      <h:outputLink value="#{subMenuItem.fullPath}" class="list-group-item">
+                        <i class="fa fa-chevron-right"></i>
+                        <b><h:outputText value="#{sp:localizeKey(subMenuItem.label)}" /></b>
+                        <br/>
+                        <span class="text-muted small"><h:outputText value="#{sp:localizeKey(subMenuItem.description)}" /></span>
+                      </h:outputLink>
+                    </c:forEach>
+                  </div>
+                  <div class="list-group list-group-half b-r b-t b-b">
+                    <c:forEach var="subMenuItem" items="#{sectionMenuItem.decoratedSubMenu}"
+                               begin="#{sp:ceil(sp:size(sectionMenuItem.decoratedSubMenu) / 2)}" end="#{sp:size(sectionMenuItem.decoratedSubMenu) - 1}">
+                      <h:outputLink value="#{subMenuItem.fullPath}" class="list-group-item">
+                        <i class="fa fa-chevron-right"></i>
+                        <b><h:outputText value="#{sp:localizeKey(subMenuItem.label)}" /></b>
+                        <br/>
+                        <span class="text-muted small"><h:outputText value="#{sp:localizeKey(subMenuItem.description)}" /></span>
+                      </h:outputLink>
+                    </c:forEach>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </c:forEach>
+        </div>
+      </section>
+    </f:view>
+  </ui:define>
+</ui:composition>
+
+</body>
+</html>

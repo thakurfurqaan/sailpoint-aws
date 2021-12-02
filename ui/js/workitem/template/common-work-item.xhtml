@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sp="http://sailpoint.com/ui">
+  <body>
+    <sp-register-config sp-config-key="workItemPriorityEditingEnabled"
+                        sp-config-value="#{sp:getSystemConfigurationValue('workItemPriorityEditingEnabled', false)}" />
+
+    <sp-register-config sp-config-key="uiApprovalItemsColumnsRole"
+                        sp-column-configs="#{sp:getColumnConfigJSON('uiApprovalItemsColumnsRole')}" />
+
+    <sp-register-config sp-config-key="uiApprovalItemsColumnsEntitlement"
+                        sp-column-configs="#{sp:getColumnConfigJSON('uiApprovalItemsColumnsEntitlement')}" />
+    <sp-register-config sp-config-key="uiBatchRequestItemsTableColumns"
+                                sp-column-configs="#{sp:getColumnConfigJSON('uiBatchRequestItemsTableColumns')}"/>
+
+    <sp-register-config sp-config-key="uiIsRecommenderConfigured"
+                        sp-config-value="#{sp:isRecommenderConfigured()}"/>
+
+    <sp-register-config sp-config-key="attachmentsEnabled"
+                        sp-config-value="#{sp:getSystemConfigurationValue('attachmentsEnabled', false)}" />
+
+    <sp-register-config sp-config-key="attachmentsMaxFileSize"
+                        sp-config-value="#{sp:getSystemConfigurationValue('attachmentsMaxFileSize', 5)}" />
+
+    <sp-register-config sp-config-key="attachmentsAllowedFileTypes"
+                        sp-config-value="#{sp:getSystemConfigurationValue('attachmentsAllowedFileTypes', '[txt,jpg,png]')}" />
+
+    <section class="container-fluid bg-white b-b">
+      <div sp-loading-mask="ctrl.getWorkItem()" class="row sp-page-header m-t-sm m-b-sm">
+        <div class="col-xs-12">
+          <button class="btn btn-sm btn-white m-t-n-xs m-r-xs"
+                  aria-label="{{ 'ui_button_back' | spTranslate }}"
+                  ng-click="ctrl.goBack()">
+            <i class="fa fa-chevron-left" role="presentation"></i>
+          </button>
+          <h1 class="inline">{{ ctrl.getWorkItem().getWorkItemTypeKey() | spTranslate }}</h1>
+        </div>
+      </div>
+    </section>
+
+    <section class="common-work-item container-fluid">
+      <div class="text-right m-b-lg">
+        <div class="text-right m-b-lg m-t-lg" ng-if="ctrl.showRecommendationBtn()">
+          <button class="btn btn-xs rec-info-btn btn-white"
+                  id="recommendationExplanationModalBtn"
+                  ng-click="ctrl.showRecommendationExplanationDialog()">
+            <span class="m-r-n-xs">
+              <span class="fa-stack m-t-xs fa-lg bounceIn rec-approve">
+                  <i class="fa fa-circle fa-stack-2x recommendation-yes-icon" role="presentation"></i>
+                  <i class="fa fa-thumbs-up fa-stack-1x text-white" role="presentation"></i>
+                </span>
+                <span class="fa-stack m-t-xs fa-lg rec-deny recommend">
+                  <i class="fa fa-circle fa-stack-2x text-danger" role="presentation"></i>
+                  <i class="fa fa-thumbs-down fa-stack-1x text-white" role="presentation"></i>
+                </span>
+            </span>
+            <span class="m-l-sm rec-text">{{'ui_approval_recommendations' | spTranslate}}</span>
+            <span class="small m-t-n-xxs"> <i class="fa fa-question-circle fa-lg text-info" role="presentation"></i></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="row m-t-xs m-b-sm work-item-row animated">
+        <div class="col-sm-12">
+          <sp-work-item ng-if="ctrl.getWorkItem()"
+                        sp-work-item="ctrl.workItem"
+                        sp-full="true"
+                        sp-completion-callback="ctrl.completionCallback" />
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

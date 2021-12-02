@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2012 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:t="http://myfaces.apache.org/tomahawk"
+  xmlns:p="http://primefaces.org/ui"
+    xmlns:sp="http://sailpoint.com/ui">
+
+<body>
+<ui:composition>
+
+<div class="paddedContainer">
+    <table style="margin:5px">
+      <tr valign="top">
+        <td rowspan="2">
+        
+        <table class="paddedTbl" style="margin:5px">
+          <tr class="padBottom">
+            <td  colspan="2"> 
+              <h:outputText styleClass="spContentTitle" value="#{msgs.sys_config_work_item_policy}"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="right"><h:outputText value="#{msgs.label_days_before_expiration} " /></td>
+            <td align="left"><t:inputText
+              id="workItemDuration" size="3"
+              value="#{systemConfig.workItemDuration}"
+              onchange="makePageDirty();">
+              <f:validateLongRange minimum="1" maximum="999" />
+            </t:inputText></td>
+          </tr>
+
+          <tr>
+            <td align="right"><h:outputText
+              value="#{msgs.label_days_before_expire_for_first_notice} " /></td>
+            <td align="left"><t:inputText
+              id="workItemReminderStart" size="3"
+              value="#{systemConfig.defaultReminderStart}"
+              onchange="makePageDirty();">
+              <f:validateLongRange minimum="1" maximum="999" />
+            </t:inputText></td>
+          </tr>
+
+          <tr>
+            <td align="right"><h:outputText
+              value="#{msgs.label_work_item_reminder_frequency} " /></td>
+            <td align="left"><t:inputText
+              id="workItemReminderFrequency" size="3"
+              value="#{systemConfig.defaultWakeUpInterval}"
+              onchange="makePageDirty();">
+              <f:validateLongRange minimum="1" maximum="999" />
+            </t:inputText> </td>
+          </tr>
+
+          <tr>
+            <td align="right"><h:outputText
+              value="#{msgs.label_notices_before_work_item_escalation} " /></td>
+            <td align="left"><t:inputText
+              id="workItemEscalationFrequency" size="3"
+              value="#{systemConfig.defaultMaxReminders}"
+              onchange="makePageDirty();">
+              <f:validateLongRange minimum="1" maximum="999" />
+            </t:inputText> </td>
+          </tr>
+          <tr>
+            <td align="right"><h:outputText
+              value="#{msgs.label_send_email_on_workitem_assignment} " /></td>
+            <td align="left">
+                 <h:selectBooleanCheckbox id="enableWorkItemAssignmentNotification"
+                  value="#{systemConfig.object.attributes['workItemAssignmentNotification']}"
+                  onclick="makePageDirty();" />
+
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><h:outputText
+              value="#{msgs.label_send_email_on_workitem_assignment_removal} " /></td>
+            <td align="left">
+                 <h:selectBooleanCheckbox id="enableWorkItemAssignmentNotificationRemoval"
+                  value="#{systemConfig.object.attributes['workItemAssignmentNotificationRemoval']}"
+                  onclick="makePageDirty();" />
+
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><h:outputText
+              value="#{msgs.label_allow_workitem_priority_editing} " /></td>
+            <td align="left">
+                 <h:selectBooleanCheckbox id="enableWorkItemPriorityEditing"
+                  value="#{systemConfig.object.attributes['workItemPriorityEditingEnabled']}"
+                  onclick="makePageDirty();" />
+
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><h:outputText
+                    value="#{msgs.sys_config_enable_check_self_certification_work_item_forward} " /></td>
+            <td align="left">
+                <h:selectBooleanCheckbox id="blockForwardWorkItemSelfCertification"
+                                         value="#{systemConfig.object.attributes['blockForwardWorkItemSelfCertification']}"
+                                         onclick="makePageDirty();" />
+
+            </td>
+          </tr>
+        </table>
+        </td>
+      </tr>
+      <tr/>
+      <tr>
+        <td rowspan="2">
+            <table class="paddedTbl" style="margin:5px">
+                <tr class="padBottom padTopHi">
+                    <td colspan="2">
+                        <h:outputText styleClass="spContentTitle" value="#{msgs.sys_config_work_item_archives}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top">
+                        <h:outputText value="#{msgs.sys_config_work_item_archive_types}" />
+                    </td>
+                    <td>
+                        <h:selectManyListbox id="workItemArchiveTypes" value="#{systemConfig.selectedWorkItemArchiveTypes}">
+                            <f:selectItems value="#{systemConfig.workItemArchiveTypes}"/>
+                        </h:selectManyListbox>
+                    </td>
+                </tr>
+            </table>
+        </td>
+      </tr>
+      <tr/>
+      <tr>
+        <td rowspan="2">
+        <table class="paddedTbl" style="margin:5px">
+                <tr class="padBottom padTopHi">
+                    <td colspan="3">
+                        <h:outputText styleClass="spContentTitle" value="#{msgs.sys_config_work_item_rules}"/>
+                    </td>
+                </tr>
+                <tr>
+      <td align="right"><h:outputText value="#{msgs.rule_inactive_work_item_escalation}" /></td>
+      <td width="15px">
+        <h:graphicImage id="imgHlpInactiveWorkItemEscalation"
+          width="12px" height="12px" alt="#{help.help_system_config_inactive_work_item_escalation_rule}"
+          style="cursor:pointer;padding: 0px 7px 0px 7px"
+          url="/images/icons/dashboard_help_16.png"/>
+      </td>
+      <td>
+        <p:outputPanel id="escalationRulePanel">
+            <h:selectOneMenu id="inactiveOwnerWorkItemEscalationRule"
+              value='#{systemConfig.object.attributes["inactiveOwnerWorkItemForwadRule"]}'
+              onchange="makePageDirty();">
+              <f:selectItems value="#{systemConfig.escalationRules}" />
+            </h:selectOneMenu>
+
+            <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                       onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:inactiveOwnerWorkItemEscalationRule').value,
+                                                           'Escalation',
+                                                           Ext.get('editForm:refreshEscalationRulesButton'))" />
+            </ui:fragment>
+        </p:outputPanel>
+      </td>
+
+    </tr>
+    <tr>
+      <td align="right"><h:outputText value="#{msgs.rule_global_work_item_forward}" /></td>
+      <td width="15px">
+        <h:graphicImage id="imgHlpWorkItemForwarding"
+          width="12px" height="12px" alt="#{help.help_system_config_global_work_item_forward_rule}"
+          style="cursor:pointer;padding: 0px 7px 0px 7px"
+          url="/images/icons/dashboard_help_16.png"/>
+      </td>
+      <td>
+        <p:outputPanel id="workItemForwardRulePanel">
+            <h:selectOneMenu id="workItemAssignmentRule"
+              value='#{systemConfig.object.attributes["workItemForwardRule"]}'
+              onchange="makePageDirty();">
+              <f:selectItems value="#{systemConfig.workItemForwardRules}" />
+            </h:selectOneMenu>
+
+            <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                       onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:workItemAssignmentRule').value,
+                                                           'WorkItemForward',
+                                                           Ext.get('editForm:refreshWorkItemForwardRulesButton'))" />
+            </ui:fragment>
+        </p:outputPanel>
+      </td>
+      </tr>
+       
+       <tr>
+      <td align="right"><h:outputText value="#{msgs.rule_fallback_work_item_forward}" /></td>
+      <td width="15px">
+        <h:graphicImage id="imgHlpFallbackForwarding"
+          width="12px" height="12px" alt="#{help.help_system_config_fallback_work_item_forward_rule}"
+          style="cursor:pointer;padding: 0px 7px 0px 7px"
+          url="/images/icons/dashboard_help_16.png"/>
+      </td>
+      <td>
+        <p:outputPanel id="fallbackWorkItemForwardRulePanel">
+            <h:selectOneMenu id="fallbackWorkItemForwardRule"
+              value='#{systemConfig.object.attributes["fallbackWorkItemForwardRule"]}'
+              onchange="makePageDirty();">
+              <f:selectItems value="#{systemConfig.fallbackWorkItemForwardRules}" />
+            </h:selectOneMenu>
+
+            <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                       onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:fallbackWorkItemForwardRule').value,
+                                                           'FallbackWorkItemForward',
+                                                           Ext.get('editForm:refreshFallbackWorkItemForwardRulesButton'))" />
+            </ui:fragment>
+        </p:outputPanel>
+      </td>
+      </tr>
+      </table>
+      </td>
+      </tr>
+      
+      
+    </table>
+    
+  <p:commandButton id="refreshEscalationRulesButton"
+                     style="display:none"
+                     update="@([id$=escalationRulePanel])"/>
+
+  <p:commandButton id="refreshWorkItemForwardRulesButton"
+                     style="display:none"
+                     update="@([id$=workItemForwardRulePanel])"/>
+                     
+  <p:commandButton id="refreshFallbackWorkItemForwardRulesButton"
+                     style="display:none"
+                     update="@([id$=fallbackWorkItemForwardRulePanel])"/>
+    
+  </div>
+
+</ui:composition>
+</body>
+</html>

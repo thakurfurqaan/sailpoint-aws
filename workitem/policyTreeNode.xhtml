@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:sp="http://sailpoint.com/ui"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html">
+<body>
+  <ui:composition>
+
+    <ui:fragment rendered="#{remediationEntityType eq null or remediationEntityType eq 'Identity'}">
+
+      <div class="sectionHeader">#{msgs.label_revoke_requests}</div>
+
+        <ui:repeat value="#{policyTreeNodes}" var="policyTreeNode">
+          <table style="margin-top: 10px" class="spTable" width="#{tableWidth}">
+            <tr>
+              <th valign="top" colspan="3">
+                <h:outputText value="#{remediationItemBean.asSummary(policyTreeNode)}" />
+              </th>
+            </tr>
+            <ui:fragment rendered="#{policyTreeNode.contributingEntitlements != null}" >
+              <tr>
+                <td colspan="2" style="text-align: center;">#{msgs.work_item_remed_entitlements_label}</td>
+              </tr>
+              <tr>
+                <th>#{msgs.ce_type}</th>
+                <th>#{msgs.ce_path}</th>
+              </tr>
+              <ui:repeat value="#{policyTreeNode.contributingEntitlements}" var="ce" >
+                <tr>
+                  <ui:fragment rendered="#{ce.type == 'R'}" >
+                    <td valign="top">
+                      <h:outputText value="#{msgs.work_item_remed_role_label}" />
+                    </td>
+                    <td/>
+                  </ui:fragment>
+                  <ui:fragment rendered="#{ce.type == 'A'}" >
+                    <td valign="top">
+                      <h:outputText value="#{msgs.work_item_remed_attr_label}" />
+                    </td>
+                    <td valign="top">
+                      <ui:fragment rendered="#{empty policyTreeNode.application  or policyTreeNode.application eq ce.source}" >
+                        <h:outputText value="#{ce.path}"/>
+                      </ui:fragment>
+                      <ui:fragment rendered="#{!empty policyTreeNode.application  and policyTreeNode.application ne ce.source}" >
+                        <h:outputFormat value="#{msgs.work_item_remed_attr_formatted}">
+                          <f:param value="#{ce.path}"/>
+                          <f:param value="#{ce.source}"/>
+                        </h:outputFormat>
+                      </ui:fragment>
+                    </td>
+                  </ui:fragment>
+                </tr>
+              </ui:repeat>
+            </ui:fragment>
+            <ui:fragment rendered="#{policyTreeNode.contributingEntitlements == null}" >
+              <tr>
+                <td colspan="2" style="text-align: center;">#{msgs.label_entitlement_is_direct}</td>
+              </tr>
+            </ui:fragment>
+         </table>
+        </ui:repeat>
+
+    </ui:fragment>
+
+  </ui:composition>
+
+</body>
+</html>

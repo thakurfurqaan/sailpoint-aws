@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sp="http://sailpoint.com/ui">
+
+<sp:loadBundle basename="sailpoint.web.messages.iiqMessages" var="msgs"/>
+<section class="panel">
+  <header class="panel-heading bg-light lter text-center">
+    <span class="h3 font-thin">#{msgs.ui_reset_verification_code}</span>
+  </header>
+
+  <div class="panel-body">
+    <section>
+      <div class="form-group m-t-lg">
+        <sp-required-text sp-required-text-id="textCode"
+                          ng-model="textCode"
+                          sp-required-text-type="text"
+                          sp-required-text-label="{{ 'ui_reset_text_verification_code' | spTranslate }}">
+        </sp-required-text>
+        <br/>
+        <sp-password-confirm ng-model="passwordModel" ng-show="showPasswordFields()"/>
+      </div>
+
+      <span class="font-thin text-info m-t-lg">
+        <a id="iNeedACodeLink" class="font-thin text-info m-t-lg"
+           href="" ng-click="sendSMS()">
+          <strong>#{msgs.ui_reset_need_code}</strong>
+        </a>
+      </span>
+
+      <div id="smsStatusDiv" role="status" aria-live="polite" ng-show="smsStatus.show"
+         ng-bind-html="smsStatus.text" ng-class="{'text-success':!smsStatus.hasError, 'text-danger':smsStatus.hasError}">
+      </div>
+    </section>
+
+    <span ng-show="errorMessages">
+      <br/><div id="alertDiv" tabindex="0" class="text-danger" aria-live="assertive" ng-bind-html="errorMessages"></div>
+    </span>
+  </div>
+
+  <footer class="panel-footer clearfix text-center bg-light lter">
+    <div class="inline">
+      <button id="cancelBtn" class="btn btn-secondary" ng-click="cancel()">#{msgs.button_cancel}</button>
+    </div>
+    <div class="inline">
+      <button id="submitBtn" class="btn btn-info" ng-click="submit()" aria-disabled="isDisableSubmit()"
+              ng-disabled="isDisableSubmit()">#{msgs.button_submit}</button>
+    </div>
+  </footer>
+</section>
+</html>

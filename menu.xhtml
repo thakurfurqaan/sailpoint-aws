@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+<head/>
+<body>
+
+<ui:composition>
+
+  <script type="text/javascript">
+
+    function skipNavigation() {
+      $('#mainContent').focus();
+    }
+
+  </script>
+
+  <h:form id="headerForm">
+    <ui:remove><!--
+			      Hidden field into which the ID of the current object being
+			      viewed gets copied (if available).
+			      --></ui:remove>
+    <h:inputHidden id="id" />
+    <h:commandButton style="display:none" id="logoutButton" action="#{login.logout}" immediate="true"/>
+  </h:form>
+
+  <div id="menuMainDiv">
+  <!-- top branded header with logos -->
+  <header class="container-fluid bg-info dker nav-bar topbar">
+    <div class="row padder-v">
+      <div id="topHeader" class="col-xs-6">
+        <img role="presentation" aria-hidden="true" src="#{base.requestContextPath}/ui/images/TopLogo1.png" 
+             alt="#{msgs.ui_sailpoint_logo}"/>
+        <button id="skipNavigationBtn" class="navSkipNavigationBtnStyle navBtnSpace" onclick="skipNavigation()">#{msgs.ui_skip_to_content}</button>
+      </div>
+      <div class="col-xs-6">
+        <img class="pull-right" role="presentation" aria-hidden="true" src="#{base.requestContextPath}/ui/images/rightlogo.png" 
+             alt="#{msgs.ui_custom_logo_position}"/>
+      </div>
+    </div>
+  </header>
+  <ui:fragment rendered="#{not hideMenu}">
+    <nav class="header bg-primary navbar">
+
+      <!-- Desktop Nav Bar -->
+      <ul class="nav navbar-nav navbar-left" role="menubar">
+        <c:if test="#{base.loggedIn}">
+          <li role="presentation" class="hidden-xs">
+            <a href="#quicklinkPanel" id="quicklinkButton" class="quicklink-button menuitem collapsed" role="menuitem" aria-haspopup="true"
+               data-toggle="collapse" aria-expanded="false" aria-controls="quicklinkPanel">
+              <span class="sr-only" >#{msgs.menu_quick_links_aria_label}</span>
+              <i role="presentation" class="fa fa-list-ul fa-lg"></i>
+              <i role="presentation" class="fa fa-times fa-lg"></i>
+            </a>
+          </li>
+        </c:if>
+        <ui:repeat value="#{menu.root.leftMenuItems}" var="menuitem" varStatus="menuStatus">
+          <ui:include src="menuitem.xhtml">
+            <ui:param name="menuitem" value="#{menuitem}" />
+          </ui:include>
+        </ui:repeat>
+      </ul>
+      <!-- right side nav -->
+      <ul class="nav navbar-nav navbar-right" role="menubar">
+        <ui:repeat value="#{menu.root.rightMenuItems}" var="menuitem">
+          <ui:include src="menuitemright.xhtml">
+            <ui:param name="menuitem" value="#{menuitem}" />
+          </ui:include>
+        </ui:repeat>
+        <c:if test="#{base.loggedIn}">
+          <ui:include src="notificationsMenuItem.xhtml" />
+        </c:if>
+        <!-- user menu -->
+        <ui:fragment rendered="#{base.loggedIn}">
+          <li class="dropdown" role="presentation">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="userMenu" aria-haspopup="true" role="menuitem">
+              <div id="usernameMenu">
+                <i role="presentation" aria-hidden="true" class="fa fa-user fa-lg visible-xs-inline"></i>
+                <h:outputText styleClass="hidden-xs" value="#{sp:escapeHTML(base.loggedInUser.displayableName, false)}" escape="false"/>
+              </div>
+              <span role="presentation" aria-hidden="true" class="caret"></span>
+              <span class="sr-only">#{msgs.user}</span>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-expanded="false">
+              <ui:fragment rendered="#{menu.preferencesEnabled}">
+                  <li role="presentation">
+                    <a href="#{base.requestContextPath}/dashboard/identityPreferences.jsf" role="menuitem" >
+                      <i role="presentation" aria-hidden="true" class="fa fa-wrench m-r-xs"></i>
+                      #{msgs.preferences}
+                    </a>
+                  </li>
+              </ui:fragment>
+              <li role="presentation">
+                <a href="#" role="menuitem" onclick="SailPoint.launchHelp(CONTEXT_PATH, helpKey); return false;">
+                  <i role="presentation" aria-hidden="true" class="fa fa-question-circle m-r-xs"></i>
+                  #{msgs.help}
+                </a>
+              </li>
+              <ui:fragment rendered="#{not base.ssoAuthenticated}">
+                <li role="presentation" aria-hidden="true" class="divider"></li>
+                <li class="username visible-xs" role="presentation">
+                  <h:outputText value="#{sp:escapeHTML(base.loggedInUser.displayableName, false)}" escape="false"/>
+                </li>
+                <li role="presentation">
+                  <a href="#" role="menuitem" onclick="doLogout(); return false;">
+                    <i role="presentation" aria-hidden="true" class="fa fa-sign-out m-r-xs"></i>
+                    #{msgs.logout}
+                  </a>
+                </li>
+              </ui:fragment>
+            </ul>
+          </li>
+        </ui:fragment>
+      </ul>
+    </nav>
+  </ui:fragment>
+  <ui:fragment rendered="#{hideMenu}">
+    <div class="header-divider"></div>
+  </ui:fragment>
+  </div>
+  <div id="mainContent" tabindex="-1"></div>
+</ui:composition>
+</body>
+</html>

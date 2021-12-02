@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2015 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+
+<ui:composition template="/ngAppPage.xhtml">
+  <sp:loadBundle basename="sailpoint.web.messages.iiqMessages" var="msgs"/>
+
+  <ui:define name="title">#{msgs.ui_access_manage_user_access}</ui:define>
+  <ui:define name="headerItems">
+    <ui:include src="../ui/scriptData.xhtml" />
+    <ui:include src="../ui/jspmInclude.xhtml" />
+
+    <script type="text/javascript">
+      System.import('#{base.requestContextPath}/ui/js/accessRequest/AccessRequestAppModule.js');
+    </script>
+  </ui:define>
+
+<ui:define name="body">
+  <div class="sp-ui-app">
+
+    <sp-register-config sp-config-key="workItemPriorityEditingEnabled"
+                        sp-config-value="#{sp:getSystemConfigurationValue('workItemPriorityEditingEnabled', false)}" />
+
+    <sp-register-config sp-config-key="disableInitialAccessRequestGridLoad"
+                        sp-config-value="#{sp:getSystemConfigurationValue('disableInitialAccessRequestGridLoad', false)}" />
+
+    <sp-register-config sp-config-key="uiApprovalItemsColumnsRole"
+                        sp-column-configs="#{sp:getColumnConfigJSON('uiApprovalItemsColumnsRole')}" />
+
+    <sp-register-config sp-config-key="uiApprovalItemsColumnsEntitlement"
+                        sp-column-configs="#{sp:getColumnConfigJSON('uiApprovalItemsColumnsEntitlement')}" />
+
+    <sp-register-config sp-config-key="userAccessConfigs"
+                          sp-config-value="#{sp:getUserAccessConfigs(base)}" />
+
+    <sp-register-config sp-config-key="attachmentsEnabled"
+                        sp-config-value="#{sp:getSystemConfigurationValue('attachmentsEnabled', false)}" />
+
+    <sp-register-config sp-config-key="attachmentsMaxFileSize"
+                        sp-config-value="#{sp:getSystemConfigurationValue('attachmentsMaxFileSize', 5)}" />
+
+    <sp-register-config sp-config-key="attachmentsMaxFileSizeLimit"
+                        sp-config-value="#{sp:getSystemConfigurationValue('attachmentsMaxFileSizeLimit', 20)}" />
+
+    <sp-register-config sp-config-key="attachmentsAllowedFileTypes"
+                        sp-config-value="#{sp:getSystemConfigurationValue('attachmentsAllowedFileTypes', '[txt,jpg,png]')}" />
+                          
+    <sp-register-config sp-config-key="contextualHelpManageUserAccessURL"
+                        sp-config-value="#{sp:getContextualHelpJSON('manageUserAccessURL')}" />
+    
+    <sp-register-config sp-config-key="contextualHelpManageMyAccessURL"
+                        sp-config-value="#{sp:getContextualHelpJSON('manageMyAccessURL')}" />
+                        
+    <promise-tracker-mask></promise-tracker-mask>
+
+    <div ui-view=""></div>
+  </div>
+</ui:define>
+</ui:composition>
+
+</body>
+</html>

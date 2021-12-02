@@ -1,0 +1,1506 @@
+div.Anchor, caption.Anchor
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: 72pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Appendix, caption.Appendix
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.AtTop, caption.AtTop
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.BlankPage, caption.BlankPage
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 45.0pt;
+  text-align: center;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Body, caption.Body
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.BodyLevel1, caption.BodyLevel1
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 0.0pt;
+  margin-left: 18pt;
+  margin-right: 0pt;
+  margin-top: 7.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.BodyLevel2, caption.BodyLevel2
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 3.0pt;
+  margin-left: 36pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.BodyLevel3, caption.BodyLevel3
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 54pt;
+  margin-right: 0pt;
+  margin-top: 7.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.BodyLevel4, caption.BodyLevel4
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 72pt;
+  margin-right: 0pt;
+  margin-top: 7.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.BookSection, caption.BookSection
+{
+  color: #3e4a68;
+  direction: ltr;
+  font-family: Cambria;
+  font-size: 24.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.BookTitle, caption.BookTitle
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Bulleted, caption.Bulleted
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 18pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: -18pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.BulletLevel1, caption.BulletLevel1
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 3.0pt;
+  margin-left: 36pt;
+  margin-right: 14.4pt;
+  margin-top: 3.0pt;
+  text-align: left;
+  text-indent: -10.8pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.BulletLevel2, caption.BulletLevel2
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 0.0pt;
+  margin-left: 54pt;
+  margin-right: 14.4pt;
+  margin-top: 7.0pt;
+  text-align: left;
+  text-indent: -10.799999999999997pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.BulletLevel3, caption.BulletLevel3
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 72pt;
+  margin-right: 14.4pt;
+  margin-top: 7.0pt;
+  text-align: left;
+  text-indent: -10.799999999999997pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.BulletLevel4, caption.BulletLevel4
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 87.84pt;
+  margin-right: 14.4pt;
+  margin-top: 7.0pt;
+  text-align: left;
+  text-indent: -8.64pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.BulletLevelNone, caption.BulletLevelNone
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 3.0pt;
+  margin-left: 36pt;
+  margin-right: 14.4pt;
+  margin-top: 3.0pt;
+  text-align: left;
+  text-indent: -10.8pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Caption, caption.Caption
+{
+  color: #3e4a68;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 12.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 12.0pt;
+  text-align: center;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Caution, caption.Caution
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 7.0pt;
+  margin-left: 50.4pt;
+  margin-right: 0pt;
+  margin-top: 7.0pt;
+  text-align: left;
+  text-indent: -50.4pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.CellBody, caption.CellBody
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 8.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.CellHeading, caption.CellHeading
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 8.0pt;
+  text-align: center;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.CellNote, caption.CellNote
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 7.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Chapter, caption.Chapter
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Cambria;
+  font-size: 28.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 5.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 34.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.ChapterNameTOC, caption.ChapterNameTOC
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.ChapterTOC, caption.ChapterTOC
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Code, caption.Code
+{
+  color: #000000;
+  direction: ltr;
+  font-family: "Courier New";
+  font-size: 9.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 0.0pt;
+  margin-left: 18pt;
+  margin-right: 0pt;
+  margin-top: 6.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.CopyrightTitle, caption.CopyrightTitle
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.CoverHead, caption.CoverHead
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Definition, caption.Definition
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Footnote, caption.Footnote
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 30.00024pt;
+  margin-right: 18pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: -12.000240000000001pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Heading1, caption.Heading1
+{
+  color: #3e4a68;
+  direction: ltr;
+  font-family: Cambria;
+  font-size: 18.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 22.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Heading1NoSplit, caption.Heading1NoSplit
+{
+  color: #3e4a68;
+  direction: ltr;
+  font-family: Cambria;
+  font-size: 18.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 22.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Heading1TOC, caption.Heading1TOC
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Heading2, caption.Heading2
+{
+  color: #727272;
+  direction: ltr;
+  font-family: Cambria;
+  font-size: 14.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 18pt;
+  margin-right: 36pt;
+  margin-top: 17.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Heading2NoSplit, caption.Heading2NoSplit
+{
+  color: #3e4a68;
+  direction: ltr;
+  font-family: Cambria;
+  font-size: 14.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 18pt;
+  margin-right: 36pt;
+  margin-top: 17.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Heading3, caption.Heading3
+{
+  color: #727272;
+  direction: ltr;
+  font-family: Cambria;
+  font-size: 12.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 18pt;
+  margin-right: 0pt;
+  margin-top: 14.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Heading3TOC, caption.Heading3TOC
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Heading4, caption.Heading4
+{
+  color: #727272;
+  direction: ltr;
+  font-family: Cambria;
+  font-size: 10.0pt;
+  font-style: italic;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 18pt;
+  margin-right: 0pt;
+  margin-top: 12.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.HeadingRunIn, caption.HeadingRunIn
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 5.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.HelpHeading1, caption.HelpHeading1
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Cambria;
+  font-size: 28.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 34.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Indented, caption.Indented
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 18pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.List, caption.List
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Note1, caption.Note1
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 72pt;
+  margin-right: 7.2pt;
+  margin-top: 7.0pt;
+  text-align: left;
+  text-indent: -36pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Note2, caption.Note2
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 90pt;
+  margin-right: 7.2pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: -36pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Note3, caption.Note3
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 108pt;
+  margin-right: 7.2pt;
+  margin-top: 7.0pt;
+  text-align: left;
+  text-indent: -36pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Note4, caption.Note4
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 126pt;
+  margin-right: 7.2pt;
+  margin-top: 7.0pt;
+  text-align: left;
+  text-indent: -36pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Numbered, caption.Numbered
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 0.0pt;
+  margin-left: 36pt;
+  margin-right: 0pt;
+  margin-top: 5.0pt;
+  text-align: left;
+  text-indent: -18pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Numbered1, caption.Numbered1
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 0.0pt;
+  margin-left: 36pt;
+  margin-right: 0pt;
+  margin-top: 7.0pt;
+  text-align: left;
+  text-indent: -18pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.numberedA, caption.numberedA
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 0.0pt;
+  margin-left: 72pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: -18pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.numberedAlpha, caption.numberedAlpha
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 0.0pt;
+  margin-left: 72pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: -18pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Para, caption.Para
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.SectionLevel1, caption.SectionLevel1
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.SectionLevel1TOC, caption.SectionLevel1TOC
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.SectionLevel3TOC, caption.SectionLevel3TOC
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.TableFootnote, caption.TableFootnote
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 30.00024pt;
+  margin-right: 18pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: -12.000240000000001pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.TableTitle, caption.TableTitle
+{
+  color: #3e4a68;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 12.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 12.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Term, caption.Term
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Title, caption.Title
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 6.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 12.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.TOCChapterTitle, caption.TOCChapterTitle
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.Warning, caption.Warning
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: italic;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 7.0pt;
+  margin-left: 54pt;
+  margin-right: 0pt;
+  margin-top: 7.0pt;
+  text-align: left;
+  text-indent: -54pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.zFooter, caption.zFooter
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.zHeader, caption.zHeader
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 2.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: center;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.zHeader2, caption.zHeader2
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 2.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: center;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.zHeaderL, caption.zHeaderL
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.zHeaderL2, caption.zHeaderL2
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: left;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.zHeaderR, caption.zHeaderR
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: right;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+div.zHeaderR2, caption.zHeaderR2
+{
+  color: #000000;
+  direction: ltr;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 0.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 0.0pt;
+  text-align: right;
+  text-indent: 0pt;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.BlueBold, span.BlueBold a, span.BlueBold a:active, abbreviation.BlueBold, abbreviation.BlueBold a, abbreviation.BlueBold a:active, acronym.BlueBold, acronym.BlueBold a, acronym.BlueBold a:active, citation.BlueBold, citation.BlueBold a, citation.BlueBold a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.Bold, span.Bold a, span.Bold a:active, abbreviation.Bold, abbreviation.Bold a, abbreviation.Bold a:active, acronym.Bold, acronym.Bold a, acronym.Bold a:active, citation.Bold, citation.Bold a, citation.Bold a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.code, span.code a, span.code a:active, abbreviation.code, abbreviation.code a, abbreviation.code a:active, acronym.code, acronym.code a, acronym.code a:active, citation.code, citation.code a, citation.code a:active
+{
+  color: #000000;
+  font-family: "Courier New";
+  font-size: 9.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.Emphasis, span.Emphasis a, span.Emphasis a:active, abbreviation.Emphasis, abbreviation.Emphasis a, abbreviation.Emphasis a:active, acronym.Emphasis, acronym.Emphasis a, acronym.Emphasis a:active, citation.Emphasis, citation.Emphasis a, citation.Emphasis a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.EquationVariables, span.EquationVariables a, span.EquationVariables a:active, abbreviation.EquationVariables, abbreviation.EquationVariables a, abbreviation.EquationVariables a:active, acronym.EquationVariables, acronym.EquationVariables a, acronym.EquationVariables a:active, citation.EquationVariables, citation.EquationVariables a, citation.EquationVariables a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.GreyBold, span.GreyBold a, span.GreyBold a:active, abbreviation.GreyBold, abbreviation.GreyBold a, abbreviation.GreyBold a:active, acronym.GreyBold, acronym.GreyBold a, acronym.GreyBold a:active, citation.GreyBold, citation.GreyBold a, citation.GreyBold a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.Icon, span.Icon a, span.Icon a:active, abbreviation.Icon, abbreviation.Icon a, abbreviation.Icon a:active, acronym.Icon, acronym.Icon a, acronym.Icon a:active, citation.Icon, citation.Icon a, citation.Icon a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.Italic, span.Italic a, span.Italic a:active, abbreviation.Italic, abbreviation.Italic a, abbreviation.Italic a:active, acronym.Italic, acronym.Italic a, acronym.Italic a:active, citation.Italic, citation.Italic a, citation.Italic a:active
+{
+  font-style: italic;
+  font-variant: normal;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.Labels, span.Labels a, span.Labels a:active, abbreviation.Labels, abbreviation.Labels a, abbreviation.Labels a:active, acronym.Labels, acronym.Labels a, acronym.Labels a:active, citation.Labels, citation.Labels a, citation.Labels a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.Not_Bold, span.Not_Bold a, span.Not_Bold a:active, abbreviation.Not_Bold, abbreviation.Not_Bold a, abbreviation.Not_Bold a:active, acronym.Not_Bold, acronym.Not_Bold a, acronym.Not_Bold a:active, citation.Not_Bold, citation.Not_Bold a, citation.Not_Bold a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.Subscript, span.Subscript a, span.Subscript a:active, abbreviation.Subscript, abbreviation.Subscript a, abbreviation.Subscript a:active, acronym.Subscript, acronym.Subscript a, acronym.Subscript a:active, citation.Subscript, citation.Subscript a, citation.Subscript a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.Superscript, span.Superscript a, span.Superscript a:active, abbreviation.Superscript, abbreviation.Superscript a, abbreviation.Superscript a:active, acronym.Superscript, acronym.Superscript a, acronym.Superscript a:active, citation.Superscript, citation.Superscript a, citation.Superscript a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.Symbol, span.Symbol a, span.Symbol a:active, abbreviation.Symbol, abbreviation.Symbol a, abbreviation.Symbol a:active, acronym.Symbol, acronym.Symbol a, acronym.Symbol a:active, citation.Symbol, citation.Symbol a, citation.Symbol a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.Underline, span.Underline a, span.Underline a:active, abbreviation.Underline, abbreviation.Underline a, abbreviation.Underline a:active, acronym.Underline, acronym.Underline a, acronym.Underline a:active, citation.Underline, citation.Underline a, citation.Underline a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.WebJump, span.WebJump a, span.WebJump a:active, abbreviation.WebJump, abbreviation.WebJump a, abbreviation.WebJump a:active, acronym.WebJump, acronym.WebJump a, acronym.WebJump a:active, citation.WebJump, citation.WebJump a, citation.WebJump a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+span.White, span.White a, span.White a:active, abbreviation.White, abbreviation.White a, abbreviation.White a:active, acronym.White, acronym.White a, acronym.White a:active, citation.White, citation.White a, citation.White a:active
+{
+  color: #000000;
+  font-family: Calibri;
+  font-size: 10.0pt;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+table.Format_A
+{
+  border-collapse: collapse;
+  direction: ltr;
+  margin-bottom: 12.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 12.0pt;
+  padding-bottom: 4pt;
+  padding-left: 6pt;
+  padding-right: 6pt;
+  padding-top: 6pt;
+  text-align: left;
+}
+
+table.Format_B
+{
+  border-collapse: collapse;
+  direction: ltr;
+  margin-bottom: 12.0pt;
+  margin-left: 0pt;
+  margin-right: 0pt;
+  margin-top: 12.0pt;
+  padding-bottom: 4pt;
+  padding-left: 6pt;
+  padding-right: 6pt;
+  padding-top: 6pt;
+  text-align: center;
+}
+
+table.StandardTable
+{
+  border-collapse: collapse;
+  direction: ltr;
+  margin-bottom: 6.0pt;
+  margin-left: 36pt;
+  margin-right: 0pt;
+  margin-top: 6.0pt;
+  padding-bottom: 4pt;
+  padding-left: 4pt;
+  padding-right: 4pt;
+  padding-top: 4pt;
+  text-align: center;
+}
+

@@ -1,0 +1,133 @@
+<!-- Used to have "position: relative" here, but this messed up the suggest component. -->
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui">
+  <f:view>
+
+    <ui:fragment rendered="#{!(identity.activeTab eq 1)}">
+      <div class="spContent">
+        <h:graphicImage url="/images/progress.gif"
+          style="padding:5px;vertical-align:middle"/>
+      </div>
+    </ui:fragment>
+
+    <ui:fragment rendered="#{identity.activeTab eq 1}">
+        
+      <div id="refreshStats" class="spContent">
+        <c:choose>
+          <c:when test="#{identity.object.lastRefresh == null}">
+              <h:outputFormat styleClass="spContentTitle" value="#{msgs.identity_not_refreshed}">
+                <f:param value="#{identity.object.name}" />
+              </h:outputFormat>
+          </c:when>
+          <c:otherwise>
+              <h:outputFormat styleClass="spContentTitle" value="#{msgs.identity_last_refreshed_on}">
+                <f:param value="#{identity.object.name}" />
+                <f:param value="#{sp:getlocalizeDate(identity.object.lastRefresh, identity.shortDateFormat)}" />
+                <f:param value="#{sp:getlocalizeTime(identity.object.lastRefresh, identity.mediumDateFormat)}" />
+              </h:outputFormat>
+          </c:otherwise>
+        </c:choose>
+        <c:set var="lastRefreshHelp" value="#{help.help_identity_last_refresh}" />
+        <c:if test="#{sp:hasRight(facesContext, 'FullAccessTask')}">
+          <c:set var="lastRefreshHelp" value="#{help.help_identity_last_refresh_privileged}" />
+        </c:if>
+        <h:graphicImage id="imgHlpIdentityLastRefresh"
+          width="12px" height="12px" alt="#{lastRefreshHelp}"
+          style="cursor:pointer; padding-left: 7px"
+          url="/images/icons/dashboard_help_16.png"/>
+      </div>
+
+      <div class="spAjaxContent" id="entitlementContentContainer"/>
+
+    </ui:fragment>
+     
+     <ui:fragment rendered="#{sp:hasRight(facesContext, 'SetIdentityRole')}">
+      <div class="width100" style="margin:5px"> 
+        
+        <h:inputHidden id="sunriseDate" value="#{identity.assignedRolesHelper.sunriseDate}" converter="sailpoint.object.Date" />
+        <h:inputHidden id="roleId" value="#{identity.assignedRolesHelper.roleId}" />
+        <h:inputHidden id="sunsetDate" value="#{identity.assignedRolesHelper.sunsetDate}" converter="sailpoint.object.Date" />
+        
+        <p:commandButton  id="roleEditButton"
+                            style="display:none"
+                            action="#{identity.assignedRolesHelper.editRoleTimeFrame}"
+                            oncomplete="javascript:updaterolesgrid();"
+                            update="@([id$=assigneRolesPanel])"/>
+               
+      </div>
+      </ui:fragment>
+
+      <ui:fragment rendered="#{sp:hasRight(facesContext, 'EditIdentityEntDates')}">
+          <div class="width100" style="margin:5px">
+
+              <h:inputHidden id="entId" value="#{identity.assignedEntitlementsHelper.entId}" />
+
+              <h:inputHidden id="entSunriseDate" value="#{identity.assignedEntitlementsHelper.sunriseDate}" converter="sailpoint.object.Date" />
+              <h:inputHidden id="entSunsetDate" value="#{identity.assignedEntitlementsHelper.sunsetDate}" converter="sailpoint.object.Date" />
+              <h:inputHidden id="entAttribute" value="#{identity.assignedEntitlementsHelper.name}" />
+              <h:inputHidden id="entValue" value="#{identity.assignedEntitlementsHelper.value}" />
+              <h:inputHidden id="entApplication" value="#{identity.assignedEntitlementsHelper.application}" />
+              <h:inputHidden id="entNativeId" value="#{identity.assignedEntitlementsHelper.nativeId}" />
+              <h:inputHidden id="entInstance" value="#{identity.assignedEntitlementsHelper.instance}" />
+
+
+              <p:commandButton  id="entEditButton"
+                                  style="display:none"
+                                  action="#{identity.assignedEntitlementsHelper.editEntTimeFrame}"
+                                  oncomplete="javascript:updateentgrid();"
+                                  update="@([id$=assigneRolesPanel])"/>
+
+          </div>
+      </ui:fragment>
+    
+  </f:view>
+  
+  <script type="text/javascript">
+  function updaterolesgrid() {
+      if(Ext.getCmp('identityentitlementrolesgrid')) {
+          var rec = Ext.getCmp('identityentitlementrolesgrid').getStore().findRecord('roleId', Ext.getDom('editForm:roleId').value);
+          if(Ext.getDom('editForm:sunriseDate').value) {
+              rec.set('startDate', Ext.getDom('editForm:sunriseDate').value);
+          } else {
+              rec.set('startDate', null);
+          }
+          
+          if(Ext.getDom('editForm:sunsetDate').value) {
+              rec.set('endDate', Ext.getDom('editForm:sunsetDate').value);
+          } else {
+              rec.set('endDate', null);
+          }
+          
+          refreshRoleAssignmentWin();
+      } else {
+          refreshRoleAssignmentWin();
+          refreshRoleDetailPanels();
+      }
+  }
+
+  function updateentgrid() {
+      if(Ext.getCmp('identityentitlementsgrid')) {
+          var rec = Ext.getCmp('identityentitlementsgrid').getStore().findRecord('id', Ext.getDom('editForm:entId').value);
+          if(Ext.getDom('editForm:entSunriseDate').value) {
+              rec.set('startDate', Ext.getDom('editForm:entSunriseDate').value);
+          } else {
+              rec.set('startDate', null);
+          }
+
+          if(Ext.getDom('editForm:entSunsetDate').value) {
+              rec.set('endDate', Ext.getDom('editForm:entSunsetDate').value);
+          } else {
+              rec.set('endDate', null);
+          }
+
+          refreshEntAssignmentWin();
+      } else {
+          refreshEntAssignmentWin();
+      }
+  }
+  </script>
+</html>

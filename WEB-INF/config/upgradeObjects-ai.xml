@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+
+<!-- (c) Copyright 2019 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<!--
+  This is used by 'iiq upgrade' to drive upgrading the schema and data between
+  revisions.
+
+  There are two files that define the upgrade: upgrade.xml and
+  upgradeObjects.xml.  If you have LCM enabled, there are an additional two
+  files, upgrade-lcm.xml and upgradeObjects-lcm.xml. If you have IdentityAI
+  enabled, there are an additional two files, upgrade-ai.xml and upgradeObjects-ai.xml.
+
+  upgrade.xml, upgrade-lcm.xml and upgrade-ai.xml are processed in a special way before
+  Hibernate is started so that changes can be made at the JDBC level.
+  These files should only contain <ImportAction> elements that use the
+  "execute" command to  call upgrader classes.
+  *DO NOT PUT STATIC XML OBJECTS IN UPGRADE.XML, UPGRADE-LCM.XML OR UPGRADE-AI.XML*
+
+  upgradeObjects-ai.xml is included by upgrade-ai.xml and will be imported after
+  Hibernate is started. Any changes to objects that can be respesented as static XML
+  or as ImportActions with the "merge" command must go in these files to ensure
+  that they are parsed after Hibernate has been started so that
+  references can be resolved.
+-->
+<sailpoint>
+
+  <Identity name="IdentityAI" protected="true" workgroup="true">
+    <Attributes>
+      <Map>
+        <entry key="displayName" value="IdentityAI"/>
+        <entry key="systemUser">
+          <value>
+            <Boolean>true</Boolean>
+          </value>
+        </entry>
+      </Map>
+    </Attributes>
+  </Identity>
+
+  <ImportAction name="include" value="WEB-INF/config/webResources-ai.xml"/>
+
+  <Capability name="IdentityAIAdministrator" displayName="capability_iai_administrator">
+    <Description>capability_desc_iai_administrator</Description>
+    <RightRefs>
+      <!-- Edit IdentityAI Configuration -->
+      <Reference class="sailpoint.object.SPRight" name="FullAccessIAIConfiguration" />
+    </RightRefs>
+  </Capability>
+
+</sailpoint>

@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:p="http://primefaces.org/ui">
+<head />
+<body>
+<ui:composition>
+  <h:form id="notificationMenuItemForm" style="display: none">
+    <h:outputText id="lastCheckedTime" style="display: none" value="#{workItemNotification.lastCheckedTime}">
+    </h:outputText>
+    <h:outputText id="lastResetTime" style="display: none" value="#{workItemNotification.lastResetTime}">
+    </h:outputText>
+    <h:outputText id="newItemCount" style="display: none" value="#{workItemNotification.newItemCount}">
+    </h:outputText>
+    <h:inputText id="menuItemName" style="display: none" value="#{workItemNotification.menuItemName}" />
+    <h:commandButton id="goToWorkItemsBtn" style="display:none"
+                       action="#{workItemNotification.goToWorkItems}"/>
+  </h:form>
+  <h:inputHidden id="workItemNotificationsInterval" value="#{sp:getSystemConfigurationValue('workItemNotificationsInterval', 300)}" />
+  <h:inputHidden id="notificationMenuNewItemMessageFormat" value="#{msgs.menu_notifications_new_items}" />
+
+  <li id="notificationMenuItem" class="dropdown notification-menu-item" role="presentation">
+    <span role="alert" class="sr-only" id="notificationMenuItemAlert"></span>
+    <a href="#" class="dropdown-toggle" id="notificationMenuItemLink" role="menuitem" data-toggle="dropdown" aria-haspopup="true">
+      <i class="fa fa-bell fa-lg" role="presentation"></i>
+      <span id="notificationMenuNewItemBadge" class="badge bg-danger notification-badge"></span>
+      <span class="sr-only">#{msgs.menu_notifications_submenu_title}</span>
+    </a>
+    <ul class="dropdown-menu" role="menu">
+      <li class="dropdown-header" role="presentation"><b>#{msgs.menu_notifications_submenu_title}</b></li>
+      <li class="divider" role="presentation"></li>
+      <ui:repeat value="#{workItemNotification.menuItems}" var="menuItem">
+        <li role="presentation">
+          <a href="#" onclick="SailPoint.NotificationMenuItem.navigateToWorkItems('#{menuItem}')"
+             role="menuitem" class="menuitem">
+            <span class="badge bg-info m-r-xs" id="subMenuItem#{menuItem}"></span>
+            <span>#{sp:localizeKey(menuItem.messageKey)}</span>
+          </a>
+        </li>
+      </ui:repeat>
+    </ul>
+  </li>
+
+  <sp:script>
+    <src>#{base.requestContextPath}/scripts/notificationsMenuItem.js?#{debug.revision}</src>
+  </sp:script>
+</ui:composition>
+</body>
+</html>

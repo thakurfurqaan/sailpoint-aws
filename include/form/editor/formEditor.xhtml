@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+<body>
+
+<ui:composition>
+  <style>
+    .x-form-radio-group .x-form-radio-wrap {
+        white-space: nowrap;
+    }
+  </style>
+
+  <div style="margin:5px" class="width100">
+
+    <c:if test="#{not empty showUsageList and showUsageList}">
+      <ui:include src="/include/form/editor/formEditorUsageListInclude.xhtml"/>
+    </c:if>
+
+    <c:if test="#{not empty showUsageListByObjectType and showUsageListByObjectType}">
+      <ui:include src="/include/form/editor/formEditorUsageListByObjectTypeInclude.xhtml"/>
+    </c:if>
+
+    <c:if test="#{not empty showList and showList}">
+      <ui:include src="/include/form/editor/formEditorListInclude.xhtml"/>
+    </c:if>
+
+    <c:if test="#{not empty showList and !showList and
+                  not empty showUsageList and !showUsageList and
+                  not empty showUsageListByObjectType and !showUsageListByObjectType}">
+      <ui:include src="/include/form/editor/formEditorPanelInclude.xhtml"/>
+    </c:if>
+
+    <ui:include src="/include/form/editor/formEditorInclude.xhtml"/>
+
+    <p:commandButton action="#{formEditor.saveForm}"
+                       id="formSaveBtn"
+                       update="@([id$=formsList],[id$=formItemsJSON])"
+                       oncomplete="Ext.getDom('editForm:formItemsJSON').value ='';Page.fireEvent('onFormEditorContentChanged');"
+                       style="display:none"/>
+
+  </div>
+</ui:composition>
+
+</body>
+</html>

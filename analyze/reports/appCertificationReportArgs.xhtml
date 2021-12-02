@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+<table class="width100" cellspacing="0" cellpadding="3" border="0">
+<ui:fragment>
+
+	<sp:script>
+		<src>#{base.requestContextPath}/scripts/sailpoint/Suggest.js?#{debug.revision}</src>
+		<src>#{base.requestContextPath}/scripts/sailpoint/MultiSuggest.js?#{debug.revision}</src>
+	</sp:script>
+    
+    <script type="text/javascript">
+        Ext.onReady(function () {
+            var appNameMultiSuggest = new SailPoint.MultiSuggest({
+                renderTo: 'appNameMultiSuggest',
+                suggestType: 'application',
+                jsonData: #{sp:basicJSONDataConverted(
+                   taskDefinition.argMap['applications'].objectListValue,
+                   'ApplicationListConverter')},
+                inputFieldName: 'appSuggest',
+                contextPath: CONTEXT_PATH
+                });
+        });    
+    </script>
+    
+<tr>
+      <td width="45%" valign="top">
+        <div class="spTabledContent">
+            <table class="spTable" cellspacing="0" >
+                <tr>
+                    <th><sp:outputText value="#{msgs.report_filter_app}"/></th>
+                </tr>
+                <tr>
+                    <td><sp:outputText style="font-size:11px"
+                                      value='#{taskDefinition.argMap["applications"].argument.description}'/></td>
+                </tr>
+                <tr>
+                    <td valign="top">
+                        <p:outputPanel>
+                            <p:autoUpdate />
+                            <h:message styleClass="formError" for="app" /><br/><br/>
+                        </p:outputPanel>
+			          <div id="appNameMultiSuggest"></div>
+			          <t:inputHidden id="appSuggest"
+			                         value="#{taskDefinition.argMap['applications'].objectListValue}" forceId="true">
+			              <sp:convertList />
+			          </t:inputHidden>                        
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </td>
+    <td valign="top" >&nbsp;</td>
+    <td valign="top">&nbsp;</td>
+</tr>
+
+
+<!-- ********************************* END THIRD ROW  ****************************************  -->
+
+
+
+
+
+</ui:fragment>
+</table>
+
+<script type="text/javascript" defer="defer">
+    <!--//--><![CDATA[//><!--
+    var checkBox1 = Ext.getDom('editForm:startDateSelect');
+    toggleDisplay(Ext.getDom('startDateDiv'), !(checkBox1.checked));
+
+    var checkBox2 = Ext.getDom('editForm:endDateSelect');
+    toggleDisplay(Ext.getDom('endDateDiv'), !(checkBox2.checked));
+
+    var checkBox3 = Ext.getDom('editForm:signedStartDateSelect');
+    toggleDisplay(Ext.getDom('signedStartDateDiv'), !(checkBox3.checked));
+
+    var checkBox4 = Ext.getDom('editForm:signedEndDateSelect');
+    toggleDisplay(Ext.getDom('signedEndDateDiv'), !(checkBox4.checked));
+
+    var checkBox5 = Ext.getDom('editForm:dueStartDateSelect');
+    toggleDisplay(Ext.getDom('dueStartDateDiv'), !(checkBox5.checked));
+
+    var checkBox6 = Ext.getDom('editForm:dueEndDateSelect');
+    toggleDisplay(Ext.getDom('dueEndDateDiv'), !(checkBox6.checked));
+
+    //--><!]]>
+</script>
+
+</ui:composition>
+</body>
+</html>

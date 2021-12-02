@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+
+    <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'APPLICATION';
+
+        function getFieldValue(field) {
+            var val = null;
+            var fileName = Ext.getDom(field);
+            if ( fileName ) {
+               val = fileName.value;
+            }
+            return val;
+        }
+        function toggleCredentials(authType) {
+            var emailRow = Ext.get('emailRow');
+            var passwordObj = Ext.get('passwordRow');
+            var applicationIdObj = Ext.get('applicationIdRow');
+            var roleIDObj = Ext.get('roleIDRow');
+            var clientIdObj = Ext.get('clientIdRow');
+            var clientSecretObj = Ext.get('clientSecretRow');
+            var tokenIDObj = Ext.get('tokenIDRow');
+            var tokenSecretObj = Ext.get('tokenSecretRow');
+            if (authType == "") {
+                authType = "userCredentials";
+            }
+            if (authType == "userCredentials") {
+                clientIdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientIdObj.hide();
+                clientSecretObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientSecretObj.hide();
+                tokenIDObj.setVisibilityMode(Ext.Element.DISPLAY);
+                tokenIDObj.hide();
+                tokenSecretObj.setVisibilityMode(Ext.Element.DISPLAY);
+                tokenSecretObj.hide();
+
+                emailRow.setVisibilityMode(Ext.Element.DISPLAY);
+                emailRow.show();
+                passwordObj.setVisibilityMode(Ext.Element.DISPLAY);
+                passwordObj.show();
+                applicationIdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                applicationIdObj.show();
+                roleIDObj.setVisibilityMode(Ext.Element.DISPLAY);
+                roleIDObj.show();
+
+            } if (authType == "tokenBasedAuthentication") {
+                emailRow.setVisibilityMode(Ext.Element.DISPLAY);
+                emailRow.hide();
+                passwordObj.setVisibilityMode(Ext.Element.DISPLAY);
+                passwordObj.hide();
+                applicationIdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                applicationIdObj.hide();
+                roleIDObj.setVisibilityMode(Ext.Element.DISPLAY);
+                roleIDObj.hide();
+
+                clientIdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientIdObj.show();
+                clientSecretObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientSecretObj.show();
+                tokenIDObj.setVisibilityMode(Ext.Element.DISPLAY);
+                tokenIDObj.show();
+                tokenSecretObj.setVisibilityMode(Ext.Element.DISPLAY);
+                tokenSecretObj.show();
+            }
+        }
+
+        Ext.onReady(function () {
+           Ext.QuickTips.init();
+
+           toggleCredentials('#{applicationObject.attributes['authType']}');
+           // This is our validation hook
+           Page.on('beforeSave', function() {
+               if (!hasCredentialConfiguration()) {
+                   var authType = getFieldValue('editForm:authType');
+                   var accountID = getFieldValue('editForm:accountId');
+                   Validator.validateNonBlankString(accountID, "#{msgs.con_form_netsuite_accntidnotnull}");
+
+                   if (authType == "userCredentials")
+                   {
+                     var emailID = getFieldValue('editForm:email');
+                     Validator.validateNonBlankString(emailID, "#{msgs.con_form_netsuite_adminemailnotnull}");
+
+                     var passwordOfAdmin = getFieldValue('editForm:password');
+                     Validator.validateNonBlankString(passwordOfAdmin, "#{msgs.con_form_netsuite_adminpasswordnotnull}");
+
+                     var applicationId = getFieldValue('editForm:applicationId');
+                     Validator.validateNonBlankString(applicationId, "#{msgs.con_form_netsuite_applicationidnotnull}");
+                   }
+                   else if(authType == "tokenBasedAuthentication")
+                   {
+                     var clientId = getFieldValue('editForm:clientId');
+                     Validator.validateNonBlankString(clientId, "#{msgs.con_form_netsuite_clientidnotnull}");
+
+                     var clientSecret = getFieldValue('editForm:clientSecret');
+                     Validator.validateNonBlankString(clientSecret, "#{msgs.con_form_netsuite_clientsecretnotnull}");
+
+                     var tokenId = getFieldValue('editForm:tokenId');
+                     Validator.validateNonBlankString(tokenId, "#{msgs.con_form_netsuite_tokenidnotnull}");
+
+                     var tokenSecret = getFieldValue('editForm:tokenSecret');
+                     Validator.validateNonBlankString(tokenSecret, "#{msgs.con_form_netsuite_tokensecretnotnull}");
+                   }
+                   var errors = Validator.getErrors();
+                   if (errors && errors.length > 0) {
+                       Validator.displayErrors('appErrorsTop');
+                       return false;
+                   }
+               }
+               //return false will kill cancel the save
+               return true;
+           });
+
+        });
+
+       //--><!]]>
+   </script>
+   <f:view>
+
+    <h:outputText styleClass="sectionHeader"
+     value="#{msgs.con_form_netsuite_credentials}" />
+    <br />
+    <br />
+
+
+    <div id="accountSettings" class='spContent'>
+     <table class="spTable" style="border: 0px" cellspacing="0">
+      <tr>
+       <td class='titleColumn certScheduleTitleCol'>
+        <h:outputText style='padding:5px'
+         value="#{msgs.con_form_netsuite_accountID}" />
+        <h:outputText styleClass="requiredText" value="*" />
+       </td>
+
+       <td class="certScheduleHelpCol" >
+        <h:graphicImage id="imgHlpAccountID"
+         styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+         alt="#{msgs.help_con_form_netsuite_accountID}" />
+       </td>
+       <td>
+        <sp:inputSecret id="accountId"
+         value="#{applicationObject.attributes['accountId']}" size="80"
+         redisplay="true"
+         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+         readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+       </td>
+
+      </tr>
+
+      <tr>
+       <td class='titleColumn certScheduleTitleCol'>
+        <h:outputText style='padding:5px'
+         value="#{msgs.con_form_netsuite_pageSize}" />
+       </td>
+       <td class="certScheduleHelpCol">
+        <h:graphicImage id="imgHlpPagesize"
+         styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+         alt="#{msgs.help_con_form_netsuite_fetchSize}" />
+       </td>
+
+       <td>
+        <h:inputText id="PageSize"
+         value="#{applicationObject.attributes['PageSize']}" size="5"
+         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+         readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+         type="number">
+         <f:validateLongRange minimum="1"
+          maximum="1000" />
+        </h:inputText>
+        <h:message for="PageSize" />
+       </td>
+      </tr>
+      <tr>
+       <td></td>
+      </tr>
+      <tr>
+       <td></td>
+      </tr>
+      <tr>
+       <td class='titleColumn certScheduleTitleCol'>
+        <h:outputText style='padding:5px'
+         value="#{msgs.con_form_netsuite_auth_type}" />
+       </td>
+       <td class="certScheduleHelpCol">
+        <h:graphicImage id="imgHlpAuthtype"
+         styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+         alt="#{help.help_con_form_netsuite_auth_type}" />
+       </td>
+       <td>
+        <h:selectOneMenu id="authType"
+         value="#{applicationObject.attributes['authType']}"
+         redisplay="true"
+         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+         readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+         onchange="toggleCredentials(this.value)">
+         <f:selectItem itemValue="userCredentials"
+          itemLabel="#{msgs.con_form_netsuite_authType_userCredentials}" />
+         <f:selectItem itemValue="tokenBasedAuthentication"
+          itemLabel="#{msgs.con_form_netsuite_authType_tokenBasedAuthentication}" />
+        </h:selectOneMenu>
+       </td>
+      </tr>
+      <tr>
+       <td></td>
+      </tr>
+      <tr>
+       <td></td>
+      </tr>
+      <tr id="emailRow">
+       <td class='titleColumn certScheduleTitleCol'>
+        <h:outputText style='padding:5px'
+         value="#{msgs.con_form_netsuite_administratorEmail}" />
+        <h:outputText styleClass="requiredText" value="*" />
+       </td>
+       <td class="certScheduleHelpCol">
+        <h:graphicImage id="imgHlpEmail"
+         styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+         alt="#{msgs.help_con_form_netsuite_administratorEmail}" />
+       </td>
+       <td>
+        <h:inputText id="email"
+         value="#{applicationObject.attributes['email']}" size="50"
+         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+         readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+       </td>
+
+      </tr>
+
+
+      <tr id="passwordRow">
+       <td class='titleColumn certScheduleTitleCol'>
+        <h:outputText style='padding:5px'
+         value="#{msgs.con_form_netsuite_administratorPassword}" />
+        <h:outputText styleClass="requiredText" value="*" />
+       </td>
+       <td class="certScheduleHelpCol">
+        <h:graphicImage id="imgHlpPassword"
+         styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+         alt="#{msgs.help_con_form_netsuite_employee_password}" />
+       </td>
+       <td>
+        <sp:inputSecret id="password" size="50"
+         autocomplete="off"
+         value="#{applicationObject.attributes['password']}"
+         redisplay="true"
+         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+         readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+       </td>
+
+      </tr>
+
+      <tr id="applicationIdRow">
+       <td class='titleColumn certScheduleTitleCol'>
+        <h:outputText style='padding:5px'
+         value="#{msgs.con_form_netsuite_applicationID}" />
+         <h:outputText styleClass="requiredText" value="*" />
+       </td>
+       <td class="certScheduleHelpCol">
+        <h:graphicImage id="imgHlpApplicationID"
+         styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+         alt="#{msgs.help_con_form_netsuite_applicationID}" />
+       </td>
+       <td>
+        <sp:inputSecret id="applicationId"
+         value="#{applicationObject.attributes['applicationId']}"
+         size="80" redisplay="true"
+         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+         readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+       </td>
+      </tr>
+
+      <tr id="roleIDRow">
+       <td class='titleColumn certScheduleTitleCol'>
+        <h:outputText style='padding:5px'
+         value="#{msgs.con_form_netsuite_roleID}" />
+       </td>
+       <td class="certScheduleHelpCol">
+        <h:graphicImage id="imgHlpRoleID"
+         styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+         alt="#{msgs.help_con_form_netsuite_roleID}" />
+       </td>
+
+       <td>
+        <h:inputText id="roleID"
+         value="#{applicationObject.attributes['roleID']}" size="20"
+         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+         readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+       </td>
+      </tr>
+
+      <tr id="clientIdRow">
+       <td class='titleColumn certScheduleTitleCol'>
+        <h:outputText style='padding:5px'
+         value="#{msgs.con_form_netsuite_clientId}" />
+        <h:outputText styleClass="requiredText" value="*" />
+       </td>
+       <td class="certScheduleHelpCol">
+        <h:graphicImage id="imgHlpclientId"
+         styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+         alt="#{help.help_con_form_netsuite_clientId}" />
+       </td>
+       <td>
+        <sp:inputSecret id="clientId" size="50"
+         value="#{applicationObject.attributes['clientId']}"
+         redisplay="true"
+         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+         readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+       </td>
+      </tr>
+
+      <tr id="clientSecretRow">
+       <td class='titleColumn certScheduleTitleCol'>
+        <h:outputText style='padding:5px'
+         value="#{msgs.con_form_netsuite_clientSecret}" />
+        <h:outputText styleClass="requiredText" value="*" />
+       </td>
+       <td class="certScheduleHelpCol">
+        <h:graphicImage id="imgHlpclientSecret"
+         styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+         alt="#{help.help_con_form_netsuite_clientSecret}" />
+       </td>
+       <td>
+        <sp:inputSecret id="clientSecret"
+         value="#{applicationObject.attributes['clientSecret']}"
+         size="20" redisplay="true"
+         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+         readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+       </td>
+      </tr>
+
+      <tr id="tokenIDRow">
+       <td class='titleColumn certScheduleTitleCol'>
+        <h:outputText style='padding:5px'
+         value="#{msgs.con_form_netsuite_tokenID}" />
+        <h:outputText styleClass="requiredText" value="*" />
+       </td>
+       <td class="certScheduleHelpCol">
+        <h:graphicImage id="imgHlpTokenID"
+         styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+         alt="#{help.help_con_form_netsuite_tokenId}" />
+       </td>
+       <td>
+        <sp:inputSecret id="tokenId"
+         value="#{applicationObject.attributes['tokenId']}" size="20"
+         redisplay="true"
+         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+         readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+       </td>
+      </tr>
+
+      <tr id="tokenSecretRow">
+       <td class='titleColumn certScheduleTitleCol'>
+        <h:outputText style='padding:5px'
+         value="#{msgs.con_form_netsuite_tokenSecret}" />
+        <h:outputText styleClass="requiredText" value="*" />
+       </td>
+       <td class="certScheduleHelpCol">
+        <h:graphicImage id="imgHlpTokenSecret"
+         styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+         alt="#{help.help_con_form_netsuite_tokenSecret}" />
+       </td>
+       <td>
+        <sp:inputSecret id="tokenSecret"
+         value="#{applicationObject.attributes['tokenSecret']}"
+         size="20" redisplay="true"
+         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+         readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+       </td>
+      </tr>
+
+      <tr>
+      </tr>
+
+     </table>
+
+    </div>
+
+
+   </f:view>
+  </ui:composition>
+
+ </body>
+</html>

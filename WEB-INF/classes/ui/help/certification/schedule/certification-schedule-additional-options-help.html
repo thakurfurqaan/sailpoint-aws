@@ -1,0 +1,62 @@
+<h2>Additional Settings</h2>
+<p><strong>Certification Name:</strong> A name and date parameter to identify the certification.</p>
+<p><strong>Certification Owner:</strong> The identity or workgroup responsible for the certification.</p>
+<p><strong>Advanced Options</strong></p>
+<ul>
+  <li><strong>Enable Bulk Clear Decisions:</strong> Allow certifiers to cancel multiple decisions simultaneously in the access review.</li>
+  <li><strong>Update Entitlement Assignments:</strong> Enable this to cause decisions made on entitlement values in the access review to apply to the entitlement assignment model. When this is enabled, approvals create assignments, and revocations remove assignments.</li>
+  <li><strong>Enable Partitioning:</strong> Partitioning aids the performance of certification scheduling, by subdividing activity across multiple threads, to increase processing throughput and speed. If you enable partitioning, you also set the Number of Partitions.</li>
+  <li><strong>Show Recommendations:</strong> Enable recommendations from IdentityAI to appear in access reviews. This option is visible only if you have implemented SailPoint IdentityAI.
+    <ul>
+      <li><strong>Automatically Approve Recommended Items:</strong> Automatically mark access review items that are recommended for approval as Approved, and move them from the Open to the Review tab of the access review. This option is visible only if you have implemented SailPoint IdentityAI.</li>
+    </ul>
+  </li>
+  <li><strong>Show Classifications:</strong> Show classification information in the access reviews. When enabled, classifications provide additional information about roles, managed attributes and policy violations.</li>
+  <li><strong>Delegation Options</strong></li>
+  <li>Delegating an item to another user allows that user to make the decisions and return the review to the original reviewer, who can then accept or change the delegate reviewer’s decisions, and sign off. With delegation, the original reviewer still retains ultimate control of the decision and the sign off.</li>
+  <li>
+    <ul>
+      <li><strong>Require Delegation Review:</strong> Require the original access review owner to review all delegated access reviews.</li>
+      <li><strong>Line Item Delegation:</strong> Allow certifiers to delegate individual items from an access review.</li>
+      <li><strong>Identity Delegation:</strong> Allow certifiers to delegate entire identities from an access review.</li>
+      <li><strong>Disable Delegation Forwarding:</strong> Disallows the forwarding of a work item that was delegated by a different user.</li>
+      <li><strong>Pre-Delegation Rule:</strong> A rule to pre-delegate entities to specific reviewers. Rules of type “CertificationPreDelegation” are included in this list. In the Targeted Certification, the pre-delegation rule does not support reassignments; for reassignments, use the Certifier Rule in the Choose Certifier section.</li>
+      <li><strong>Email Owner on Pre-Delegation Completion:</strong> If you are using a Pre-Delegation Rule, this option sends an email to the owner of the original certification when delegate reviewers have completed their certifications.</li>
+    </ul>
+  </li>
+  <li><strong>Approve Options</strong></li>
+  <li>
+    <ul>
+      <li><strong>Require Comments with Approval:</strong> Require the certifier to include comments when an access review item is approved.</li>
+      <li><strong>Enable Bulk Approval:</strong> Allow certifiers to approve multiple decisions simultaneously in the access review.</li>
+    </ul>
+  </li>
+  <li><strong>Revoke Options</strong></li>
+  <li>
+    <ul>
+      <li><strong>Enable Bulk Revocation:</strong> Allow certifiers to revoke multiple items simultaneously in the access review.</li>
+      <li><strong>Enable Account Revocation:</strong> Allow certifiers to revoke an account and all its associated entitlements.</li>
+      <li><strong>Enable Bulk Account Revocation:</strong> Allow certifiers to revoke multiple accounts simultaneously in the access review.</li>
+      <li><strong>Require Comments with Revocation:</strong> Require the certifier to include comments when an access review item is revoked.</li>
+    </ul>
+  </li>
+  <li><strong>Allow Options</strong></li>
+  <li>
+    <ul>
+      <li><strong>Enable Allow Exceptions:</strong> Allow exceptions on non-policy-violation items such as roles or entitlements. Allowing an exception means the user should not have access indefinitely, but can retain access for a specified period of time. Exceptions for policy violations are always enabled, so note that this setting applies only to items that are not policy violations.</li>
+      <li><strong>Enable Bulk Allow Exceptions:</strong> Allow certifiers to approve multiple exceptions simultaneously in the access review.</li>
+      <li><strong>Deprovision Items When Exception Expires:</strong> Enables automatic deprovisioning of access when the allowed exception period has expired. This setting applies only to items such as roles or entitlements, that are not policy violations.</li>
+      <li><strong>Enable Allow Exception Popup:</strong> The Allow Exception popup lets reviewers manually set expiration dates and allow comments. This option applies to both violation and non-violation items.</li>
+      <li><strong>Require Comments for Allowing Exceptions:</strong> Require the certifier to include comments when an exception is allowed. . This option applies to both violation and non-violation items.</li>
+      <li><strong>Default Duration for Exceptions:</strong> The default time period in which exceptions are allowed during the access review. The reviewer can modify this default time period during the review, in the Allow Exceptions pop-up. After this time period, exceptions will expire.</li>
+    </ul>
+  </li>
+  <li><strong>Access Review Properties</strong></li>
+  <li>
+    <ul>
+      <li><strong>Custom Name:</strong> A custom name for the access reviews generated by this certification. You can combine free text, and parameterized text selected from the list. The Custom Name appears in the reviewer’s My Access Reviews page.</li>
+      <li><strong>Custom Short Name:</strong> A custom short name for the access reviews generated by this certification. You can combine free text, and parameterized text selected from the list. The Custom Short Name appears in the user’s detailed Access Review page.</li>
+    </ul>
+  </li>
+  <li><strong>Tags:</strong> Labels that are used to classify certifications for searching and reporting.</li>
+</ul>

@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2017 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://java.sun.com/jstl/core" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+  <table>
+    <tr>
+      <td class="titleColumn">#{msgs.identity}</td>
+      <td>#{pamRequest.identityDisplayName}</td>
+    </tr>
+    <tr>
+      <td class="titleColumn">#{msgs.application}</td>
+      <td>#{pamRequest.accountRequests[0].application}</td>
+    </tr>
+    <tr>
+      <td class="titleColumn">#{msgs.label_account}</td>
+      <td>#{pamRequest.accountRequests[0].displayName}</td>
+    </tr>
+    <tr>
+      <td class="titleColumn">#{msgs.ui_pam_approval_container}</td>
+      <td>#{pamRequest.containerDisplayName}</td>
+    </tr>
+    <ui:fragment rendered="#{(null != pamRequest.accountRequests[0].addedRights) and (!empty pamRequest.accountRequests[0].addedRights)}">
+      <tr>
+        <td class="titleColumn">#{msgs.pam_work_item_archive_added_rights}</td>
+        <td>
+          <ui:repeat value="#{pamRequest.accountRequests[0].addedRights}" var="right">
+            <h:outputText value="#{not sp:isFirstElement(right, pamRequest.accountRequests[0].addedRights) ? ', ' : ''}" />
+            <h:outputText value="#{right}" />
+          </ui:repeat>
+        </td>
+      </tr>
+    </ui:fragment>
+    <ui:fragment rendered="#{(null != pamRequest.accountRequests[0].removedRights) and (!empty pamRequest.accountRequests[0].removedRights)}">
+      <tr>
+        <td class="titleColumn">#{msgs.pam_work_item_archive_removed_rights}</td>
+        <td>
+          <ui:repeat value="#{pamRequest.accountRequests[0].removedRights}" var="right">
+            <h:outputText value="#{not sp:isFirstElement(right, pamRequest.accountRequests[0].removedRights) ? ', ' : ''}" />
+            <h:outputText value="#{right}" />
+          </ui:repeat>
+        </td>
+      </tr>
+    </ui:fragment>
+    <tr>
+      <td class="titleColumn">#{msgs.label_decision}</td>
+      <td>#{(pamRequest.approved) ? msgs.approved : msgs.rejected}</td>
+    </tr>
+  </table>
+</ui:composition>
+</body>
+</html>

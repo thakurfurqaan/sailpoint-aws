@@ -1,0 +1,342 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<!--
+  This is used by 'iiq upgrade' to drive upgrading the schema and data between
+  revisions.
+
+  There are two files that define the upgrade, upgrade.xml and
+  upgradeObjects.xml.
+
+  upgrade.xml is processed in a special way before Hibernate
+  is started so that changes can be made at the JDBC level.  upgrade.xml should
+  only contain <ImportAction> elements that use the "execute" command to
+  call upgrader classes.  *DO NOT PUT STATIC XML OBJECTS IN UPGRADE.XML*
+
+  upgradeObjects.xml (this file) is included by upgrade.xml and will be
+  imported after Hibernate is started.  Any changes to objects that can be
+  represented as static XML or as ImportActions with the "merge" command
+  must go in upgradeObjects.xml to ensure that they are parsed after
+  Hibernate has been started so that references can be resolved.
+
+-->
+<sailpoint>
+
+  <!--
+     This will reimport some updated objects
+     and should be safe to do for every release.
+   -->
+  <ImportAction name='include' value='WEB-INF/config/authorization.xml' />
+  <ImportAction name='include' value='WEB-INF/config/reportDefinitions.xml' />
+  <ImportAction name='include' value='WEB-INF/config/tasks.xml' />
+  <ImportAction name='include' value='WEB-INF/config/reportTasks.xml' />
+  <ImportAction name='include' value='WEB-INF/config/archiveReports.xml'/>
+  <ImportAction name='include' value='WEB-INF/config/rules.xml' />
+  <ImportAction name='include' value='WEB-INF/config/workflowRules.xml' />
+  <ImportAction name='include' value='WEB-INF/config/workflowSubs.xml' />
+  <ImportAction name='include' value='WEB-INF/config/workflowRegistry.xml' />
+  <ImportAction name='include' value='WEB-INF/config/workflow.xml' />
+  <ImportAction name='include' value='WEB-INF/config/form.xml' />
+  <ImportAction name='include' value='WEB-INF/config/reportForms.xml' />
+  <ImportAction name='include' value='WEB-INF/config/emailtemplates.xml' />
+  <ImportAction name='include' value='WEB-INF/config/defaultPasswordPolicies.xml' />
+  <ImportAction name='include' value='WEB-INF/config/connectorRegistry.xml' />
+  <ImportAction name='include' value='WEB-INF/config/connectorRegistryDeprecated.xml' />
+  <!-- Controlled Availability for Connectors -->
+  <ImportAction name='include' value='WEB-INF/config/connectorRegistryCAConnectors.xml' />
+  <ImportAction name='include' value='WEB-INF/config/reportRules.xml' />
+  <ImportAction name="include" value="WEB-INF/config/lcmForms.xml" />
+  <ImportAction name="include" value="WEB-INF/config/sendEmailPostActionRule.xml" />
+  <ImportAction name="include" value="WEB-INF/config/cefActivityTransformRule.xml" />
+  <ImportAction name="include" value="WEB-INF/config/cefActivityCorrelationRule.xml" />
+  <ImportAction name="include" value="WEB-INF/config/workflowConfigForms.xml" />
+  <!-- Scim configuration -->
+  <ImportAction name='include' value='WEB-INF/config/scimConfiguration.xml' />
+  <!-- Applications Builder Rule XML -->
+  <ImportAction name="include" value="WEB-INF/config/applicationBuilderRule.xml" />
+  
+  <ImportAction name="merge">
+    <AuditConfig name='AuditConfig'>
+      <AuditSCIMResources>
+        <AuditSCIMResource name="Alert"/>
+      </AuditSCIMResources>
+    </AuditConfig>
+</ImportAction>
+
+  <ImportAction name="merge">
+    <UIConfig name='UIConfig'>
+      <Attributes>
+        <Map>
+          <!-- UIConfig entry for the contextual help entries -->
+          <entry key="contextualHelp">
+            <value>
+              <Map>
+                <entry key="manageMyAccessURL">
+                  <value>
+                    <ContextualHelpItem key="manageMyAccessURL" enabled="true" useTemplate="true" title="ui_manage_my_access_help"
+                                        homeUrl="accessRequest/accessRequest.jsf#/accessRequestSelf"
+                                        type="URL" url="ui/help/accessRequest/manage-my-access-help.html" height="600" width="1024"/>
+                  </value>
+                </entry>
+              </Map>
+            </value>
+          </entry>
+
+          <entry key="uiCertificationExportColumns">
+            <value>
+              <List>
+                <ColumnConfig headerKey="cert_item_tbl_header_role_applications" dataIndex="roleApplications" property="IIQ_roleApplications" sortable="false" hideable="true" hidden="true" />
+                <ColumnConfig headerKey="cert_item_tbl_header_role_accounts" dataIndex="roleAccountNames" property="IIQ_roleAccounts" sortable="false" hideable="true" hidden="true" />
+              </List>
+            </value>
+          </entry>
+
+          <entry key="uiCertificationExportWithRecommendationColumns">
+            <value>
+              <List>
+                <ColumnConfig dataIndex="roleApplications" groupProperty="IIQ_roleApplications" headerKey="cert_item_tbl_header_role_applications" property="IIQ_roleApplications" sortProperty="IIQ_roleApplications" stateId="IIQ_roleApplications"/>
+                <ColumnConfig dataIndex="roleAccountNames" groupProperty="IIQ_roleAccounts" headerKey="cert_item_tbl_header_role_accounts" property="IIQ_roleAccounts" sortProperty="IIQ_roleAccounts" stateId="IIQ_roleAccounts"/>
+                <ColumnConfig dataIndex="IIQ_autoDecisionGenerated" evaluator="sailpoint.web.view.certification.CertificationItemAutoDecisionGeneratedColumn" groupProperty="IIQ_autoDecisionGenerated" headerKey="ui_auto_decision_generated" property="IIQ_autoDecisionGenerated" sortProperty="IIQ_autoDecisionGenerated" stateId="IIQ_autoDecisionGenerated"/>
+                <ColumnConfig dataIndex="IIQ_autoDecisionAccepted" evaluator="sailpoint.web.view.certification.CertificationItemAutoDecisionAcceptedColumn" groupProperty="IIQ_autoDecisionAccepted" headerKey="ui_auto_decision_accepted" property="IIQ_autoDecisionAccepted" sortProperty="IIQ_autoDecisionAccepted" stateId="IIQ_autoDecisionAccepted"/>
+              </List>
+            </value>
+          </entry>
+
+          <entry key="certificationDetailManagerRoleTableColumns">
+            <value>
+              <List>
+                <ColumnConfig dataIndex="parent-targetId" fieldOnly="true" property="parent.targetId"/>
+              </List>
+            </value>
+          </entry>
+
+          <entry key="certificationDetailViolationTableColumns">
+            <value>
+              <List>
+                <ColumnConfig dataIndex="parent-targetId" fieldOnly="true" property="parent.targetId"/>
+              </List>
+            </value>
+          </entry>
+
+          <entry key="certificationDetailEntitlementsColumns">
+            <value>
+              <List>
+                <ColumnConfig dataIndex="parent-targetId" fieldOnly="true" property="parent.targetId"/>
+              </List>
+            </value>
+          </entry>
+
+          <entry key="certificationDetailAppGranularityEntitlementsColumns">
+            <value>
+              <List>
+                <ColumnConfig dataIndex="parent-targetId" fieldOnly="true" property="parent.targetId"/>
+              </List>
+            </value>
+          </entry>
+
+          <entry key="uiClassificationsColumns">
+            <value>
+              <List>
+                <ColumnConfig percentWidth="30" headerKey="classifications_tbl_header_name" dataIndex="displayableName" property="classifications.classification.displayableName" hideable="true" sortable="true" sortProperty="classifications.classification.displayableName"/>
+                <ColumnConfig percentWidth="50" headerKey="classifications_tbl_header_desc" dataIndex="description"  hideable="true" />
+                <ColumnConfig percentWidth="20" headerKey="classifications_tbl_header_origin" dataIndex="origin" property="classifications.classification.origin" hideable="true" sortable="true" sortProperty="classifications.classification.origin"/>
+              </List>
+            </value>
+          </entry>
+
+          <entry key="uiRoleEntitlementsColumns">
+            <value>
+              <List>
+                <ColumnConfig headerKey="ui_item_detail_application" dataIndex="applicationName" sortable="true" property="applicationName" />
+                <ColumnConfig headerKey="ui_item_detail_attribute" dataIndex="property" sortable="true" property="property" />
+                <ColumnConfig headerKey="ui_item_detail_name" dataIndex="displayValue" sortable="true" renderer="spRoleEntitlementDescription" property="displayValue" />
+                <ColumnConfig headerKey="ui_item_detail_assigned" dataIndex="roleName" sortable="true" property="roleName" />
+              </List>
+            </value>
+          </entry>
+
+          <entry key="entitlementCatalogTableColumns">
+            <value>
+              <List>
+                <ColumnConfig dataIndex="IIQ_classificationNames" headerKey="ui_classifications" hideable="true" renderer="SailPoint.grid.Util.renderClassifications"/>
+                <ColumnConfig dataIndex="id" fieldOnly="true" property="id"/>
+              </List>
+            </value>
+          </entry>
+
+          <entry key="identityEntitlementIndirectGridColumns">
+            <value>
+              <List>
+                <ColumnConfig dataIndex="owningObjectId" fieldOnly="true" property="objectId"/>
+                <ColumnConfig dataIndex="ownerType" fieldOnly="true" property="ownerType"/>
+                <ColumnConfig dataIndex="classificationNames" headerKey="identity_role_col_classifications" hideable="true" renderer="SailPoint.grid.Util.renderClassifications"/>
+                <ColumnConfig dataIndex="attributes" property="attributes" fieldOnly="true"/>
+              </List>
+            </value>
+          </entry>
+
+          <entry key="uiIdentityHistoryByItemTableColumns">
+          <value>
+          <List>
+            <ColumnConfig property="entryDate" dataIndex="entryDate" headerKey="cert_item_view_hist_grid_hdr_date" dateStyle="long" sortable="true"/>
+          </List>
+          </value>
+          </entry>
+
+          <entry key="uiApprovalItemsColumnsEntitlement">
+            <value>
+              <List>
+                <ColumnConfig dataIndex="accountDisplayName" property="accountDisplayName" headerKey="my_approvals_account_col" />
+              </List>
+            </value>
+          </entry>
+
+          <entry key="identityEntitlementGridColumns">
+            <value>
+              <List>
+                <ColumnConfig dataIndex="type" fieldOnly="true" property="type"/>
+              </List>
+            </value>
+          </entry>
+          <entry key="contributingEntitlementColumns">
+            <value>
+              <List>
+                <ColumnConfig dataIndex="attributes" property="attributes" fieldOnly="true"/>
+              </List>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </UIConfig>
+  </ImportAction>
+
+  <ImportAction name="merge">
+    <Configuration name="IdentityAIConfiguration">
+      <Attributes>
+        <Map>
+          <entry key="catalogCacheTTLMillis" value="86400000" />
+          <entry key="recommendationsCatalogEndpoint" value="beta/translation-catalogs/recommender" />
+        </Map>
+      </Attributes>
+    </Configuration>
+  </ImportAction>
+
+  <ImportAction name="merge">
+    <Configuration name='IdentitySelectorConfiguration'>
+      <Attributes>
+        <Map>
+          <entry key="identityFilters">
+            <value>
+              <Map>
+                <entry key="Global">
+                  <value>
+                    <!-- We are already applying the global context so let's not apply it again -->
+                    <IdentityFilter name="Global" ignoreGlobal="true">
+                      <FilterSrc>
+                        <FilterSource>
+                          <ParameterizedFilter>
+                            <FilterTemplate>
+                              <FilterString>
+                                <![CDATA[
+                              #if($parts.size() == 1)
+                                firstname.startsWithIgnoreCase("$parts.get(0)") ||
+                                  lastname.startsWithIgnoreCase("$parts.get(0)") ||
+                                  name.startsWithIgnoreCase("$parts.get(0)") ||
+                                  displayName.startsWithIgnoreCase("$parts.get(0)")
+                              #elseif($parts.size() == 2)
+                                (firstname.startsWithIgnoreCase("$parts.get(0)") && lastname.startsWithIgnoreCase("$parts.get(1)")) ||
+                                  (firstname.startsWithIgnoreCase("$parts.get(1)") && lastname.startsWithIgnoreCase("$parts.get(0)")) ||
+                                  displayName.startsWithIgnoreCase("$parts.get(0) $parts.get(1)") ||
+                                  firstname.startsWithIgnoreCase("$parts.get(0) $parts.get(1)") || name.startsWithIgnoreCase("$parts.get(0) $parts.get(1)")
+                              #elseif($parts.size() > 2)
+                                #foreach($part in $parts)
+                                    firstname.startsWithIgnoreCase("$part") ||
+                                      lastname.startsWithIgnoreCase("$part") ||
+                                      name.startsWithIgnoreCase("$part") ||
+                                      displayName.startsWithIgnoreCase("$part")
+                                    #if($foreach.count < $parts.size())
+                                       ||
+                                    #end
+                                #end
+                              #end
+                              ]]>
+                              </FilterString>
+                              <FilterParameters>
+                                <String>parts</String>
+                              </FilterParameters>
+                            </FilterTemplate>
+                          </ParameterizedFilter>
+                        </FilterSource>
+                      </FilterSrc>
+                      <OrderBy>
+                        <String>displayName</String>
+                        <String>firstname</String>
+                        <String>lastname</String>
+                        <String>name</String>
+                        <String>id</String>
+                      </OrderBy>
+                    </IdentityFilter>
+                  </value>
+                </entry>
+              </Map>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </Configuration>
+  </ImportAction>
+
+  <ImportAction name="merge">
+    <Configuration name="WebResource">
+      <Attributes>
+        <Map>
+          <!-- webResources : Urls and the rights required to view them. Urls that are not included in this list will be globally
+              accessible -->
+          <entry key="webResources">
+            <value>
+              <List>
+                <!-- Entitlement catalog advanced search Type suggest uses same data source as advanced analytics -->
+                <WebResource rights="ManagedAttributePropertyAdministrator, ManagedAttributeProvisioningAdministrator, ViewAccountGroups" url="analyze/accountGroup/accountGroupTypesDataSource.*"/>
+
+                <WebResource rights="*" url="define/groups/accountGroupClassificationDataSource.*"/>
+              </List>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </Configuration>
+  </ImportAction>
+
+  <ImportAction name="merge">
+    <Configuration name="SystemConfiguration">
+      <Attributes>
+      <Map>
+        <entry key='showEditForwarding' value="true" />
+        <entry key='showChangePasswordTab' value="true" />
+        <entry key='searchInputDefinitions'>
+          <value>
+            <List>
+                <SearchInputDefinition description="ui_classification" headerKey="ui_classifications"
+                  inputType="Equal" name="role.classification" propertyName="classifications.classification.id" propertyType="String" searchType="Role"/>
+                <SearchInputDefinition description="ui_classification" headerKey="ui_classifications"
+                  inputType="Equal" name="accountGroup.classification" propertyName="classifications.classification.id" propertyType="String" searchType="AccountGroup"/>
+            </List>
+          </value>
+        </entry>
+      </Map>
+      </Attributes>
+    </Configuration>
+  </ImportAction>
+
+  <ImportAction name="merge">
+    <AuditConfig name="AuditConfig">
+      <AuditActions>
+        <!-- LoginConfig change -->
+        <AuditAction name="LoginConfigurationChange" displayName="audit_action_login_config"/>
+      </AuditActions>
+    </AuditConfig>
+  </ImportAction>
+
+</sailpoint>

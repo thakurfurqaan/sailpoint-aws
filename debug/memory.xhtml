@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC
+  "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+    xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition template="/appPage.xhtml">
+
+  <ui:define name="title">#{msgs.title_debug_jvm_memory}</ui:define>
+  <ui:define name="headerItems">
+    <script type="text/javascript" defer="defer">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'DEBUG_MEMORY';
+      //--><!]]>
+    </script>
+  </ui:define>
+
+  <ui:define name="body">
+    <f:view>
+      <h:messages infoClass="formInfo" warnClass="formWarn" errorClass="formError" fatalClass="formError"/>
+      
+      <p:outputPanel id="memoryPanel">
+        <h:panelGrid columns="2">
+          <h:outputText value="Free Memory"/>
+          <h:outputText value="#{debug.freeMemory}"/>
+          
+          <h:outputText value="Total Memory"/>
+          <h:outputText value="#{debug.totalMemory}"/>
+          
+          <h:outputText value="Max Memory"/>
+          <h:outputText value="#{debug.maxMemory}"/>
+        </h:panelGrid>
+      </p:outputPanel>
+      
+      <h:form>
+        <div class="buttonRow">
+          <p:commandButton value="Run Finalizers"
+                             action="#{debug.finalizeAction}"
+                             update="@([id$=memoryPanel])" styleClass="primaryBtn"  />
+          <p:commandButton value="Run Garbage Collector"
+                             action="#{debug.gcAction}"
+                             update="@([id$=memoryPanel])" styleClass="primaryBtn"  />
+        </div>
+      </h:form>
+      
+    </f:view>
+  </ui:define>
+</ui:composition>
+
+</body>
+</html>

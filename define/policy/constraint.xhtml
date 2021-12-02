@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<!--
+  Include for editing BaseConstraint fields.
+
+  Expected to be called with these parameters:
+
+    constraint
+      An instanceof BaseConstraint or BaseConstraintDTO
+
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:p="http://primefaces.org/ui">
+<body>
+
+<ui:composition>
+  <script type="text/javascript">
+    
+    // <![CDATA[
+      Ext.onReady(function () {
+          var policyViolationOwnerSuggest = new SailPoint.IdentitySuggest({
+              id: 'policyViolationOwnerSuggestCmp',
+              renderTo: 'policyViolationOwnerSuggest',
+              binding: 'policyViolationOwner',
+              disabled: #{!sp:hasRight(facesContext, 'ManagePolicy')},
+              width: 200,
+              baseParams: {context: 'Owner'}
+          });
+          
+          var iVal = #{empty sp:buildJSONFromIdentity(constraint.violationOwnerId) ? "{}" : sp:buildJSONFromIdentity(constraint.violationOwnerId)};
+          if(iVal && iVal.displayableName){
+              policyViolationOwnerSuggest.setRawValue(iVal.displayableName);
+              SailPoint.Suggest.IconSupport.setIconDiv(policyViolationOwnerSuggest, 'userIcon');
+          }
+	             
+          selectViolationOwnerType(Ext.getDom('violationOwnerType').value);
+      });
+      
+      function selectViolationOwnerType(violationOwnerType) {
+          if (violationOwnerType == 'None') {
+            Ext.getDom('choice0').checked = 'checked';
+            Ext.getCmp('policyViolationOwnerSuggestCmp').disable();
+            Ext.getDom('mainForm:violationOwnerRule').disabled = true;
+            Ext.getDom('ruleEditButton').disabled = true;
+          } else if (violationOwnerType == 'Identity') {
+          	Ext.getDom('choice1').checked = 'checked';
+			Ext.getCmp('policyViolationOwnerSuggestCmp').enable();
+            Ext.getDom('mainForm:violationOwnerRule').disabled = true;
+            Ext.getDom('ruleEditButton').disabled = true;
+          } else if (violationOwnerType == 'Manager') {
+          	Ext.getDom('choice2').checked = 'checked';
+			Ext.getCmp('policyViolationOwnerSuggestCmp').disable();
+			Ext.getDom('mainForm:violationOwnerRule').disabled = true;
+            Ext.getDom('ruleEditButton').disabled = true;
+          } else if (violationOwnerType == 'Rule') {
+          	Ext.getDom('choice3').checked = 'checked';
+			Ext.getDom('mainForm:violationOwnerRule').removeAttribute('disabled');
+            Ext.getDom('ruleEditButton').removeAttribute('disabled');
+			Ext.getCmp('policyViolationOwnerSuggestCmp').disable();
+          } else {
+          	alert('unknown violationOwnerType: ' + violationOwnerType);
+          	return;
+          }
+          Ext.getDom('violationOwnerType').value = violationOwnerType;
+      }
+     
+    //]]>
+  </script>
+
+    <p:outputPanel id='constraintRulesPanel'>
+    <h:panelGrid columns="2" styleClass="width100">
+
+      <h:panelGrid columns="2" styleClass="width100 paddedTbl">
+
+        <h:outputText class="titleColumn" value="#{msgs.label_summary}"/>
+        <h:inputTextarea value="#{constraint.name}" cols="40" rows="2"
+                         disabled="#{!sp:hasRight(facesContext, 'ManagePolicy')}"
+                         readonly="#{!sp:hasRight(facesContext, 'ManagePolicy')}"/>
+
+        <h:outputText class="titleColumn" value="#{msgs.label_description}"/>
+        <h:inputTextarea value="#{constraint.description}" cols="40" rows="4"
+                         disabled="#{!sp:hasRight(facesContext, 'ManagePolicy')}"
+                         readonly="#{!sp:hasRight(facesContext, 'ManagePolicy')}"/>
+
+        <h:outputText class="titleColumn"
+          value="#{msgs.policy_violation_owner}"/>
+        <h:panelGroup>
+          <table>
+            <tr>
+              <td colspan='2'><input type='radio' id='choice0'
+                name='violationOwnerChoice'
+                onclick="selectViolationOwnerType('None');" /><h:outputText
+                value='#{msgs.none}' style='padding-left:5px;' /></td>
+            </tr>
+            <tr>
+              <td><input type='radio' id='choice1'
+                name='violationOwnerChoice'
+                onclick="selectViolationOwnerType('Identity');" /><h:outputText
+                value='#{msgs.identity}' style='padding-left:5px;' /></td>
+              <td>
+              <div id="policyViolationOwnerSuggest" />
+              <t:inputHidden id="policyViolationOwner"
+                value="#{constraint.violationOwnerId}" forceId="true">
+              </t:inputHidden> <h:message styleClass="formError"
+                for="policyViolationOwner" /></td>
+            </tr>
+            <tr>
+              <td colspan="2"><input type='radio' id='choice2'
+                name='violationOwnerChoice'
+                onclick="selectViolationOwnerType('Manager');">
+              <h:outputText value='#{msgs.manager_is_violation_owner}'
+                style='padding-left:5px;' /> </input></td>
+            </tr>
+            <tr>
+              <td><input type='radio' id='choice3'
+                name='violationOwnerChoice'
+                onclick="selectViolationOwnerType('Rule');" /><h:outputText
+                value='#{msgs.label_rule}' style='padding-left:5px;' /></td>
+              <td><p:outputPanel id="violationOwnerRulePanel">
+                <h:selectOneMenu id="violationOwnerRule"
+                  value="#{constraint.violationOwnerRule}" style="width:200px;">
+                  <f:selectItems value="#{util.policyOwnerRules}" />
+                </h:selectOneMenu>
+              <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}">
+                <input type="button" id="ruleEditButton"
+                  value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                  onclick="SailPoint.Rule.Editor.edit(Ext.getDom('mainForm:violationOwnerRule').value,
+                                                      'PolicyOwner',
+                                                      Ext.get('mainForm:refreshRulesButton'))" />
+              </ui:fragment>
+              </p:outputPanel>
+              </td>
+            </tr>
+            <t:inputHidden id='violationOwnerType'
+              value='#{constraint.violationOwnerType}'
+              converter='sailpoint.object.Enum' forceId="true">
+            </t:inputHidden>
+          </table>
+        </h:panelGroup>
+
+        <h:outputText class="titleColumn" value="#{msgs.policy_label_violation_rule}"/>
+        <h:panelGroup>
+	        <h:selectOneMenu id="constraintFormattingRule" value="#{constraint.violationRule}">
+	          <f:selectItems value="#{util.violationRules}" />
+	        </h:selectOneMenu>
+            <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                       onclick="SailPoint.Rule.Editor.edit(Ext.getDom('mainForm:constraintFormattingRule').value,
+                                                           'Violation',
+                                                           Ext.get('mainForm:refreshConstraintRulesButton'))" />
+            </ui:fragment>	        
+        </h:panelGroup>
+        <h:outputText class="titleColumn" value="#{msgs.policy_label_violation_workflow}"/>
+        <h:selectOneMenu id="constraintWorkflow" value="#{constraint.violationWorkflow}">
+          <f:selectItems value="#{util.workflows}" />
+        </h:selectOneMenu>
+
+        <h:outputText class="titleColumn" value="#{msgs.disabled}"/>
+        <h:panelGroup>
+          <h:selectBooleanCheckbox id="constraintDisabled" value="#{constraint.disabled}" disabled="#{!sp:hasRight(facesContext, 'ManagePolicy')}"/>
+        </h:panelGroup>
+      </h:panelGrid>
+
+      <h:panelGrid columns="2" styleClass="width100 paddedTbl">
+        <h:outputText class="titleColumn" value="#{msgs.label_compensating_control}"/>
+        <h:inputTextarea value="#{constraint.compensatingControl}" cols="40" rows="4"
+                         disabled="#{!sp:hasRight(facesContext, 'ManagePolicy')}"
+                         readonly="#{!sp:hasRight(facesContext, 'ManagePolicy')}"/>
+
+        <h:outputText class="titleColumn" value="#{msgs.label_correction_adv}"/>
+        <h:inputTextarea value="#{constraint.remediationAdvice}" cols="40" rows="4"
+                         disabled="#{!sp:hasRight(facesContext, 'ManagePolicy')}"
+                         readonly="#{!sp:hasRight(facesContext, 'ManagePolicy')}"/>
+      </h:panelGrid>
+
+    </h:panelGrid>
+    
+    <p:commandButton id="refreshRulesButton"
+                       style="display:none"
+                       immediate="true"
+                       update="@([id$=violationOwnerRulePanel], [id$=formattingRulePanel])"/>
+    <p:commandButton id="refreshConstraintRulesButton"
+                       style="display:none"
+                       immediate="true"
+                       update="@([id$=constraintRulesPanel])"/>
+    
+    </p:outputPanel>
+  </ui:composition>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:c="http://java.sun.com/jstl/core" 
+  xmlns:f="http://java.sun.com/jsf/core" 
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui">
+<body>
+
+<ui:composition>
+
+
+    <h:inputHidden id="currentDefinitionId" value="#{definitionListBean.selectedId}"/>
+    <h:inputHidden id="taskstatus" value="#{definitionListBean.taskStatus}"/>
+    <h:inputHidden id="taskPercentComplete" value="#{definitionListBean.taskPercentComplete}"/>
+    <h:inputHidden id="launchError" value="#{definitionListBean.launchError}"/>
+    <h:inputHidden id="taskName" value="#{definitionListBean.name}"/>
+    
+    <p:commandButton style="display:none"
+        action="#{definitionListBean.copy}"
+        id="copyDefinitionButton" oncomplete="refreshGrid(Ext.getCmp('myReportObjectsGrid'));refreshGrid(Ext.getCmp('reportObjectsGrid'));refreshGrid(Ext.getCmp('taskObjectsGrid'));Ext.getCmp('spViewport').doLayout();"/>
+    
+    <p:commandButton style="display:none"
+        action="#{definitionListBean.delete}"
+        id="deleteDefinitionButton" oncomplete="refreshGrid(Ext.getCmp('myReportObjectsGrid'));refreshGrid(Ext.getCmp('reportObjectsGrid'));refreshGrid(Ext.getCmp('taskObjectsGrid'));Ext.getCmp('spViewport').doLayout();"/>
+
+    <p:commandButton style="display:none"
+        action="#{definitionListBean.edit}"
+        id="editButton" />
+
+     <p:commandButton style="display:none"
+        action="#{definitionListBean.run}"
+        id="backgroundRunButton" />
+
+    <p:commandButton style="display:none"
+        action="#{definitionListBean.runNow}"
+        id="runNowButton" />  
+
+    <p:commandButton style="display:none"
+          update="@([id$=taskstatus], [id$=launchError], [id$=taskPercentComplete])"
+          action="getStatus"
+          id="statusButton" />
+      
+    <p:commandButton style="display:none"
+        action="#{definitionListBean.gotoViewResult}" 
+        id="gotoViewResultButton" />  
+      
+  
+    <!-- Note that we have to reRender here to get the old error message
+         cleared for the next launch.
+     -->
+    <p:commandButton style="display:none" update="@([id$=taskstatus], [id$=launchError])"
+        id="resetLaunchButton" action="#{definitionListBean.clearLaunchError}"/>
+  
+    <p:commandButton style="display:none"
+        id="cancelViewResultButton"/>
+  
+    <p:commandButton style="display:none"
+        action="ok"
+        id="cancelViewResultToListButton" />
+   
+</ui:composition>
+
+</body>
+</html>

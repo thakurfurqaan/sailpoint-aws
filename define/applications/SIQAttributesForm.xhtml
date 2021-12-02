@@ -1,0 +1,75 @@
+<!--
+  ~ /* (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. */
+  -->
+
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+  <body>
+
+    <ui:composition>
+        <script type="text/javascript">
+            <!--//--><![CDATA[//><!--
+            helpKey = 'APPLICATION';
+
+            function getFieldValue(field) {
+                var val = null;
+                var fieldName = Ext.getDom(field);
+                if ( fieldName ) {
+                    val = fieldName.value;
+                }
+                return val;
+            }
+            Ext.onReady(function () {
+                Ext.QuickTips.init();
+
+            });
+
+            //--><!]]>
+        </script>
+
+        <f:view>
+
+          <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_siq_config_title}" />
+
+          <br />
+          <br />
+
+            <p:outputPanel id="attributesOutputPanel">
+                <p:autoUpdate />
+                <div id="SIQSettingsDiv">
+                    <t:dataList id="attDdataList" value="#{applicationObject.schemaDTOs}" var="schemaItem" rowKey="#{schemaItem.objectType}">
+                            <ui:fragment rendered="#{schemaItem.objectType eq 'alert'}" >
+                                <div id="#{schemaItem.objectType}Settings">
+                                <ui:include src="SIQAlertAttributes.xhtml">
+                                    <ui:param name="schemaDTO" value="#{schemaItem}"/>
+                                </ui:include>
+                                </div>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{schemaItem.objectType eq 'unstructured'}">
+                                <div id="#{schemaItem.objectType}Settings">
+                                <ui:include src="SIQUnstructuredAttributes.xhtml">
+                                    <ui:param name="schemaDTO" value="#{schemaItem}"/>
+                                    <ui:param name="nameSpace" value="#{schemaItem.objectType}"/>
+                                </ui:include>
+                                </div>
+                            </ui:fragment>
+                    </t:dataList>
+                </div>
+            </p:outputPanel>
+
+        </f:view>
+
+    </ui:composition>
+
+  </body>
+
+</html>

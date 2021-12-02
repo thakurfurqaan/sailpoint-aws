@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+<sp:loadBundle basename="sailpoint.web.messages.iiqMessages" var="msgs"/>
+<h:head>
+  <sp:style serveOffset="#{base.requestContextPath}/ui/css">
+    <src>home.css?#{debug.revision}</src>
+  </sp:style>
+</h:head>
+<body class="bg-white">
+  <!-- this div is necessary for jaws to read the notification -->
+  <div id="notificationDiv" class="sr-only" role="alert" aria-live="assertive"></div>
+  <sp-notification sp-triggerable="true"/>
+  <section sp-loading-mask="home.getMenuItems()" class="container-fluid mobile-quick-links">
+    <div ng-repeat="item in home.getMenuItems()">
+      <div class="row {{item.cssClass}}" ng-class="{'m-t': $first}" ng-click="home.launchQuickLink(item)">
+        <div class="col-xs-8">
+          <div class="card-title">
+            {{ item.label | spTranslate }}
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="pull-right">
+            <span ng-if="!home.isLaunching(item)">
+              <button class="quick-links-btn" role="button" tabindex="0">
+                <i ng-if="!item.text" role="presentation" class="fa fa-chevron-right"></i>
+                <span ng-if="item.text">{{item.text}}</span>
+                <span class="sr-only">{{item.ariaLabel ? item.ariaLabel : item.label| spTranslate}}</span>
+              </button>
+            </span>
+            <span ng-if="home.isLaunching(item)">
+              <i role="presentation" class="fa fa-spinner fa-spin fa-2x text-info m-t-xs m-r-xs"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="line pull-in" role="presentation"></div>
+    </div>
+  </section>
+</body>
+</html>

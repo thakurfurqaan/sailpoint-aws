@@ -1,0 +1,179 @@
+<!-- (c) Copyright 2019 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+  <body>
+
+  <ui:composition template="/ngAppPage.xhtml">
+  <sp:loadBundle basename="sailpoint.web.messages.iiqMessages" var="msgs"/>
+
+  <ui:define name="title">#{msgs.ui_fam_config_title}</ui:define>
+  <ui:define name="headerItems">
+
+    <ui:include src="../ui/scriptData.xhtml" />
+    <script type="text/javascript">
+      SailPoint.FAM_CONFIG_FULL_ACCESS = #{sp:hasRight(facesContext, "FullAccessFAMConfiguration")};
+    </script>
+    <ui:include src="../ui/jspmInclude.xhtml" />
+    <script type="text/javascript">
+      System.import('#{base.requestContextPath}/ui/js/fam/FamAppModule.js');
+    </script>
+  </ui:define>
+
+  <ui:define name="body">
+    <div class="sp-ui-app" ng-cloak="">
+        <div id="notificationDiv" class="sr-only" role="alert" aria-live="assertive"></div>
+        <sp-notification sp-triggerable="true"></sp-notification>
+        <div ui-view=""></div>
+        <section class="container" ng-controller="FamConfigurationCtrl as famConfigCtrl">
+          <div class="row header">
+            <h2>{{ 'ui_fam_config_title' | spTranslate }}</h2>
+          </div>
+          <span ng-if="famConfigCtrl.errorMessages">
+            <div id="alertDiv" class="alert alert-danger" role="alert" tabindex="0">
+              <i role="presentation" class="fa fa-exclamation-triangle"></i> {{ famConfigCtrl.errorMessages | spTranslate }}
+            </div>
+          </span>
+          <span ng-if="famConfigCtrl.testSuccess">
+            <div id="testSuccessDiv" class="alert alert-success" role="alert" tabindex="0">
+              <i role="presentation" class="fa fa-check-circle"></i> {{ 'ui_fam_connection_success' | spTranslate }}
+            </div>
+          </span>
+          <form name="famConfigForm" novalidate="novalidate">
+            <div id="famConfigDiv" class="panel">
+              <div class="form-group page-settings-container">
+                <h4 class="settings-title">{{ 'ui_fam_connection_information' | spTranslate }}</h4  >
+                <div class="form-group row col-sm-12">
+                  <sp-required-text ng-model="famConfigCtrl.famConfig.hostname"
+                                    sp-required-text-id="hostName"
+                                    sp-required-text-label="{{ 'ui_fam_hostname' | spTranslate }}"
+                                    sp-button-icon-class="fam-help-button"
+                                    sp-label-icon-class="fa fa-question-circle fa-lg text-info"
+                                    sp-label-icon-title-msg="{{ 'ui_fam_config_hostname_help' | spTranslate }}"/>
+
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-12">
+                    <label class="radio-inline font-bold" for="famBasicAuth">
+                      <input type="radio" id="famBasicAuth" name="authtype" value="BASIC" ng-model="famConfigCtrl.famConfig.authType"></input>
+                      {{ 'ui_fam_basic_connection' | spTranslate }}
+                    </label>
+                    <label class="radio-inline font-bold" for="famOauth">
+                      <input type="radio" id="famOauth" name="authtype" value="OAUTH" ng-model="famConfigCtrl.famConfig.authType"></input>
+                      {{ 'ui_fam_oauth_connection' | spTranslate }}
+                    </label>
+                  </div>
+                </div>
+                <div ng-if="famConfigCtrl.famConfig.authType === 'BASIC'">
+                  <div class="form-group row col-sm-12">
+                    <sp-required-text ng-model="famConfigCtrl.famConfig.userName"
+                                      sp-required-text-id="famUserName"
+                                      sp-required-text-label="{{ 'ui_fam_username' | spTranslate }}"
+                                      sp-button-icon-class="fam-help-button"
+                                      sp-label-icon-class="fa fa-question-circle fa-lg text-info"
+                                      sp-label-icon-title-msg="{{ 'ui_fam_username_help' | spTranslate }}"/>
+                  </div>
+                  <div class="form-group row col-sm-12">
+                    <sp-required-text ng-model="famConfigCtrl.famConfig.password"
+                                      sp-required-text-id="famPassword"
+                                      sp-required-text-type="password"
+                                      sp-required-text-label="{{ 'ui_fam_password' | spTranslate }}"
+                                      sp-button-icon-class="fam-help-button"
+                                      sp-label-icon-class="fa fa-question-circle fa-lg text-info"
+                                      sp-label-icon-title-msg="{{ 'ui_fam_password_help' | spTranslate }}"/>
+                  </div>
+                </div>
+                <div ng-if="famConfigCtrl.famConfig.authType === 'OAUTH'">
+                  <div class="form-group row col-sm-12">
+                    <sp-required-text ng-model="famConfigCtrl.famConfig.clientId"
+                                      sp-required-text-id="famClientId"
+                                      sp-required-text-label="{{ 'ui_fam_client_id' | spTranslate }}"
+                                      sp-button-icon-class="fam-help-button"
+                                      sp-label-icon-class="fa fa-question-circle fa-lg text-info"
+                                      sp-label-icon-title-msg="{{ 'ui_fam_client_id_help' | spTranslate }}"/>
+                  </div>
+                  <div class="form-group row col-sm-12">
+                    <sp-required-text ng-model="famConfigCtrl.famConfig.clientSecret"
+                                      sp-required-text-id="famClientSecret"
+                                      sp-required-text-type="password"
+                                      sp-required-text-label="{{ 'ui_fam_client_secret' | spTranslate }}"
+                                      sp-button-icon-class="fam-help-button"
+                                      sp-label-icon-class="fa fa-question-circle fa-lg text-info"
+                                      sp-label-icon-title-msg="{{ 'ui_fam_client_secret_help' | spTranslate }}"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <button type="submit"
+                            class="btn btn-secondary"
+                            aria-label="{{ 'ui_fam_button_test_connection_aria_label' | spTranslate }}"
+                            ng-disabled="famConfigForm.$invalid"
+                            ng-click="famConfigCtrl.testConnection()">
+                            {{ 'ui_fam_button_test_connection' | spTranslate }}
+                    </button>
+                  </div>
+                </div>
+
+                <br/><br/>
+                <h4 class="settings-title">{{ 'ui_fam_correlation_information' | spTranslate }}</h4  >
+                <div class="form-group row col-sm-12">
+                  <label for="scimCorrelationRule">{{ 'ui_fam_scim_correlation_rule' | spTranslate }}</label>
+                  <button id="famConfigScimRuleHelpBtn"
+                          class="fam-help-button"
+                          title="{{ 'ui_fam_scim_correlation_rule_help' | spTranslate }}">
+                    <i class="fa fa-question-circle fa-lg text-info" role="presentation"></i>
+                  </button>
+                  <sp-object-suggest sp-object-suggest-class="sailpoint.object.Rule"
+                                     sp-object-suggest-id="scimCorrelationRule"
+                                     sp-object-suggest-limit="5"
+                                     ng-model="famConfigCtrl.famConfig.scimCorrelationRule"
+                                     sp-button-aria-label="{{ 'ui_fam_scim_correlation_rule' | spTranslate }}"
+                                     sp-object-suggest-filter="{{famConfigCtrl.getScimCorrelationRuleFilter()}}"
+                                     sp-suggest-url="{{famConfigCtrl.suggestUrl}}">
+                  </sp-object-suggest>
+              </div>
+              <div class="form-group row col-sm-12">
+                  <label for="scimCorrelationApps">{{ 'ui_fam_scim_correlation_apps' | spTranslate }}</label>
+                  <button id="famConfigScimAppHelpBtn"
+                          class="fam-help-button"
+                          title="{{ 'ui_fam_scim_correlation_apps_help' | spTranslate }}">
+                    <i class="fa fa-question-circle fa-lg text-info" role="presentation"></i>
+                  </button>
+                  <sp-object-multi-suggest
+                          sp-object-multi-suggest-id="scimCorrelationApps"
+                          sp-object-multi-suggest-class="sailpoint.object.Application"
+                          sp-object-multi-suggest-limit="5"
+                          sp-suggest-url="{{ famConfigCtrl.suggestUrl }}"
+                          ng-model="famConfigCtrl.famConfig.scimCorrelationApplications"
+                          sp-button-aria-label="{{ 'ui_fam_scim_correlation_apps' | spTranslate }}">
+                  </sp-object-multi-suggest>
+                </div>
+
+                <div class="button-group row">
+                  <div class="col-sm-12">
+                    <button type="button"
+                            class="btn btn-secondary"
+                            ng-click="famConfigCtrl.cancel()">{{ 'ui_fam_button_cancel' | spTranslate }}</button>
+                    <button type="submit"
+                            class="btn btn-primary"
+                            aria-label="{{ 'ui_fam_button_save_aria_label' | spTranslate }}"
+                            ng-disabled="famConfigForm.$invalid"
+                            ng-click="famConfigCtrl.saveConfig()">{{ 'ui_fam_button_save' | spTranslate }}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+    </ui:define>
+  </ui:composition>
+  </body>
+</html>

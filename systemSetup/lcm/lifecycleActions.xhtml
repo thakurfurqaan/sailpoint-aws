@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2010 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://java.sun.com/jstl/core" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+  <div id="lifecycleActionsWrapper" class="spBackground">
+    <div id="requiredMessage" class="spBackground">
+      <div style="margin: 20px 0 0 20px;">
+        <div><img src="http://www.picgifs.com/graphics/c/construction-workers/graphics-construction-workers-790840.gif"/></div>
+        <br/>
+        <p>
+        You came here looking to change the LCM Actions Configuration, but you'll have to do that in xml or from the debug pages now.
+        </p>
+        <br/>
+        <p>
+        All QuickLinks are now stored in the database. A QuickLink will appear on your dashboard if the identity "matches" a DynamicScope
+         and the DynamicScope contains a QuickLinkOptions object relating the two objects together. (Check out init-lcm.xml and 
+         search for QuickLinkOptions near the bottom of the file)
+        </p>
+        <br/>
+        <p>
+        What used to be called "Request Controls" as system configuration properties, are now stored as Attributes inside the 
+        QuickLinkOptions object itself. The only QuickLinks that have Request Controls are "Request Access" and "Manage Account".
+        </p>
+        <br/>
+        <p>
+        If you are looking to change the Population Request Authority or Object Request Authority, those configurations are now stored
+        on the DynamicScope object itself. Again, you will likely have to look at the init-lcm.xml to see samples of how that works.
+        </p>
+        <br/>
+        <p>
+        When all else fails you can email <a href="mailto:scrum-hiltonhead@sailpoint.com">scrum-hiltonhead@sailpoint.com</a> and explain
+        what your issue is.
+        </p>
+      </div>
+    </div>
+  </div>
+</ui:composition>
+
+</body>
+</html>

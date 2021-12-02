@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2019 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+  <ui:composition>
+    <div id="applicationLibraryConfig" class="spContent">
+      <h:outputText styleClass="sectionHeader" value="#{msgs.con_application_library_configuration}"/>
+      <table class="spTable" style="border: 0px" cellspacing="0">
+        <tr>
+          <td class='titleColumn certScheduleTitleCol'>
+            <h:outputText style='padding:5px' value="#{msgs.con_application_libraries}"/>
+          </td>
+          <td class="certScheduleHelpCol">
+            <h:graphicImage id="imgHlpAppConfigLib" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{msgs.help_con_application_library_configuration}"/>
+          </td>
+          <td>
+            <h:inputTextarea converter="NewLineList"
+                id="appLibConfigConnectorClasspath" rows="5" cols="10" style="width:300px;"
+                value="#{applicationObject.attributes['connector-classpath']}"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </ui:composition>
+</body>
+</html>

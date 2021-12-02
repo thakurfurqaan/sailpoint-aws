@@ -1,0 +1,102 @@
+/* size the topbar logo images */
+.topbar img {
+  max-width: 100px;
+}
+
+nav.header {
+  font-size: 13px;
+}
+
+/* Pull in left side navbar */
+.navbar-left {
+  margin-left: -15px;
+}
+
+/*
+ * The classic sets a ul li margin-left to 25px. For nav, this shouldn't render as an
+ * unordered list, so get rid of the left margin.
+ */
+ul.nav li {
+  margin-left: 0;
+}
+
+/*
+ * In FontAwesome, fa-lg sets the line-height to .75em.  If a nav item only has the large icon in
+ * it, it shows up too short in the nav bar. To get around this, force the line-height back to 20px.
+ */
+.nav-icon-no-submenu {
+  line-height: 20px;
+}
+
+
+/* Make the title bar background white. */
+.bodyHeaderDiv {
+  background-color: #ffffff;
+}
+
+/* Move the sub-title down since the nav bar is taller. */
+#bodyDivSubTitle {
+  top: 102px;
+}
+
+
+/*
+ * Username menu styles
+ */
+.username {
+  padding: 5px 10px;
+  color: #4C515F;
+  font-weight:bold;
+}
+
+/*
+ * The theme sets overflow-x to hidden on both html and body, which produces double scroll bars for
+ * some unknown reason. Change this to only set overflow-x on body by resetting this to the default
+ * value (visible).
+ */
+html {
+  overflow-x: visible;
+}
+
+@media (max-width: 767px) {
+  html {
+    overflow-x: visible;
+  }
+}
+
+.x-panel input[type="checkbox"] {
+  margin: 0 3px 0 0;
+}
+
+.x-panel label.font10 {
+  font-weight: normal;
+}
+
+.commentBody pre {
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.classic-body-container {
+  min-height: 100%;
+  position: relative;
+  background-color: #ffffff;
+}
+
+.classic-body {
+  padding-bottom: 35px;
+}
+
+.classic-footer {
+  position: absolute;
+  bottom: 25px;
+  height: 25px;
+  width: 100%;
+}
+
+/*
+* iiq-extjs reset is setting em to font-style normal and included after tag-override.
+* !important was removed in tag-override so no longer styling em tags with italics
+*/
+em {
+    font-style: italic;
+}

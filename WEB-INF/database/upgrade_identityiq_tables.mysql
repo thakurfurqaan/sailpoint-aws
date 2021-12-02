@@ -1,0 +1,122 @@
+ --
+-- This script contains DDL statements to upgrade a database schema to
+-- reflect changes to the model.  This file should only be used to
+-- upgrade from the last formal release version to the current code base.
+--
+
+USE identityiq;
+
+alter table identityiq.spt_integration_config add column maintenance_expiration bigint default 0;
+
+--
+-- Create new index on provisioning transaction table
+--
+create index spt_prvtrans_created on identityiq.spt_provisioning_transaction (created);
+
+--
+-- Add flag for auto decisions
+--
+alter table identityiq.spt_certification_action add auto_decision bit default 0;
+
+-- 
+-- Remove integer display width meta-data
+--
+
+alter table QRTZ221_TRIGGERS modify NEXT_FIRE_TIME bigint null;
+alter table QRTZ221_TRIGGERS modify PREV_FIRE_TIME bigint null;
+alter table QRTZ221_TRIGGERS modify START_TIME bigint not null;
+alter table QRTZ221_TRIGGERS modify END_TIME bigint null;
+alter table QRTZ221_TRIGGERS modify MISFIRE_INSTR smallint null;
+alter table QRTZ221_SIMPLE_TRIGGERS modify REPEAT_COUNT bigint not null;
+alter table QRTZ221_SIMPLE_TRIGGERS modify REPEAT_INTERVAL bigint not null;
+alter table QRTZ221_SIMPLE_TRIGGERS modify TIMES_TRIGGERED bigint not null;
+alter table QRTZ221_FIRED_TRIGGERS modify FIRED_TIME bigint not null;
+alter table QRTZ221_FIRED_TRIGGERS modify SCHED_TIME bigint not null;
+alter table QRTZ221_SCHEDULER_STATE modify LAST_CHECKIN_TIME bigint not null;
+alter table QRTZ221_SCHEDULER_STATE modify CHECKIN_INTERVAL bigint not null;
+
+--
+-- Add Classifications table and associations with Bundle and Managed Attribute
+--
+
+create table identityiq.spt_classification (
+       id varchar(32) not null,
+        created bigint,
+        modified bigint,
+        name varchar(128) not null,
+        display_name varchar(128),
+        displayable_name varchar(128),
+        attributes longtext,
+        origin varchar(128),
+        type varchar(128),
+        primary key (id)
+) engine=InnoDB;
+
+create table identityiq.spt_object_classification (
+       id varchar(32) not null,
+        created bigint,
+        modified bigint,
+        owner_id varchar(32),
+        owner_type varchar(128),
+        source varchar(128),
+        effective bit,
+        classification_id varchar(32) not null,
+        primary key (id)
+    ) engine=InnoDB;
+
+alter table identityiq.spt_object_classification
+       add constraint FK4hfvqf5hc3a6rl944f4h171tn
+       foreign key (classification_id)
+       references identityiq.spt_classification (id);
+
+create index spt_classification_owner_id on identityiq.spt_object_classification (owner_id);
+
+create index spt_class_owner_type on identityiq.spt_object_classification (owner_type);
+
+create index spt_classif_dispname_ci on identityiq.spt_classification (displayable_name);
+
+alter table identityiq.spt_classification
+   add constraint UK_eqb3e1wxju8yopo50ljal8lpg unique (name);
+
+--
+-- Add Classification names to certification items
+--
+
+create table identityiq.spt_cert_item_classifications (
+   certification_item varchar(32),
+   classification_name varchar(255)
+) engine=InnoDB;
+
+alter table identityiq.spt_cert_item_classifications
+   add constraint FK9dehgtst8bbi31palx2ygp8hi
+   foreign key (certification_item)
+   references identityiq.spt_certification_item (id);
+
+--
+-- Add remove rule options for quicklink population
+--
+alter table identityiq.spt_dynamic_scope add column role_remove_control varchar(32);
+
+alter table identityiq.spt_dynamic_scope add column application_remove_control varchar(32);
+
+alter table identityiq.spt_dynamic_scope add column managed_attr_remove_control varchar(32);
+
+alter table identityiq.spt_dynamic_scope
+   add constraint FKtktdhh12wn2ah31yrges9oiu1 
+   foreign key (role_remove_control)
+   references identityiq.spt_rule (id);
+
+alter table identityiq.spt_dynamic_scope
+   add constraint FKexhlawv29rux6bct75f19h91v
+   foreign key (application_remove_control)
+   references identityiq.spt_rule (id);
+
+alter table identityiq.spt_dynamic_scope
+   add constraint FK5qib64c7xdiovhut2k81054iu
+   foreign key (managed_attr_remove_control)
+   references identityiq.spt_rule (id);
+
+--
+-- This is necessary to maintain the schema version. DO NOT REMOVE.
+--
+update identityiq.spt_database_version set schema_version = '8.1-08' where name = 'main';

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2010 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:t="http://myfaces.apache.org/tomahawk"
+  xmlns:sp="http://sailpoint.com/ui"
+  xmlns:p="http://primefaces.org/ui">
+<body>
+
+<ui:composition>
+  <td style="padding:10px !important;" width="100"><h:outputText value="#{groupTerm.typeLabel}" /></td>
+  <td style="padding:10px !important;"><h:outputText value="#{groupTerm.applicationName}" /></td>
+  <td style="padding:10px !important;">
+    <ui:fragment rendered="#{!groupTerm.renderAsPermission}">
+        <div id="#{prefix}SelectorNameDiv" class="#{prefix}attrSelect" />
+        <h:inputHidden value="#{groupTerm.name}" id="#{prefix}SelectorNameValue" class="#{prefix}SelectorNameValue" />
+        <h:inputHidden value="#{groupTerm.allowedNamesTrimmedJSON}" id="#{prefix}nameAllowedValues" />
+    </ui:fragment>
+    <ui:fragment rendered="#{groupTerm.renderAsPermission}">
+        <h:inputText value="#{groupTerm.name}" size="20" disabled="#{readOnly == true}" onchange="Page.fireEvent('selectorPanelChanged');"/>
+    </ui:fragment>
+  </td>
+  <td>
+    <ui:fragment rendered="#{showNewOperators}">
+      <h:selectOneMenu id="#{prefix}_groupTermOperator" disabled="#{readOnly == true}" 
+        value="#{groupTerm.operator}" onchange="#{prefix}disableAssociatedTextBoxForSelect(this); Page.fireEvent('selectorPanelChanged');">
+        <f:selectItems value="#{groupTerm.operators}" />
+      </h:selectOneMenu>
+    </ui:fragment>
+  </td>
+  <td style="padding:10px !important;">
+  	<ui:fragment rendered="#{groupTerm.renderAsPermission or !enableValueSelect}">
+  		<h:inputText value="#{groupTerm.value}" size="60" class="matchListValue" disabled="#{readOnly == true || groupTerm.isNull}" onchange="Page.fireEvent('selectorPanelChanged');"/>
+  	</ui:fragment>
+  	<ui:fragment rendered="#{!groupTerm.renderAsPermission and enableValueSelect}">
+  	    <div class="#{prefix}attrValueSelect" applicationId="#{groupTerm.applicationId}" defaultDisplayValue="#{groupTerm.displayValue}"></div>
+  		<h:inputHidden value="#{groupTerm.value}" disabled="#{groupTerm.isNull}" onchange="Page.fireEvent('selectorPanelChanged');"/>
+  	</ui:fragment>
+  </td>
+  <td style="padding:10px !important;" width="50" align="center">
+    <ui:fragment rendered="#{!showNewOperators}">
+      <h:selectBooleanCheckbox value="#{groupTerm.isNull}" onchange="Page.fireEvent('selectorPanelChanged');" onclick="#{prefix}disableAssociatedTextBox(this);" class="#{prefix}nullCheck" disabled="#{readOnly == true}" /> 
+    </ui:fragment>
+  </td>
+</ui:composition>
+
+</body>
+</html>

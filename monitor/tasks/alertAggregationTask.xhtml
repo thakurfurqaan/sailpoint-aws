@@ -1,0 +1,116 @@
+<!--
+  ~ /* (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. */
+  -->
+
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+
+    <sp:script>
+        <src>#{base.requestContextPath}/scripts/sailpoint/Suggest.js?#{debug.revision}</src>
+        <src>#{base.requestContextPath}/scripts/sailpoint/MultiSuggest.js?#{debug.revision}</src>
+    </sp:script>
+
+    <script type="text/javascript">
+        Ext.onReady(function () {
+            var appSuggest = new SailPoint.MultiSuggest({
+                renderTo: 'applicationsMultiSuggest',
+                suggestType: 'application',
+                jsonData: #{sp:basicJSONDataConverted(taskDefinition.argMap['sources'].objectListValue, 'ApplicationListConverter')},
+                contextPath: CONTEXT_PATH,
+                inputFieldName: 'editForm:applicationsSuggest',
+                valueField:'displayName',
+                sortable:true,
+                sortOnAdd:false,
+                extraParams: {aggregationType: 'alert'}
+
+            });
+
+            toggleDisplay(Ext.getDom('alertDefRow'), !Ext.getDom('editForm:checkDeleted').checked);
+        });
+    </script>
+
+    <ui:fragment>
+        <div class="spContent">
+            <table id="alertOptsTab" class="argumentTbl argumentTblWithHelp customWidth paddedTbl" cellspacing="0">
+                <tr>
+                    <th colspan="2" ><h:outputText styleClass="spContentTitle" value="#{msgs.alert_aggregation_options}"/></th>
+                </tr>
+                <tr>
+                    <td>
+                        <sp:outputText value="#{taskDefinition.argMap['sources'].argument.prompt}"/>
+                        <h:outputText styleClass="requiredText" value="*"/>
+                    </td>
+                    <td><h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['sources'].argument.name}"
+                                        rendered="#{taskDefinition.argMap['sources'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help[taskDefinition.argMap['sources'].argument.helpKey]}"/>
+                    </td>
+                    <td>
+                        <div id="applicationsMultiSuggest"></div>
+                        <t:inputHidden id="applicationsSuggest"
+                                       value="#{taskDefinition.argMap['sources'].objectListValue}"
+                                       required="true">
+                            <sp:convertList />
+                        </t:inputHidden>
+                        <p:outputPanel>
+                            <p:autoUpdate />
+                            <h:message styleClass="formError" for="applicationsSuggest" />
+                        </p:outputPanel>
+                    </td>
+                </tr>
+                <tr>
+                    <td><sp:outputText  value="#{taskDefinition.argMap['deltaAggregation'].argument.prompt}"/></td>
+                    <td><h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['deltaAggregation'].argument.name}"
+                                        rendered="#{taskDefinition.argMap['deltaAggregation'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help[taskDefinition.argMap['deltaAggregation'].argument.helpKey]}"/>
+                    </td>
+
+                    <td>
+                        <h:selectBooleanCheckbox id="deltaAggregation" value="#{taskDefinition.argMap['deltaAggregation'].booleanValue}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><sp:outputText  value="#{taskDefinition.argMap['processAlerts'].argument.prompt}"/></td>
+                    <td><h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['processAlerts'].argument.name}"
+                                        rendered="#{taskDefinition.argMap['processAlerts'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help[taskDefinition.argMap['processAlerts'].argument.helpKey]}"/>
+                    </td>
+                    <td>
+                        <h:selectBooleanCheckbox id="checkDeleted" value="#{taskDefinition.argMap['processAlerts'].booleanValue}"
+                                                 onchange="toggleDisplay(Ext.getDom('alertDefRow'), !this.checked);"/>
+                    </td>
+                </tr>
+                <tr id="alertDefRow">
+                    <td><sp:outputText  value="#{taskDefinition.argMap['alertDefinitionNames'].argument.prompt}"/></td>
+                    <td><h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['alertDefinitionNames'].argument.name}"
+                                        rendered="#{taskDefinition.argMap['alertDefinitionNames'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help[taskDefinition.argMap['alertDefinitionNames'].argument.helpKey]}"/>
+                    </td>
+                    <td>
+                        <h:inputText size="40" id="alertDefinitionNames" value="#{taskDefinition.argMap['alertDefinitionNames'].value}" />
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+
+        <script defer="defer">
+            makeTableMulticolored(Ext.getDom('alertOptsTab'),true,false, "even", "odd" );
+        </script>
+    </ui:fragment>
+</ui:composition>
+
+</body>
+</html>

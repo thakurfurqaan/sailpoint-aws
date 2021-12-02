@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2014 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+<body>
+
+<ui:composition>
+  <div style="margin:5px" class="width100">
+    <h:outputText style="display:none" id="formApplicationName" value="#{sp:getDisplayNameForId('Application', formEditor.formDTO.applicationId)}"/>
+    <h:outputText style="display:none" id="formApplicationId" value="#{formEditor.formDTO.applicationId}"/>
+
+    <p:outputPanel id="formAttributes">
+      <input type="hidden" value="#{formEditor.formDTO.formItems}" id="formItems" name="formItems" />
+      <h:inputHidden value="#{formEditor.formDTO.description}" id="formDescr"/>
+      <h:inputHidden value="#{formEditor.formDTO.owner}" id="formOwner"/>
+      <h:inputHidden value="#{formEditor.formDTO.ownerType}" id="formOwnerType"/>
+      <h:inputHidden value="#{formEditor.formDTO.presentationalAttributesJSON}" id="presentationalAttributes"/>
+      <h:outputText style="display:none" id="formOwnerRuleName" value="#{formEditor.formDTO.ownerRuleName}"/>
+    </p:outputPanel>
+
+    <h:inputHidden value="#{formEditor.formDTO.name}" id="formName" size="60"/>
+    <h:inputHidden value="#{formEditor.formId}" id="formId"/>
+    <h:inputHidden value="#{formEditor.formDTO.formItemsJSON}" id="formItemsJSON"/>
+
+    <t:inputText id="formApplication"
+              style="display:none"
+              value="#{formEditor.formDTO.applicationId}"
+              forceId="true">
+    </t:inputText>
+  </div>
+</ui:composition>
+
+</body>
+</html>

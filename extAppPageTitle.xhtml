@@ -1,0 +1,50 @@
+<!-- (c) Copyright 2016 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<!--
+  extAppPageTitle.xhtml is used by combination of Ext and Angular pages to define Title and
+  to show session messages of type formInfo, formWarn, formError.
+  For Classic pages using extAppPage Template, Title is defined
+  in <ui:define> which is then inserted into bodyDivTitle.
+
+  Angular pages inserts Title from page controllers but
+  combination pages do not always have page controllers.
+  This page is used by following pages, currently only by FormEditor pages -
+      workflow.xhtml
+      lcmConfig.xhtml
+-->
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+<header id="pageTitle">
+  <table width="100%">
+    <tr>
+      <td>
+        <div id="bodyDivTitle" class="titleText" >
+          <ui:insert name="title"></ui:insert>
+          <ui:insert name="underTitle"></ui:insert>
+        </div>
+        <div id="breadCrumbs">
+          <h:form id="breadCrumbForm">
+            <ui:insert name="breadCrumbs"></ui:insert>
+          </h:form>
+        </div>
+        <div id="bodyDivSubTitle">
+          <ui:insert name="subtitle"/>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p:outputPanel layout="block">
+          <p:autoUpdate/>
+          <div id="spErrorMsgsDiv" class="lcmErrorMsgsDiv">
+            <h:messages infoClass="formInfo" warnClass="formWarn" errorClass="formError" fatalClass="formError"/>
+          </div>
+        </p:outputPanel>
+      </td>
+    </tr>
+  </table>
+</header>
+</html>

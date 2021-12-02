@@ -1,0 +1,302 @@
+<!--
+  ~ /* (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. */
+  -->
+
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+    <script type="text/javascript">
+
+        helpKey = 'APPLICATION';
+
+        function getFieldValue(field) {
+            var val = null;
+            var fileName = Ext.getDom(field);
+            if ( fileName ) {
+                val = fileName.value;
+            }
+            return val;
+        }
+
+        //True if the targetHostSelector should be enabled
+        function showTargetHostSelector() {
+            var show = false;
+            show = validateConnectionParams(false);
+            Validator.clearErrors();
+            return show;
+        }
+
+        function updateHostConfigs() {
+            Ext.getDom('editForm:attDdataList:r_id_unstructured:updateHostConfigsBtn').click();
+        }
+
+        function validateConnectionParams(displayErrors) {
+
+            var valid = true;
+
+            var errors = Validator.getErrors();
+            if (errors &amp;&amp; errors.length &gt; 0) {
+                if (displayErrors) {
+                    Validator.displayErrors('appErrorsTop');
+                }
+                //return false will kill cancel the save
+                valid = false;
+            }
+            return valid;
+        }
+
+        Ext.onReady(function () {
+            Ext.QuickTips.init();
+            buildTooltips();
+            var applicationsMultiSuggest = new SailPoint.MultiSuggest({
+                renderTo: 'applicationsMultiSuggest',
+                suggestType: 'application',
+                jsonData: #{sp:basicJSONDataConverted(schemaDTO.config['referencedApplications'], 'ApplicationNameListConverter')},
+                contextPath: CONTEXT_PATH,
+                inputFieldName: 'editForm:attDdataList:r_id_unstructured:applicationsSuggest',
+                valueField:'displayName',
+                sortable:true,
+                sortOnAdd:false
+            });
+
+            // This is our validation hook
+            Page.on('beforeSave', function() {
+                if (!hasCredentialConfiguration()) {
+                    validateConnectionParams(false);
+    
+                    var errors = Validator.getErrors();
+                    if (errors &amp;&amp; errors.length &gt; 0) {
+                        Validator.displayErrors('appErrorsTop');
+                        return false;
+                    }
+                }
+                //return false will kill cancel the save
+                return true;
+            });
+        });
+
+
+    </script>
+    <f:view>
+
+        <div id="unstructSettings" class='spContent'>
+        <h:outputText styleClass="sectionHeader" value="#{msgs.con_siq_unstruct_header}"/><br/><br/>
+
+
+
+
+            <table class="spTable" style="border:0px" cellspacing="0">
+                <tr>
+                    <td class="titleColumn">
+                        <h:outputText styleClass="subSectionHeader" value="#{msgs.siq_conn_header}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='titleColumn'>
+                        <h:outputText style='padding:5px' value="#{msgs.siq_db_url}"/>
+                    </td>
+                    <td class="certScheduleHelpCol">
+                        <h:graphicImage id="imgHlpURLs" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help.help_siq_collector_url}"/>
+                    </td>
+                    <td class="certScheduleOptionCol">
+                        <h:inputText id="url"
+                                     value="#{schemaDTO.attributeDTO.url}"
+                                     size="80"
+                                     disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                     readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class='titleColumn'>
+                        <h:outputText style='padding:5px' value="#{msgs.siq_db_driver}"/>
+                    </td>
+                    <td class="certScheduleHelpCol">
+                        <h:graphicImage id="imgHlpdriverClass" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help.help_siq_collector_driver}"/>
+                    </td>
+                    <td class="certScheduleOptionCol">
+                        <h:inputText id="driverClass"
+                                     value="#{schemaDTO.attributeDTO.driverClass}"
+                                     size="80"
+                                     disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                     readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class='titleColumn'>
+                        <h:outputText style='padding:5px' value="#{msgs.siq_db_username}"/>
+                    </td>
+                    <td class="certScheduleHelpCol">
+                        <h:graphicImage id="imgHlpdbIUserName" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help.help_siq_collector_userName}"/>
+                    </td>
+                    <td class="certScheduleOptionCol">
+                        <h:inputText id="dbUserName"
+                                     value="#{schemaDTO.attributeDTO.userName}"
+                                     size="80"
+                                     disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                     readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class='titleColumn'>
+                        <h:outputText style='padding:5px' value="#{msgs.siq_db_password}"/>
+                    </td>
+                    <td class="certScheduleHelpCol">
+                        <h:graphicImage id="imgHlpPassword" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help.help_siq_collector_password}"/>
+                    </td>
+                    <td class="certScheduleOptionCol">
+                        <sp:inputSecret id="password"
+                                        value="#{schemaDTO.attributeDTO.password}"
+                                        autocomplete="off"
+                                        redisplay="true"
+                                        size="80"
+                                        disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                        readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class='titleColumn'>
+                        <h:outputText style='padding:5px' value="#{msgs.siq_db_schemaName}"/>
+                    </td>
+                    <td class="certScheduleHelpCol">
+                        <h:graphicImage id="imgHlpdbSchema" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help.help_siq_collector_schema}"/>
+                    </td>
+                    <td class="certScheduleOptionCol">
+                        <h:inputText id="dbSchema"
+                                     value="#{schemaDTO.attributeDTO.schemaName}"
+                                     size="80"
+                                     disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                     readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                    </td>
+                </tr>
+
+                <td class="titleColumn">
+                    <h:outputText styleClass="subSectionHeader" value="#{msgs.siq_settings_header}"/>
+                </td>
+                <tr>
+                    <td class='titleColumn'>
+                        <h:outputText style='padding:5px; white-space: normal' value="#{msgs.siq_referenced_applications}"/>
+                    </td>
+                    <td class="certScheduleHelpCol">
+                        <h:graphicImage id="imgHlpreferencedApplications" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help.help_siq_connector_referenced_apps}"/>
+                    </td>
+                    <td class="certScheduleOptionCol">
+                        <div id="applicationsMultiSuggest"></div>
+                        <t:inputHidden id="applicationsSuggest"
+                                       value="#{schemaDTO.config['referencedApplications']}">
+                            <sp:convertList />
+                        </t:inputHidden>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class='titleColumn'>
+                        <h:outputText style='padding:5px; white-space: normal' value="#{msgs.siq_agg_inherited}"/>
+                    </td>
+                    <td class="certScheduleHelpCol">
+                        <h:graphicImage id="imgHlpaggInherited" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help.help_siq_collector_agg_inherited}"/>
+                    </td>
+                    <td class="certScheduleOptionCol">
+                        <h:selectBooleanCheckbox id="aggInherited"
+                                                 value="#{schemaDTO.attributeDTO.aggregateInherited}"
+                                                 disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                                 readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="titleColumn">
+                        <h:outputText style='padding:5px' value="#{msgs.siq_agg_target_hosts}"/>
+                    </td>
+                    <td class="certScheduleHelpCol">
+                        <h:graphicImage id="imgHlptargetHosts" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help.help_siq_collector_target_hosts}"/>
+                    </td>
+                    <td class="certScheduleOptionCol">
+                        <p:outputPanel id="targetHostPanel" layout="block">
+                            <p:commandLink id="discoverHostsBtn"
+                                             value="#{msgs.siq_discover_hosts}"
+                                             onchange="return validateConnectionParams(true);"
+                                             action="#{schemaDTO.attributeDTO.discoverTargetHosts}"
+                                             style="display: block"
+                                             update="@([id$=targetHostPanel])"/>
+                            <h:selectManyListbox id="targetHosts" size="15"
+                                                 value="#{schemaDTO.attributeDTO.targetHosts}"
+                                                 style="display: block"
+                                                 onclick="updateHostConfigs(); return true;"
+                                                 rendered="#{not empty schemaDTO.attributeDTO.availableHosts}">
+                                <f:selectItems value="#{schemaDTO.attributeDTO.targetHostSelectItems}"/>
+                            </h:selectManyListbox>
+                        </p:outputPanel>
+                    </td>
+                </tr>
+
+            </table>
+
+
+
+
+            <p:outputPanel id="targetHostConfigs">
+                <p:autoUpdate />
+                <table>
+                <t:dataList value="${schemaDTO.attributeDTO.targetHostConfigDtos}" var="hostConfig">
+                    <tr>
+                        <td class="titleColumn">
+                            <h:outputText styleClass="subSectionHeader" value="#{hostConfig.hostName}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="titleColumn">
+                            <h:outputText value="#{msgs.siq_host_config_paths}"/>
+                        </td>
+                        <td class="helpColumn">
+                            <h:graphicImage id="imgHlphostPaths" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                            alt="#{help.help_siq_collector_target_host_paths}"/>
+                        </td>
+                        <td class="certScheduleOptionCol">
+                            <h:inputText id="#{hostConfig.hostName}paths" value="#{hostConfig.pathsCSV}" size="80"/>
+                        </td>
+
+                    </tr>
+                </t:dataList>
+                </table>
+            </p:outputPanel>
+
+
+        </div>
+
+
+
+        <p:commandButton id="updateHostConfigsBtn" style="display: none"
+                           action="#{schemaDTO.attributeDTO.updateTargetHostConfigs}" update="@([id$=targetHostConfigs])"/>
+
+    </f:view>
+
+
+
+</ui:composition>
+
+</body>
+
+</html>

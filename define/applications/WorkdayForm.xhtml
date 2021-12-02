@@ -1,0 +1,536 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+
+
+    <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'APPLICATION';
+
+        function getFieldValue(field) {
+            var val = null;
+            var fileName = Ext.getDom(field);
+            if ( fileName ) {
+               val = fileName.value;
+            }
+            return val;
+        }
+        
+        function showRestConfig() {
+            if(document.getElementById("editForm:isRestConfigEnabled").checked == true){
+                 document.getElementById('restSettings').style.display = '';
+            }
+            else{
+                 document.getElementById('restSettings').style.display = 'none';
+            }
+        }
+        
+        Ext.onReady(function () {
+           showRestConfig();
+           Ext.QuickTips.init();
+           // This is our validation hook
+           Page.on('beforeSave', function() {
+               if (!hasCredentialConfiguration()) {
+                   var host = getFieldValue('editForm:url');
+                   Validator.validateNonBlankString(host, "#{msgs.err_workday_missing_url}");
+                   
+                   var user= getFieldValue('editForm:user');
+                   Validator.validateNonBlankString(user, "#{msgs.err_workday_missing_username}");
+                   
+                   var pw = getFieldValue('editForm:password');
+                   Validator.validateNonBlankString(pw, "#{msgs.err_workday_missing_password}");
+                   
+                   var integrationFieldOverrideService = getFieldValue('editForm:Integration_Field_Override_Service');
+                   var integrationSystemID = getFieldValue('editForm:IntegrationSystemID');
+                   var integrationField = getFieldValue('editForm:Integration_Field');
+                   if(integrationFieldOverrideService){
+                       Validator.validateNonBlankString(integrationSystemID, "#{msgs.err_workday_missing_integration_system_id}");
+                       Validator.validateNonBlankString(integrationField, "#{msgs.err_workday_missing_integration_fields}");
+                   }
+                   else if(integrationField){
+                       Validator.validateNonBlankString(integrationSystemID, "#{msgs.err_workday_missing_integration_system_id}");
+                       Validator.validateNonBlankString(integrationFieldOverrideService, "#{msgs.err_workday_missing_integration_field_override_service}");
+                   }
+                   if (document.getElementById("editForm:isRestConfigEnabled").checked == true) {
+                       var restEndpoint = getFieldValue('editForm:restEndpoint');
+                       Validator.validateNonBlankString(restEndpoint, "#{msgs.err_workday_missing_rest_endpoint}");
+                       var tokenEp = getFieldValue('editForm:tokenEndpoint');
+                       Validator.validateNonBlankString(tokenEp, "#{msgs.err_workday_missing_token_endpoint}");
+                       var authEp = getFieldValue('editForm:authEndpoint');
+                       Validator.validateNonBlankString(authEp, "#{msgs.err_workday_missing_auth_endpoint}");
+                       var clientId = getFieldValue('editForm:clientId');
+                       Validator.validateNonBlankString(clientId, "#{msgs.err_workday_missing_clientId}");
+                       var clientSecret = getFieldValue('editForm:clientSecret');
+                       Validator.validateNonBlankString(clientSecret, "#{msgs.err_workday_missing_client_secret}");
+                       var refreshToken = getFieldValue('editForm:refreshToken');
+                       Validator.validateNonBlankString(refreshToken, "#{msgs.err_workday_missing_refresh_token}");
+                   } else {
+                       document.getElementById('editForm:restEndpoint').value = '';
+                       document.getElementById('editForm:tokenEndpoint').value = '';
+                       document.getElementById('editForm:authEndpoint').value = '';
+                       document.getElementById('editForm:clientId').value = '';
+                       document.getElementById('editForm:clientSecret').value = '';
+                       document.getElementById('editForm:refreshToken').value = '';
+                   }
+                   var errors = Validator.getErrors();
+                   if (errors && errors.length > 0) {
+                       Validator.displayErrors('appErrorsTop');
+                       return false;
+                   }
+               }
+               //return false will kill cancel the save
+               return true;
+           });
+        });
+
+       //--><!]]>
+    </script>
+  
+    <f:view>
+
+      <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_workday_config}"/><br/>
+
+
+      <div id="accountSettings" class='spContent'>
+        <table class="spTable" style="border:0px" cellspacing="0">
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_workday_url}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpHostName" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_workday_url}"/>
+
+            </td>
+            <td valign="center">
+              <h:inputText id="url"
+                           value="#{applicationObject.attributes['url']}"
+                           size="120"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_workday_username}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpUser" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_workday_username}"/>
+            </td>
+            
+            <td>
+              <h:inputText value="#{applicationObject.attributes['user']}"
+                           id="user"
+                           size="120"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_workday_password}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpPassword" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_workday_password}"/>
+            </td>
+             <td>
+               <sp:inputSecret size="50" 
+                               id="password"
+                               autocomplete="off"
+                               value="#{applicationObject.attributes['password']}" redisplay="true"
+                               disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                               readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/> 
+             </td>
+          </tr>
+          
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_workday_chunk_size}"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpChunkSize" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_workday_chunk_size}"/>
+            </td>
+            <td>
+              <h:inputText id="ChunkSize"
+                           value="#{applicationObject.attributes['ChunkSize']}"                              
+                           size="3"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"                          
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                           <f:validateLongRange minimum="1" maximum="999"/>
+              </h:inputText>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_workday_server_time_zone}"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpServerTimeZone" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_workday_server_time_zone}"/>
+            </td>
+            <td>
+              <h:inputText id="ServerTimeZone"
+                           value="#{applicationObject.attributes['ServerTimeZone']}"                              
+                           size="3"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"                          
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+              </h:inputText>
+            </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_workday_custom_timeout}"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpCustomTimeOut" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_workday_custom_timeout}"/>
+            </td>
+            <td>
+              <h:inputText id="customTimeOut"
+                           value="#{applicationObject.attributes['customTimeOut']}"                              
+                           size="3"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"                          
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+              </h:inputText>
+            </td>
+          </tr>
+          
+        <tr>
+          <td> <br> </br> </td>
+        </tr>
+        <tr>
+          <td class='titleColumn certScheduleTitleCol'>
+            <h:outputText style='padding:5px' value="#{msgs.con_form_workday_update_userinfo}"/>
+              <br>
+              </br>
+          </td>
+        </tr>
+        
+        <tr>
+          <td class='titleColumn certScheduleTitleCol'>
+            <h:outputText style='padding:5px' value="#{msgs.con_form_workday_prov_admin}"/>
+          </td>
+
+          <td class="certScheduleHelpCol">
+            <h:graphicImage id="imgHlpUpdateUser" styleClass="helpIcon" 
+                            url="/images/icons/dashboard_help_16.png" 
+                            alt="#{help.help_con_form_workday_update_username}"/>
+          </td>
+            
+          <td>
+            <h:inputText value="#{applicationObject.attributes['provisioningUser']}"
+                         id="updateUser"
+                         size="120"
+                         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                         readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+          </td>
+        </tr>
+
+        <tr>
+          <td class='titleColumn certScheduleTitleCol'>
+            <h:outputText style='padding:5px' value="#{msgs.con_form_workday_prov_pass}"/>
+          </td>
+
+          <td class="certScheduleHelpCol">
+            <h:graphicImage id="imgHlpUpdatePassword" styleClass="helpIcon" 
+                     url="/images/icons/dashboard_help_16.png" 
+                     alt="#{help.help_con_form_workday_update_password}"/>
+          </td>
+          <td>
+            <sp:inputSecret size="50" 
+                  id="updatePassword"
+                  autocomplete="off"
+                  value="#{applicationObject.attributes['provisioningPassword']}" redisplay="true"
+                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/> 
+          </td>
+        </tr>
+      </table>
+      </div>
+        
+                   <br />
+            <h:outputText styleClass="sectionHeader"
+                value="#{msgs.con_form_workday_filter_criteria}" />
+            <br />
+        <div id="enableRest" class='spContent'>
+            <table class="spTable" style="border: 0px" cellspacing="0">
+              <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_workday_effective_offset_date}"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpEffectiveDateOffset" styleClass="helpIcon"
+                              url="/images/icons/dashboard_help_16.png"
+                              alt="#{help.help_con_form_workday_effective_offset_date}"/>
+            </td>
+            <td>
+              <h:inputText value="#{applicationObject.attributes['EffectiveDateOffset']}"
+                           id="EffectiveDateOffset"
+                           size="8"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                           <f:validateLongRange minimum="-99999" maximum="99999"/>
+                           </h:inputText>
+            </td>
+            </tr>
+             <tr>
+                <td class='titleColumn certScheduleTitleCol'>
+                  <h:outputText style='padding:5px' value="#{msgs.con_form_workday_organization_reference_id}"/>
+                </td>
+                <td class="certScheduleHelpCol">
+                  <h:graphicImage id="imgHlpOrganizationReferenceID" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                                  alt="#{help.help_con_form_workday_organization_reference_id}"/>
+                </td>
+                <td>
+                  <h:inputText id="Organization_Reference_ID"
+                               value="#{applicationObject.attributes['Organization_Reference_ID']}"
+                               size="3"
+                               disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                               readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                  </h:inputText>
+                </td>
+             </tr>
+             <tr>
+                <td class='titleColumn certScheduleTitleCol'>
+                  <h:outputText style='padding:5px' value="#{msgs.con_form_workday_integration_systen_id}"/>
+                </td>
+                <td class="certScheduleHelpCol">
+                  <h:graphicImage id="imgHlpIntegrationSystemID" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                                  alt="#{help.help_con_form_workday_integration_systen_id}"/>
+                </td>
+                <td>
+                  <h:inputText id="IntegrationSystemID"
+                               value="#{applicationObject.attributes['IntegrationSystemID']}"
+                               size="3"
+                               disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                               readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                  </h:inputText>
+                </td>
+             </tr>
+             <tr>
+                <td class='titleColumn certScheduleTitleCol'>
+                  <h:outputText style='padding:5px' value="#{msgs.con_form_workday_integration_field_override_service}"/>
+                </td>
+                <td class="certScheduleHelpCol">
+                  <h:graphicImage id="imgHlpIntegrationFieldOverrideService" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                                  alt="#{help.help_con_form_workday_integration_field_override_service}"/>
+                </td>
+                <td>
+                  <h:inputText id="Integration_Field_Override_Service"
+                               value="#{applicationObject.attributes['Integration_Field_Override_Service']}"
+                               size="3"
+                               disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                               readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                  </h:inputText>
+                </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_workday_integration_field}"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpIntegrationField" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_workday_integration_field}"/>
+            </td>
+            <td>
+              <h:inputText id="Integration_Field"
+                           value="#{applicationObject.attributes['Integration_Field']}"
+                           size="3"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+              </h:inputText>
+            </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_workday_past_termination_offset}"/>
+            </td>
+
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpTerminationOffset" styleClass="helpIcon"
+                              url="/images/icons/dashboard_help_16.png"
+                              alt="#{help.help_con_form_workday_past_termination_offset}"/>
+            </td>
+            <td>
+              <h:inputText value="#{applicationObject.attributes['Past_Termination_Offset']}"
+                           id="Past_Termination_Offset"
+                           size="8"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                           <f:validateLongRange minimum="0" maximum="99999"/>
+                           </h:inputText>
+            </td>
+          </tr>
+          <tr>
+               <td class='titleColumn certScheduleTitleCol'>
+                    <h:outputText  value="#{msgs.con_form_workday_dont_allow_terminated}" />
+                </td>
+                <td class="certScheduleHelpCol">
+                  <h:graphicImage id="imgHlpAllowTerminated" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                  alt="#{help.help_con_form_workday_dont_allow_terminated}"/>
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox id="isInactiveWorkersAllowed"
+                      value="#{applicationObject.attributes['isInactiveWorkersAllowed']}" />
+                </td>
+         </tr>
+        </table>
+       </div>
+            <br />
+            <h:outputText styleClass="sectionHeader"
+                value="#{msgs.con_form_workday_rest_config}" />
+            <br />
+            <div id="enableRest" class='spContent'>
+                <table class="spTable" style="border: 0px" cellspacing="0">
+                    <tr>
+                        <td class='titleColumn certScheduleTitleCol'><h:outputText
+                                value="#{msgs.con_form_workday_enable_rest_config}" /></td>
+                        <td class="certScheduleHelpCol"><h:graphicImage
+                                id="imgHlpEnableRest" styleClass="helpIcon"
+                                url="/images/icons/dashboard_help_16.png"
+                                alt="#{help.help_con_form_workday_enable_rest_config}" /></td>
+                        <td><h:selectBooleanCheckbox id="isRestConfigEnabled"
+                                onclick="showRestConfig()"
+                                value="#{applicationObject.attributes['isRestConfigEnabled']}" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="restSettings" class='spContent'>
+                <table class="spTable" style="border: 0px" cellspacing="0">
+                    <tr>
+                        <td class='titleColumn certScheduleTitleCol' valign="center">
+                            <h:outputText style='padding:5px'
+                                value="#{msgs.con_form_workday_rest_endpoint}" /> <h:outputText
+                                styleClass="requiredText" value="*" />
+                        </td>
+                        <td class="certScheduleHelpCol" valign="middle"><h:graphicImage
+                                id="imgHlpRestEp" styleClass="helpIcon"
+                                url="/images/icons/dashboard_help_16.png"
+                                alt="#{help.help_con_form_workday_restEndpoint}" /></td>
+                        <td valign="center"><h:inputText id="restEndpoint"
+                                value="#{applicationObject.attributes['restEndpoint']}"
+                                size="120"
+                                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class='titleColumn certScheduleTitleCol'><h:outputText
+                                style='padding:5px'
+                                value="#{msgs.con_form_workday_token_endpoint}" /> <h:outputText
+                                styleClass="requiredText" value="*" /></td>
+
+                        <td class="certScheduleHelpCol"><h:graphicImage
+                                id="imgHlpTokenEp" styleClass="helpIcon"
+                                url="/images/icons/dashboard_help_16.png"
+                                alt="#{help.help_con_form_workday_tokenEndpoint}" /></td>
+
+                        <td><h:inputText
+                                value="#{applicationObject.attributes['tokenEndpoint']}"
+                                id="tokenEndpoint" size="120"
+                                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class='titleColumn certScheduleTitleCol'><h:outputText
+                                style='padding:5px'
+                                value="#{msgs.con_form_workday_auth_endpoint}" /> <h:outputText
+                                styleClass="requiredText" value="*" /></td>
+
+                        <td class="certScheduleHelpCol"><h:graphicImage
+                                id="imgHlpAuthEp" styleClass="helpIcon"
+                                url="/images/icons/dashboard_help_16.png"
+                                alt="#{help.help_con_form_workday_authEndpoint}" /></td>
+                        <td><sp:inputText size="120" id="authEndpoint"
+                                value="#{applicationObject.attributes['authEndpoint']}"
+                                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class='titleColumn certScheduleTitleCol'><h:outputText
+                                style='padding:5px' value="#{msgs.con_form_workday_clientId}" /> <h:outputText
+                                styleClass="requiredText" value="*" /></td>
+
+                        <td class="certScheduleHelpCol"><h:graphicImage
+                                id="imgHlpClientId" styleClass="helpIcon"
+                                url="/images/icons/dashboard_help_16.png"
+                                alt="#{help.help_con_form_workday_clientId}" /></td>
+
+                        <td><h:inputText
+                                value="#{applicationObject.attributes['clientId']}"
+                                id="clientId" size="120"
+                                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" /></td>
+                    </tr>
+
+                    <tr>
+                        <td class='titleColumn certScheduleTitleCol'><h:outputText
+                                style='padding:5px'
+                                value="#{msgs.con_form_workday_clientSecret}" /> <h:outputText
+                                styleClass="requiredText" value="*" /></td>
+                        <td class="certScheduleHelpCol"><h:graphicImage
+                                id="imgHlpClientSecret" styleClass="helpIcon"
+                                url="/images/icons/dashboard_help_16.png"
+                                alt="#{help.help_con_form_workday_clientSecret}" /></td>
+                        <td><sp:inputSecret id="clientSecret"
+                                value="#{applicationObject.attributes['clientSecret']}"
+                                size="120" redisplay="true"
+                                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" /></td>
+                    </tr>
+                    
+                    <tr>
+                        <td class='titleColumn certScheduleTitleCol'><h:outputText
+                                style='padding:5px'
+                                value="#{msgs.con_form_workday_refreshToken}" /> <h:outputText
+                                styleClass="requiredText" value="*" /></td>
+                        <td class="certScheduleHelpCol"><h:graphicImage
+                                id="imgHlpRefreshToken" styleClass="helpIcon"
+                                url="/images/icons/dashboard_help_16.png"
+                                alt="#{help.help_con_form_workday_refreshToken}" /></td>
+                        <td><sp:inputSecret id="refreshToken"
+                                value="#{applicationObject.attributes['refreshToken']}"
+                                size="120" redisplay="true"
+                                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" /></td>
+                    </tr>
+                </table>
+            </div>
+
+    </f:view>
+</ui:composition>
+
+</body>
+</html>

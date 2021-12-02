@@ -1,0 +1,138 @@
+@media screen and (max-width: 767px) {
+}
+@media (min-width: 768px) {
+}
+@media (min-width: 768px) {
+}
+@media (max-width: 767px) {
+}
+@media (min-width: 768px) {
+}
+@media (min-width: 768px) {
+}
+@media (max-width: 767px) {
+}
+@media (max-width: 767px) {
+}
+@media (min-width: 768px) {
+}
+@media (max-width: 767px) {
+}
+html {
+  font-size: 100%;
+}
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  color: #717171;
+  background-color: #fff;
+  min-width: 320px;
+}
+h1 {
+  font-size: 2.5rem;
+}
+h2 {
+  font-size: 2.0rem;
+}
+h3 {
+  font-size: 1.75rem;
+}
+h4 {
+  font-size: 1.5rem;
+}
+h5 {
+  font-size: 1.125rem;
+}
+h6 {
+  font-size: 1rem;
+}
+p,
+ol,
+ul,
+li {
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.4;
+  list-style-type: none;
+  margin: 1rem 0;
+  color: #717171;
+}
+strong {
+  font-weight: 700;
+}
+header {
+  background-color: #011E69;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 60px;
+}
+nav {
+  box-sizing: border-box;
+  position: relative;
+}
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+#logo {
+  display: flex;
+  height: 60px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+}
+#logo > img {
+  height: 75%;
+}
+main {
+  margin-top: 60px;
+  padding: 20px;
+  display: block;
+}
+hr {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
+}
+footer {
+  display: block;
+  text-align: center;
+  padding: 0.75rem 0;
+}
+.footnote {
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: #717171;
+}
+.btn {
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn-close {
+  background: none;
+  color: #fff;
+  position: absolute;
+  display: block;
+  top: 8px;
+  right: 8px;
+  width: 44px;
+  height: 44px;
+  font-size: 1.5rem;
+}
+#scroll-to-top-btn {
+  display: none;
+  position: fixed;
+  bottom: 8px;
+  right: 8px;
+  width: 44px;
+  height: 44px;
+  background-color: #011E69;
+  color: #fff;
+  font-size: 1.2rem;
+}

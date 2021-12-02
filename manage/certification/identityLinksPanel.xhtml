@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:sp="http://sailpoint.com/ui"
+        xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html">
+
+<body>
+
+
+<ui:composition>
+
+    <ui:include src="/identity/identityLinksPanel.xhtml">
+        <ui:param name="identity" value="#{certItemView.identity}"/>
+        <ui:param name="refererType" value="certificationItem"/>
+        <ui:param name="refererId" value="#{certItemView.itemId}"/>
+
+    </ui:include>
+
+</ui:composition>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:t="http://myfaces.apache.org/tomahawk"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:sp="http://sailpoint.com/ui">
+
+
+<body>
+
+<ui:composition template="/appPage.xhtml">
+
+  <ui:define name="title">#{msgs.label_quick_link_populations}</ui:define>
+  <ui:define name="subtitle">
+    <input type="button" id="saveButton" value="+  #{msgs.new}" class="primaryBtn"
+         onclick="SailPoint.systemSetup.QuickLinkPopulationEditor.newButtonHandler();" />
+  </ui:define>
+
+  <ui:define name="headerItems">
+    <sp:style serveOffset="#{base.requestContextPath}/css/sailpoint/web/systemSetup">
+      <src>system-setup.css</src>
+    </sp:style>       
+  
+    <sp:script>
+      <src>#{base.requestContextPath}/scripts/sailpoint/assignmentRuleSelector.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/grid/PagingGrid.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/grid/PagingCheckboxGrid.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/grid/CheckboxSelectionModel.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/grid/SelectionCollection.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/Store.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/Suggest.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/MultiSuggest.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/grid/PageSizePlugin.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/component/StateProvider.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/component/TabPanel.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/component/ApplicationSelector.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/data/RestJsonStore.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/component/RuleEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/grid/SortableGrid.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/grid/Utils.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/ComboBox.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/MultiSelect.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/MultiText.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/HtmlEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/HtmlEditorCounterPlugin.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/MultiLanguageHtmlEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/ManagedAttributeValueCombo.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/systemSetup/quickLinkPopulationEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/systemSetup/quickLinkPopulationQuickLinkGrid.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/systemSetup/defaultOptionsModal.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/systemSetup/requestAccessOptionsModal.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/systemSetup/manageAccountsOptionsModal.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/systemSetup/lcm/attributeFilterBuilder.js?#{debug.revision}</src>
+    </sp:script>
+    <script type="text/javascript" defer="defer">
+      helpKey = 'QUICKLINK_POPULATION';
+    </script>
+    
+    <script type="text/javascript">
+      var sp = new SailPoint.state.StateProvider({
+        stateIds: ['quicklinkPopulationQuicklinkListGridState'],
+        states:   ["#{gridConfigBean.gridStateConfig['quicklinkPopulationQuicklinkListGridState'].state}"]
+      });
+      Ext.state.Manager.setProvider(sp);  
+      
+      Ext.onReady(function() {
+        SailPoint.systemSetup.QuickLinkPopulationEditor.createEditor(#{gridConfigBean.uiConfigJson['quicklinkPopulationQuicklinkListColumns']}, 'quicklinkPopulationQuicklinkListColumns');
+      });               
+    </script>    
+    
+  </ui:define>  
+
+  <ui:define name="body">
+    <f:view>
+    
+      <h:form id="editForm">
+      
+        <p:outputPanel layout="block">
+          <p:autoUpdate />
+          <div id="spErrorMsgsDiv" style="margin-left:15px; margin-right: 15px">
+            <h:messages infoClass="formInfo" warnClass="formWarn" errorClass="formError" fatalClass="formError"/>
+          </div>
+        </p:outputPanel>
+      
+        <div id="qlpEditorDiv"/>
+
+        <p:outputPanel id="qlpContent" width="100%">
+
+          <ui:fragment rendered="#{null != dsEditor.currentDTO}">
+                                            
+            <div id="qlpConfigurationTab" >
+              <ui:include src="quicklinkPopulationConfiguration.xhtml"/>
+            </div>
+            
+          </ui:fragment>
+        </p:outputPanel>
+        
+        <h:inputHidden id="selectedDynamicScopeId" value="#{dsEditor.selectedDynamicScopeId}"/>
+        <h:inputHidden id="selectedQLOsJson" />
+        <p:commandButton id="saveAction" style="display:none" action="#{dsEditor.saveAction}"
+                onclick="SailPoint.systemSetup.QuickLinkPopulationEditor.scrollToMessage();"/> 
+        <p:commandButton id="refreshButton" style="display:none" action="#{dsEditor.refresh}"
+                update="@([id$=qlpContent])"
+                onclick="SailPoint.systemSetup.QuickLinkPopulationEditor.showLoadMask();"
+                oncomplete="SailPoint.systemSetup.QuickLinkPopulationEditor.refresh();"/>
+
+        <h:commandButton id="deleteButton" style="display:none" action="#{dsEditor.deleteAction}"/>
+        <h:commandButton id="backAction" style="display:none" action="backToSystemSetup"/>
+      </h:form>
+    </f:view>
+  </ui:define>
+</ui:composition>
+
+</body>
+</html>

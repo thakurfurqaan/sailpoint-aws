@@ -1,0 +1,224 @@
+<script type="text/javascript">
+    <!--//--><![CDATA[//><!--
+    /**
+     * Helper method for common Plugin related functions
+     */
+    var PluginHelper = (function() {
+
+        return {
+            SETTING_TYPE_BOOLEAN: "boolean",
+            SETTING_TYPE_DATE: "date",
+            SETTING_TYPE_INTEGER: "int",
+            SETTING_TYPE_LONG: "long",
+            SETTING_TYPE_IDENTITY: "identity",
+            SETTING_TYPE_MANAGED_ATTRIBUTE: "managedAttribute",
+            SETTING_TYPE_SECRET: "secret",
+            SETTING_TYPE_STRING: "string",
+            SETTING_TYPE_APPLICATION: "application",
+            SETTING_TYPE_BUNDLE: "bundle",
+
+            getCsrfToken: function () {
+                return '#{base.csrfToken}';
+            },
+
+            getCurrentUserId: function () {
+                return '#{base.loggedInUser.id}';
+            },
+
+            getCurrentUsername: function () {
+                return '#{sp:escapeJavascript(base.loggedInUserName)}';
+            },
+
+            getCurrentUserDisplayableName: function () {
+                return '#{sp:escapeJavascript(base.loggedInUser.displayableName)}';
+            },
+
+            getPluginFileUrl: function (pluginName, file) {
+                return encodeURI('#{base.requestContextPath}/plugin/' + pluginName + '/' + file);
+            },
+
+            getPluginRestUrl: function(path) {
+                return encodeURI('#{base.requestContextPath}/plugin/rest/' + path);
+            },
+
+            retrieveSettings: function(retrieveSettingsError, retrieveSettingsSuccessful, options) {
+                let xhttp = new XMLHttpRequest(),
+                    pluginName = Ext.Object.fromQueryString(window.location.search).pn,
+                    pluginId = Ext.Object.fromQueryString(window.location.search).pid;
+
+                if (options) {
+                    pluginName = options.pluginNameOverride || pluginName;
+                    pluginId = options.pluginIdOverride || pluginId;
+                }
+
+                this.validatePluginName(pluginName, pluginId, function() {
+                    xhttp.open("GET", "#{base.requestContextPath}/rest/plugins/" + pluginId + "/settings", true);
+                    xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                    xhttp.setRequestHeader('Accept', 'application/json, text/plain, */*');
+                    xhttp.setRequestHeader('X-XSRF-TOKEN', PluginHelper.getCsrfToken());
+                    xhttp.onreadystatechange = function () {
+                        if (xhttp.readyState === 4) {
+                            if (xhttp.status === 200) {
+                                let settings = JSON.parse(xhttp.response);
+                                retrieveSettingsSuccessful(settings.map(PluginHelper.interpretSettingValues));
+                            } else {
+                                retrieveSettingsError(JSON.parse(xhttp.responseText).message);
+                            }
+                        }
+                    }
+                    xhttp.send();
+                },function() {
+                    retrieveSettingsError("#{msgs.ui_plugin_name_id_mismatch}");
+                });
+            },
+
+            interpretSettingValues: function(setting) {
+                // save the raw value in case it's needed by the plugin
+                setting.rawValue = setting.value;
+                switch (setting.dataType) {
+                    case PluginHelper.SETTING_TYPE_BOOLEAN:
+                        if(setting.value != null) {
+                            setting.value = (setting.value.toLowerCase() == "true");
+                        }
+                        break;
+                    case PluginHelper.SETTING_TYPE_INTEGER:
+                    case PluginHelper.SETTING_TYPE_LONG:
+                        if(setting.value != null) {
+                            setting.value = Number(setting.value);
+                        }
+                        break;
+                    case PluginHelper.SETTING_TYPE_DATE:
+                        if(setting.value != null) {
+                            setting.value = new Date(setting.value);
+                        }
+                        break;
+                    case PluginHelper.SETTING_TYPE_APPLICATION:
+                    case PluginHelper.SETTING_TYPE_BUNDLE:
+                    case PluginHelper.SETTING_TYPE_MANAGED_ATTRIBUTE:
+                    case PluginHelper.SETTING_TYPE_IDENTITY:
+                        if(setting.multiValue) {
+                            setting.value = setting.multiValueList;
+                            setting.multiValueList = undefined;
+                        } else {
+                            setting.value = setting.referencedObject;
+                        }
+                        break;
+
+                    case PluginHelper.SETTING_TYPE_STRING:
+                        if(setting.multiValue) {
+                            setting.value = setting.multiValueList;
+                            setting.multiValueList = undefined;
+                        }
+                        break;
+                }
+
+                return setting;
+            },
+
+            saveSettings: function(settings, saveSettingsError, saveSettingsSuccessful, options) {
+                if(settings != null) {
+                    let xhttp = new XMLHttpRequest(),
+                        pluginName = Ext.Object.fromQueryString(window.location.search).pn,
+                        pluginId = Ext.Object.fromQueryString(window.location.search).pid;
+
+                    if (options) {
+                        pluginName = options.pluginNameOverride || pluginName;
+                        pluginId = options.pluginIdOverride || pluginId;
+                    }
+
+                    this.validatePluginName(pluginName, pluginId, function() {
+                        xhttp.open("POST", "#{base.requestContextPath}/rest/plugins/" + pluginId, true);
+                        xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                        xhttp.setRequestHeader('Accept', 'application/json, text/plain, */*');
+                        xhttp.setRequestHeader('X-XSRF-TOKEN', PluginHelper.getCsrfToken());
+                        xhttp.onreadystatechange = function() {
+                            if (xhttp.readyState === 4 && xhttp.status != 200) {
+                                saveSettingsError(JSON.parse(xhttp.responseText).message);
+                            } else if (xhttp.readyState === 4 && xhttp.status === 200) {
+                                if(saveSettingsSuccessful) {
+                                    saveSettingsSuccessful();
+                                }
+                                PluginHelper.sendAlert(PluginHelper.AlertStatus.SUCCESS,
+                                    "#{msgs.ui_plugin_configuration_save_successful}");
+                            }
+                        };
+                        xhttp.send(JSON.stringify(settings));
+                    },function() {
+                        saveSettingsError("#{msgs.ui_plugin_name_id_mismatch}");
+                    });
+                }
+            },
+
+            validatePluginName: function(pluginName, pluginId, validationSucceeded, validationError) {
+                let xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "#{base.requestContextPath}/rest/plugins/" + pluginId + "/validatePluginName", true);
+                xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                xhttp.setRequestHeader('Accept', 'application/json, text/plain, */*');
+                xhttp.setRequestHeader('X-XSRF-TOKEN', PluginHelper.getCsrfToken());
+                xhttp.onreadystatechange = function() {
+                     if (xhttp.readyState === 4 && xhttp.status != 200) {
+                        validationError();
+                    } else if (xhttp.readyState === 4 && xhttp.status === 200) {
+                        validationSucceeded();
+                    }
+                };
+                xhttp.send(JSON.stringify(pluginName));
+            },
+
+            navigateToPluginsPage: function() {
+                window.location = "plugins.jsf#/plugins";
+            },
+
+            AlertStatus: {
+                ERROR: "ERROR",
+                WARN: "WARN",
+                INFO: "INFO",
+                SUCCESS: "SUCCESS"
+            },
+
+            clearAlerts: function() {
+                let alertElement = document.getElementById('sp-alert-area');
+                while(alertElement.firstChild) {
+                    alertElement.removeChild(alertElement.firstChild);
+                }
+            },
+
+            sendAlert: function(alertStatus, alertMessage) {
+                let elementClass = "alert-danger",
+                    iconClass = "fa-exclamation-triangle";
+
+                switch(alertStatus) {
+                    case this.AlertStatus.INFO:
+                        elementClass = "alert-info";
+                        iconClass = "fa-info-circle";
+                        break;
+
+                    case this.AlertStatus.SUCCESS:
+                        elementClass = "alert-success";
+                        iconClass = "fa-check-circle";
+                        break;
+
+                    case this.AlertStatus.WARN:
+                        elementClass = "alert-warning";
+                        break;
+                }
+
+                elementClass += " alert m-t-sm";
+                iconClass += " fa m-r-xs";
+
+                let newAlertDiv = document.getElementById('sp-alert-area').appendChild(document.createElement("div"));
+                newAlertDiv.setAttribute("class", elementClass);
+
+                let textElement = newAlertDiv.appendChild(document.createElement("p"));
+                textElement.setAttribute("class", "alert-title");
+
+                let iconElement = textElement.appendChild(document.createElement("i"));
+                iconElement.setAttribute("class", iconClass);
+
+                textElement.appendChild(document.createTextNode(alertMessage));
+            }
+
+        };
+    })();
+    //--><!]]>
+</script>

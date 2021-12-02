@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:sp="http://sailpoint.com/ui">
+  <sp:loadBundle basename="sailpoint.web.messages.iiqMessages" var="msgs"/>
+
+  <h:body>
+    <sp-register-config sp-config-key="workItemPriorityEditingEnabled"
+                        sp-config-value="#{sp:getSystemConfigurationValue('workItemPriorityEditingEnabled', false)}" />
+
+    <sp-register-config sp-config-key="uiApprovalItemsColumnsRole"
+                        sp-column-configs="#{sp:getColumnConfigJSON('uiApprovalItemsColumnsRole')}" />
+
+    <sp-register-config sp-config-key="uiApprovalItemsColumnsEntitlement"
+                        sp-column-configs="#{sp:getColumnConfigJSON('uiApprovalItemsColumnsEntitlement')}" />
+    <sp-register-config sp-config-key="uiBatchRequestItemsTableColumns"
+                                sp-column-configs="#{sp:getColumnConfigJSON('uiBatchRequestItemsTableColumns')}"/>
+    <span ng-include="'workitem/template/common-work-item-list.html'" class="m-l"/>
+
+  </h:body>
+</html>

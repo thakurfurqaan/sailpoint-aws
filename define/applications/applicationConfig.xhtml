@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2014 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+<f:view>
+    <script type="text/javascript">
+      function hasCredentialConfiguration() {
+        var hasConfiguration = #{applicationObject.hasCredentialConfiguration};
+        return hasConfiguration;
+      }
+    </script>
+    <div id="applicationConfigTabs" class="submenuContentBox x-hidden" style="border:0px">
+        <div id="attributesContent" class="submenuContentBox x-hidden" style="border:0px">
+
+            <p:outputPanel id="attributePanel">
+                <p:outputPanel rendered="#{sp:hasRight(facesContext, 'ManageApplication') and applicationObject.hasUndefinedSchemas}">
+                    <p:autoUpdate />
+                    <div>
+                        <h:inputHidden id="hiddenSchemaObjectTypeSelection" value="#{applicationObject.schemaObjectType}" />
+                        <button type="button" onclick="ApplicationPage.showAddSchemaWindow(#{applicationObject.undefinedScheamsJSON})"
+                                class="secondaryBtn" style="margin-bottom:10px">#{msgs.app_button_add_object_type}</button>
+                        <p:commandButton value="#{msgs.add_group_schema}"
+                                         id="addSchemaBtn"
+                                         style="display: none"
+                                         action="#{applicationObject.addGroupSchemaAction}"
+                                         update="@([id$=schemaData], [id$=errorPanel], [id$=templatesList])"
+                                         oncomplete="enterKeyCheck(Ext.get('appSchemasContent')); refreshTabPanel();">
+                        </p:commandButton>
+                    </div>
+                </p:outputPanel>
+                <c:if test="#{applicationObject.hasCredentialConfiguration}">
+                  <div id="credentialConfiguration" class="font10 marDown">#{msgs.app_credentials_enabled}</div>
+                </c:if>
+                    <ui:include src="#{applicationObject.attributesForm}"/>
+
+                    <h:panelGrid columns="2" columnClasses=",padded width100" styleClass="marUp width100">
+                        <p:commandButton id="testButton"
+                                           value="#{msgs.button_test_connection}"
+                                           styleClass="secondaryBtn"
+                                           action="#{applicationObject.testConnectorAction}"
+                                           onclick="startTest(this)"
+                                           oncomplete="endTest()"
+                                           update="@([id$=testResultsPanel], [id$=errorPanel])"/>
+                        <p:outputPanel id="testResultsPanel">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <h:messages infoClass="formInfo" warnClass="formWarn" errorClass="formError" fatalClass="formError"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div id="testResultsDiv" class="#{applicationObject.testSuccess ? 'successText' : 'failText'}">
+                                            <h:outputText value="#{applicationObject.testResult}"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </p:outputPanel>
+                        <p:commandButton value="#{msgs.discover_schemas}"
+                                           styleClass="secondaryBtn"
+                                           style="5px 0px"
+                                           action="#{applicationObject.discoverSchemasAction}"
+                                           update="@([id$=schemaData], [id$=errorPanel])"
+                                           rendered="#{not applicationObject.accountSchemaDefined
+                                                    and applicationObject.supportsSchemaDiscovery
+                                                    and sp:hasRight(facesContext, 'ManageApplication')}"
+                                           oncomplete="enterKeyCheck(Ext.get('appSchemasContent')); refreshTabPanel();"/>
+                    </h:panelGrid>
+            </p:outputPanel>
+        </div>  <!-- attributesContent -->
+
+        <div id="schemaContent" class="x-hidden">
+            <div id="loadingSchemaDiv" class="waitingForDataDiv" style="position:absolute;z-index:1;display: none">
+                <h:graphicImage url="/images/progress.gif" style="padding:5px;vertical-align:middle"/>
+                #{msgs.loading_data}
+            </div>
+            <p:outputPanel id="schemaPanel">
+                  
+                    <p:outputPanel id="schemaData" rendered="#{ (applicationObject.currentTab eq 'schemaContent'
+                                                                         or applicationObject.schemaLoaded )
+                                                                       and ( applicationObject.appReconfMode == false
+                                                                         or applicationObject.schemaMappingSaved == true)}">
+                        <div id="appSchemasContent">
+                            <ui:include src="applicationSchemas.xhtml"/>
+                        </div>
+                    </p:outputPanel>
+                    <p:outputPanel id="reconfigchemaData" rendered="#{applicationObject.appReconfMode == true
+                                                                               and applicationObject.schemaMappingSaved == false}">
+                        <div id="appSchemasContent">
+                            <ui:include src="reconfigApplicationSchemas.xhtml"/>
+                        </div>
+                    </p:outputPanel>
+
+            </p:outputPanel>
+        </div>  <!-- schemaContent -->
+
+        <div id="templateContent" class="submenuContentBox x-hidden" >
+          <div class="spContentTitle">
+            <h:outputText value="#{msgs.templates}"/>
+          </div>
+
+          <ui:fragment rendered="#{applicationObject.appReconfMode == true and applicationObject.provPolicyUpdated == false}">
+          <div>
+              <h:panelGrid columns="2" columnClasses="nowrap vertical-align" styleClass="paddedTbl topAlignTbl appInfoTable">
+                  <h:selectOneRadio id="radioBtnProvPolicies" layout="pageDirection" value="#{applicationObject.templateChoice}">
+                      <f:selectItem itemLabel = "#{msgs.app_reconf_old_prov_policies}" itemValue="old"/>
+                      <f:selectItem itemLabel = "#{msgs.app_reconf_new_prov_policies}" itemValue="new"/>
+                  </h:selectOneRadio>
+             </h:panelGrid>
+             <h:commandButton styleClass="secondaryBtn" value = "#{msgs.app_reconf_provision_pol_confirm_btn_value}" id="Confirm" onclick="modifyProvPolicies();return false;"/>
+
+          </div>
+          </ui:fragment>
+          
+          <ui:fragment rendered="#{applicationObject.appReconfMode == false or (applicationObject.appReconfMode == true and applicationObject.provPolicyUpdated == true)}">
+          <div>
+            <ui:include src="/include/form/editor/formEditor.xhtml">
+              <ui:param name="formEditor" value="#{applicationObject.formEditor}"/>
+              <ui:param name="showApplication" value="false"/>
+              <ui:param name="hideTitle" value="false"/>
+              <ui:param name="showUsageListByObjectType" value="true"/>
+              <ui:param name="beanType" value="application"/>
+            </ui:include>
+          </div>
+          </ui:fragment>
+        </div> <!-- templateContent -->
+
+
+    </div> <!-- ApplicationObjectTabs -->
+</f:view>
+</ui:composition>
+</body>
+</html>

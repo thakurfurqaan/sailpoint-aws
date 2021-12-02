@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:t="http://myfaces.apache.org/tomahawk" xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:sp="http://sailpoint.com/ui">
+    <h:body>
+        <ui:composition>
+            <script type="text/javascript">
+                <!--//--><![CDATA[//><!--
+                //Function to show and hide OAuth2 parameters based on grant type
+                function granttypechanged(){
+                    var x = document.getElementById("editForm:selectgranttypeId").value;
+                    if(x == "CLIENT_CREDENTIALS"){
+                        document.getElementById("refreshTokenDiv").style.display = 'none';
+                        document.getElementById("jwtDiv").style.display = "none";
+                        document.getElementById("clientIdDiv").style.display = "";
+                        document.getElementById("clientSecretDiv").style.display = "";
+                        document.getElementById("client_id_star").style.display = "";
+                        document.getElementById("client_secret_star").style.display = "";
+                        document.getElementById("passwordGrantDiv").style.display = "none";
+                    } else if(x == "REFRESH_TOKEN"){
+                        document.getElementById("refreshTokenDiv").style.display = "";
+                        document.getElementById("jwtDiv").style.display = "none";
+                        document.getElementById("clientIdDiv").style.display = "";
+                        document.getElementById("clientSecretDiv").style.display = "";
+                        document.getElementById("client_id_star").style.display = "";
+                        document.getElementById("client_secret_star").style.display = "";
+                        document.getElementById("passwordGrantDiv").style.display = "none";
+                    } else if(x == "JWT_BEARER"){
+                        document.getElementById("refreshTokenDiv").style.display = "none";
+                        document.getElementById("jwtDiv").style.display = "";
+                        document.getElementById("clientIdDiv").style.display = "";
+                        document.getElementById("clientSecretDiv").style.display = "";
+                        document.getElementById("client_id_star").style.display = "none";
+                        document.getElementById("client_secret_star").style.display = "none";
+                        document.getElementById("passwordGrantDiv").style.display = "none";
+                    } else if(x == "PASSWORD"){
+                        document.getElementById("refreshTokenDiv").style.display = "none";
+                        document.getElementById("jwtDiv").style.display = "none";
+                        document.getElementById("clientIdDiv").style.display = "none";
+                        document.getElementById("clientSecretDiv").style.display = "none";
+                        document.getElementById("client_id_star").style.display = "none";
+                        document.getElementById("client_secret_star").style.display = "none";
+                        document.getElementById("passwordGrantDiv").style.display = "";
+                    }
+                }
+                
+                
+                function validateOauth2Params(){
+                  var selectedOauthType = document.getElementById("editForm:selectgranttypeId").value;
+                  
+                  var tokenUrlId = document.getElementById("editForm:tokenUrlId").value;
+                  Validator.validateNonBlankString(tokenUrlId, '#{msgs.err_oauth_token_url}');
+                  
+                  if (selectedOauthType == "REFRESH_TOKEN") {
+                    var clientId = document.getElementById("editForm:clientIdId").value;
+                    Validator.validateNonBlankString(clientId, '#{msgs.err_oauth_client_id}');
+                    var clientSecret = document.getElementById("editForm:clientSecretId").value;
+                    Validator.validateNonBlankString(clientSecret, '#{msgs.err_oauth_client_secret}');
+                  } else if (selectedOauthType == "PASSWORD") {
+                    var username = document.getElementById("editForm:oauth2Username").value;
+                    Validator.validateNonBlankString(username, '#{msgs.err_oauth_resource_owner_username_empty}');
+                    var password = document.getElementById("editForm:oauth2Password").value;
+                    Validator.validateNonBlankString(password, '#{msgs.err_oauth_resource_owner_password_empty}');
+                  }
+                  
+                  if (selectedOauthType == "REFRESH_TOKEN") {
+                    var refreshTokenId = document.getElementById("editForm:refreshTokenId").value;
+                    Validator.validateNonBlankString(refreshTokenId, '#{msgs.err_oauth_refresh_token}');
+                  } else if (selectedOauthType == "JWT_BEARER"){
+                    var privateKeyExists = document.getElementById("editForm:privateKeyExists").value;
+                    if(!privateKeyExists) {
+                      var privateKey = document.getElementById("editForm:private_key").value;
+                      Validator.validateNonBlankString(privateKey, "#{msgs.err_oauth_private_key_empty}");                
+                    }
+                    var privateKeyPassword = document.getElementById("editForm:private_key_password").value;
+                    Validator.validateNonBlankString(privateKeyPassword, "#{msgs.err_oauth_private_key_password_empty}");
+                  }
+                }
+       
+              //--><!]]>
+            </script>
+            <div class="row" style='margin-top: 15px'>
+                <div class="col-md-3" style="text-align:right">
+                    <label for="name">
+                        <h:outputText value="#{msgs.label_grant_type}" />
+                    </label>
+                    <h:graphicImage id="imgHlpGrantType"
+                        styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                        alt="#{help.help_con_form_oauth2_grant_type}" />
+                </div>
+                <div class="col-md-3">
+                    <h:selectOneMenu id="selectgranttypeId"
+                        style="width:100%;padding: 6px 0px" name="granttype"
+                        disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                        readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                        value="#{applicationObject.attributes['grant_type']}"
+                        class="form-control" onchange="granttypechanged();">
+                        <f:selectItems
+                            value="#{manageRest.oauth2GrantTypeList}" />
+                    </h:selectOneMenu>
+                </div>
+            </div>
+            <div class="row" style='margin-top: 15px'>
+                <div class="col-md-3" style="text-align:right;">
+                    <label for="name">
+                        <h:outputText value="#{msgs.label_oauth_token_url}" />
+                        <h:outputText styleClass="requiredText" value=" *"/>
+                    </label>
+                    <h:graphicImage id="imgHlpTokenUrl"
+                        styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                        alt="#{help.help_con_form_token_url}" />
+                </div>
+                <div class="col-md-6">
+                    <h:inputText
+                        value="#{applicationObject.attributes['token_url']}"
+                        id="tokenUrlId" class="form-control" style="width:100%;padding: 6px 0px" />
+                </div>
+            </div>
+            <div id='jwtDiv'>
+                <div class="row" style='margin-top: 15px'>
+                    <div class="col-md-3" style="text-align:right;">
+                        <label for="name">
+                            <h:outputText
+                                value="#{msgs.con_form_jwt_private_key}" />
+                            <h:outputText styleClass="requiredText" value=" *"/>
+                        </label>
+                        <h:graphicImage id="imgHlpPrivateKey"
+                            styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                            alt="#{help.help_con_form_jwt_private_key}" />
+                    </div>
+                    <div class="col-md-6">
+                        <ui:include src="privateKey.xhtml"/>
+                    </div>
+                </div>
+                <div class="row" style='margin-top: 15px'>
+                    <div class="col-md-3" style="text-align:right;">
+                        <label for="name">
+                            <h:outputText
+                                value="#{msgs.con_form_jwt_private_key_password}" />
+                            <h:outputText styleClass="requiredText" value=" *"/>
+                        </label>
+                        <h:graphicImage id="imgHlpPrivateKeyPassword"
+                            styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                            alt="#{help.help_con_form_jwt_private_key_password}" />
+                    </div>
+                    <div class="col-md-6">
+                        <sp:inputSecret id="private_key_password"
+                           value="#{applicationObject.attributes['private_key_password']}"
+                           redisplay="true" class="form-control" size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style='margin-top: 15px' id="clientIdDiv">
+                <div class="col-md-3" style="text-align:right;">
+                    <label for="name">
+                        <h:outputText value="#{msgs.label_oauth_client_id}" />
+                        <span id="client_id_star">
+                        <h:outputText  styleClass="requiredText" value=" *"/>
+                        </span>
+                    </label>
+                    <h:graphicImage id="imgHlpClientId"
+                        styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                        alt="#{help.help_con_form_client_id}" />
+                </div>
+                <div class="col-md-6">
+                    <h:inputText
+                        value="#{applicationObject.attributes['client_id']}"
+                        id="clientIdId" class="form-control" style="width:100%;padding: 6px 0px" />
+                </div>
+            </div>
+            <div class="row" style='margin-top: 15px' id="clientSecretDiv">
+                <div class="col-md-3" style="text-align:right;">
+                    <label for="name">
+                        <h:outputText
+                            value="#{msgs.label_oauth_client_secret}" />
+                            <span id="client_secret_star">
+                        <h:outputText styleClass="requiredText" value=" *"/>
+                        </span>
+                    </label>
+                    <h:graphicImage id="imgHlpClientSecret"
+                        styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                        alt="#{help.help_con_form_client_secret}" />
+                </div>
+                <div class="col-md-6">
+                    <sp:inputSecret
+                        value="#{applicationObject.attributes['client_secret']}"
+                        id="clientSecretId" redisplay="true" class="form-control" 
+                        style="width:100%;padding: 6px 0px" />
+                </div>
+            </div>
+            <div class="row" style='margin-top: 15px' id='refreshTokenDiv'>
+                <div class="col-md-3" style="text-align:right;">
+                    <label for="name">
+                        <h:outputText
+                            value="#{msgs.label_oauth_refresh_token}" />
+                        <h:outputText styleClass="requiredText" value=" *"/>
+                    </label>
+                    <h:graphicImage id="imgHlpRefreshToken"
+                        styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                        alt="#{help.help_con_form_refresh_token}" />
+                </div>
+                <div class="col-md-6">
+                    <sp:inputSecret
+                        value="#{applicationObject.attributes['refresh_token']}"
+                        id="refreshTokenId" redisplay="true" class="form-control" 
+                        style="width:100%;padding: 6px 0px" />
+                </div>
+            </div>
+            <div id="passwordGrantDiv">
+              <div class="row" style='margin-top: 15px'>
+                  <div class="col-md-3" style="text-align:right;">
+                      <label for="name">
+                          <h:outputText
+                              value="#{msgs.label_oauth_resource_owner_username}" />
+                          <h:outputText styleClass="requiredText" value=" *"/>
+                      </label>
+                      <h:graphicImage id="imgHlpOauthUsername"
+                          styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                          alt="#{help.help_con_form_oauth2_username}" />
+                  </div>
+                  <div class="col-md-6">
+                      <h:inputText
+                          value="#{applicationObject.attributes['resourceOwnerUsername']}"
+                          id="oauth2Username" redisplay="true" class="form-control" 
+                          style="width:100%;padding: 6px 0px" />
+                  </div>
+              </div>
+              <div class="row" style='margin-top: 15px'>
+                  <div class="col-md-3" style="text-align:right;">
+                      <label for="name">
+                          <h:outputText
+                              value="#{msgs.label_oauth_resource_owner_password}" />
+                          <h:outputText styleClass="requiredText" value=" *"/>
+                      </label>
+                      <h:graphicImage id="imgHlpOauthPassword"
+                          styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                          alt="#{help.help_con_form_oauth2_password}" />
+                  </div>
+                  <div class="col-md-6">
+                      <sp:inputSecret
+                          value="#{applicationObject.attributes['resourceOwnerPassword']}"
+                          id="oauth2Password" redisplay="true" class="form-control" 
+                          style="width:100%;padding: 6px 0px" />
+                  </div>
+              </div>
+            </div>
+        </ui:composition>
+    </h:body>
+</html>

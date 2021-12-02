@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>${helpPageTitle}</title>
+  <meta name="description" content="${helpPageTitle}">
+  <meta name="author" content="SailPoint">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="${helpPageCSSPath}">
+  <link rel="stylesheet" href="${helpPageCustomCSSPath}">
+</head>
+<body>
+  <header role="banner">
+    <nav class="container" role="navigation">
+      <div id="logo"><img src="${helpPageLogoPath}" alt="${helpPageLogoDesc}" /></div>
+    </nav>
+    <button id="close-window-btn" class="btn btn-close"
+            type="button" onclick="window.close()" aria-label="Close Help Window">
+        &times;
+    </button>
+  </header>
+  
+  <main role="main">
+    <article class="container" role="article">
+      <section role="region">
+
+      ${helpPageContent}
+
+      </section>
+    </article>
+  </main>
+
+  <!-- scroll to top button -->
+  <button onclick="topFunction()" id="scroll-to-top-btn" class="btn btn-to-top"
+          aria-label="Click to scroll to the top" type="button">
+      &#8679;
+  </button>
+  <hr>
+  <footer role="contentinfo">
+    <p class="footnote">SailPoint &copy; 2019</p>
+  </footer>
+  <script>
+    // When the user scrolls down 60px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+      if (document.body.scrollTop > 60 || document.documentElement.scrollTop > 60) {
+        document.getElementById("scroll-to-top-btn").style.display = "block";
+      } else {
+        document.getElementById("scroll-to-top-btn").style.display = "none";
+      }
+    }
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
+</body>
+</html>

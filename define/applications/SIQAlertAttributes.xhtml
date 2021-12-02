@@ -1,0 +1,109 @@
+<!--
+  ~ /* (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. */
+  -->
+
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+    <script type="text/javascript">
+        Ext.onReady(function () {
+
+            // This is our validation hook
+            Page.on('beforeSave', function() {
+                if (!hasCredentialConfiguration()) {
+                    var errors = Validator.getErrors();
+                    if (errors &amp;&amp; errors.length > 0) {
+                        Validator.displayErrors('appErrorsTop');
+                        return false;
+                    }
+                }
+                return true;
+            });
+
+        });
+    </script>
+    <f:view>
+    <div id="alertSettings" class="spContent">
+        <h:outputText styleClass="sectionHeader" value="#{msgs.con_siq_alert_header}" />
+        <table class="spTable" style="border:0px" cellspacing="0">
+            <tr>
+                <td class="titleColumn">
+                    <h:outputText styleClass="subSectionHeader" value="#{msgs.siq_conn_header}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="titleColumn">
+                    <h:outputText style="padding:5px; white-space: normal" value="${msgs.con_form_siq_base_url}" />
+                </td>
+
+                <td class="certScheduleHelpCol">
+                    <h:graphicImage id="imgHlpBaseUrl" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                    alt="#{help.con_help_siq_base_url}"/>
+
+                </td>
+                <td class="certScheduleOptionCol">
+                    <h:inputText id="baseUrl"
+                                 value="#{schemaDTO.config['baseURL']}"
+                                 size="80"
+                                 disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                 readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="titleColumn">
+                    <h:outputText style="padding:5px; white-space: normal" value="${msgs.con_form_siq_user}" />
+                </td>
+
+                <td class="certScheduleHelpCol">
+                    <h:graphicImage id="imgHlpElasticUsername" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                    alt="#{help.con_help_siq_alert_username}"/>
+
+                </td>
+                <td class="certScheduleOptionCol">
+                    <h:inputText id="elasticUsername"
+                                 value="#{schemaDTO.config['username']}"
+                                 size="80"
+                                 disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                 readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="titleColumn">
+                    <h:outputText style="padding:5px; white-space: normal" value="${msgs.con_form_siq_password}" />
+                </td>
+
+                <td class="certScheduleHelpCol">
+                    <h:graphicImage id="imgHlpElasticPassword" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                    alt="#{help.con_help_siq_alert_password}"/>
+
+                </td>
+                <td class="certScheduleOptionCol">
+                    <sp:inputSecret id="elasticPassword"
+                                 value="#{schemaDTO.config['password']}"
+                                 size="80"
+                                 autocomplete="off"
+                                 redisplay="true"
+                                 disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                 readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    </f:view>
+</ui:composition>
+
+</body>
+
+</html>

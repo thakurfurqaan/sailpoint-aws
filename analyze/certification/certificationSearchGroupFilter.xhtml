@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+    
+  <div style="margin-top:10px; margin-bottom:10px">
+  <script type="text/javascript">
+    //<![CDATA[
+
+      function addGridFilter()
+      {
+          Ext.getDom('#{formName}:certificationSearchGroupFilterAddBtn').click();
+      }
+
+      function removeGridFilter(filterId)
+      {
+          Ext.getDom('#{formName}:certificationSearchGroupSelectedFilter').value = filterId;
+          Ext.getDom('#{formName}:certificationSearchGroupFilterRemoveBtn').click();
+      }
+
+      function updateGroupFilterDefinition(filterId, val) {
+        var input = Ext.getDom('groupDefinitionInput_'+filterId).firstChild;
+        input.value = val;
+        SailPoint.Utils.styleSelects();
+      }
+
+      function maskDefinitionSelect(id) {
+        Ext.getDom('groupDefinitionSelect_'+id).style.display = 'none';
+        Ext.getDom('groupDefinitionLabel_'+id).style.display = 'none';
+        Ext.getDom('groupDefinitionLoading_'+id).style.display = '';
+      }
+    //]]>
+  </script>    
+  
+  <p:outputPanel id="certificationSearchGroupFilter">
+  
+    <table class="paddedTbl">
+    
+    <t:dataList value="#{searchBean.groupFilter.filters}" var="filter">
+      <tr>
+        <td style="text-align: right; width:45px">
+          <h:outputText value="#{msgs.group}" styleClass="textBold" />
+        </td>
+        <td align="left">
+          <h:selectOneMenu id="groupFactorySelect_#{filter.id}" value="#{filter.factory}">
+            <f:selectItems value="#{groupFactoryList.factoryOptions}" />
+            <p:ajax event="change"
+                         listener="#{searchBean.groupFilter.updateFilter}" 
+                         onstart="maskDefinitionSelect('#{filter.id}')"
+                         update="@([id$=certificationSearchGroupFilter])"
+                         oncomplete="updateGroupFilterDefinition('#{filter.id}', Ext.getDom('groupDefinitionSelect_#{filter.id}').value)"/>
+          </h:selectOneMenu>
+        </td>
+        <td style="text-align: right; width:45px">
+            <span id="groupDefinitionLoading_#{filter.id}" style="display:none">
+                <h:graphicImage url="/images/progress.gif" style="padding:5px;vertical-align:middle"/>
+                  #{msgs.loading_data}
+            </span>
+            <span class="textBold" id="groupDefinitionLabel_#{filter.id}">#{msgs.label_value}</span>
+        </td>
+        <td style="vertical-align: middle; text-align: right;">
+          <!-- PH: have to do an old-fashioned select.  Ajax-built f:selectItems dont pass validation -->
+          <select name="groupDefinitionSelect_#{filter.id}" id="groupDefinitionSelect_#{filter.id}"
+                  onchange="updateGroupFilterDefinition('#{filter.id}', this.value)">
+            
+            <t:dataList value="#{filter.definitionChoices}" var="choice">
+              <ui:fragment rendered="#{filter.definition eq choice.value}">
+                <option selected="selected" value="#{choice.value}">#{choice.label}</option>
+              </ui:fragment>
+              <ui:fragment rendered="#{!(filter.definition eq choice.value)}">
+                <option value="#{choice.value}">#{choice.label}</option>
+              </ui:fragment>
+            </t:dataList>
+            
+          </select>
+        </td>
+        <td style="vertical-align: middle; text-align: left;">
+          <!--  PH: Have to wrap the input with a span so that we can find it by its id.  h:inputText ids
+          are assigned before the ui:repeat runs in ajax -->
+          <span id="groupDefinitionInput_#{filter.id}">
+            <h:inputHidden value="#{filter.definition}" />
+          </span>
+          <span>
+            <h:graphicImage url="/images/icons/plus.png"
+                            height="20" width="20"
+                            class="pointer"
+                            onclick="addGridFilter();" />
+          </span>
+          <span>
+            <h:graphicImage url="/images/icons/minus.png"
+                            height="20" width="20"
+                            style="#{filter.id eq '0' ? 'visibility:hidden' : ''}"
+                            class="pointer" 
+                            onclick="removeGridFilter('#{filter.id}');" />
+          </span>
+        </td>
+      </tr>
+    </t:dataList>
+      <tr>
+        <td style="vertical-align: top; text-align: center" colspan="3">
+           
+          <p:commandButton  id="certificationSearchGroupFilterAddBtn"
+                              style="display:none"
+                              action="#{searchBean.groupFilter.addFilter}"
+                              update="@([id$=certificationSearchGroupFilter])"
+                              oncomplete="SailPoint.Utils.styleSelects();"/>
+                              
+          <p:commandButton  id="certificationSearchGroupFilterResetBtn"
+                              style="display:none"
+                              action="#{searchBean.groupFilter.reset}"
+                              update="@([id$=certificationSearchGroupFilter])"
+                              oncomplete="SailPoint.Utils.styleSelects();"/>
+                              
+          <p:commandButton  id="certificationSearchGroupFilterRemoveBtn"
+                              style="display:none"
+                              action="#{searchBean.groupFilter.removeFilter}"
+                              update="@([id$=certificationSearchGroupFilter])"
+                              oncomplete="SailPoint.Utils.styleSelects();"/>
+                              
+          <h:inputHidden id="certificationSearchGroupSelectedFilter" value="#{searchBean.groupFilter.selectedFilterId}" />
+        </td>
+      </tr>
+    </table>
+  </p:outputPanel>
+  </div>
+</ui:composition>
+
+</body>
+</html>

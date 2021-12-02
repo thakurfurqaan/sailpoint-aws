@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2014 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+  <ui:composition>
+    <f:view>
+
+                  <div id="rulesContent" class="submenuContentBox x-hidden" style="border:0px">
+                    <div class="spContentTitle">
+                      <h:outputText value="#{msgs.aggregation_rules}"/>
+                    </div>
+                    <p:outputPanel id="rulesPanel">
+                      <div class="spContent">
+                          <table cellspacing="0" cellpadding="5" class="paddedTbl">
+                            <tr>
+                              <td><h:outputText styleClass="textBold" value="#{msgs.label_correlation_rule}" /></td>
+                              <td>
+                                <h:selectOneMenu id="correlationRule" style="width:300px"
+                                  value="#{applicationObject.correlationRule}"
+                                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                                  <f:selectItems value="#{applicationObject.correlationRules}" />
+                                </h:selectOneMenu>
+                              </td>
+                              <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                              <td>
+                                     <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                                         onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:correlationRule').value,
+                                                                             'Correlation',
+                                                                             Ext.get('editForm:refreshRulesButton'))" />
+                              </td>
+                              </ui:fragment>
+                            </tr>
+                            <tr>
+                              <td><h:outputText styleClass="textBold" value="#{msgs.label_creation_rule}" /></td>
+                              <td>
+                                <h:selectOneMenu id="creationRule" style="width:300px"
+                                  value="#{applicationObject.creationRule}"
+                                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                                  <f:selectItems value="#{applicationObject.creationRules}" />
+                                </h:selectOneMenu>
+                              </td>
+                              <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                              <td>
+                                  <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                                         onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:creationRule').value,
+                                                                             'IdentityCreation',
+                                                                             Ext.get('editForm:refreshRulesButton'))" />
+                              </td>
+                              </ui:fragment>
+                            </tr>
+                            <tr>
+                              <td><h:outputText styleClass="textBold" value="#{msgs.label_mgr_correlation_rule}" /></td>
+                              <td>
+                                <h:selectOneMenu id="managerCorrelationRule" style="width:300px"
+                                  value="#{applicationObject.managerCorrelationRule}"
+                                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                                  <f:selectItems value="#{applicationObject.managerCorrelationRules}" />
+                                </h:selectOneMenu>
+                              </td>
+                              <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                              <td>
+                                  <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                                         onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:managerCorrelationRule').value,
+                                                                             'ManagerCorrelation',
+                                                                             Ext.get('editForm:refreshRulesButton'))" />
+                              </td>
+                              </ui:fragment>
+                            </tr>
+                            <tr>
+                              <td><h:outputText styleClass="textBold" value="#{msgs.label_customization_rule}" /></td>
+                              <td>
+                                <h:selectOneMenu id="CustomizationRule" style="width:300px"
+                                  value="#{applicationObject.customizationRule}"
+                                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                                  <f:selectItems value="#{applicationObject.customizationRules}" />
+                                </h:selectOneMenu>
+                              </td>
+                              <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                              <td>
+                                  <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                                         onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:CustomizationRule').value,
+                                                                             'ResourceObjectCustomization',
+                                                                             Ext.get('editForm:refreshRulesButton'))" />
+                              </td>
+                              </ui:fragment>
+                            </tr>
+                            <tr>
+                              <td><h:outputText styleClass="textBold" value="#{msgs.label_managed_attribute_customization_rule}" /></td>
+                              <td>
+                                <h:selectOneMenu id="ManagedAttributeCustomizationRule" style="width:300px"
+                                  value="#{applicationObject.managedAttributeCustomizationRule}"
+                                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                                  <f:selectItems value="#{applicationObject.managedAttributeCustomizationRules}" />
+                                </h:selectOneMenu>
+                              </td>
+                              <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                              <td>
+                                  <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                                         onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:ManagedAttributeCustomizationRule').value,
+                                                                             'ManagedAttributePromotion',
+                                                                             Ext.get('editForm:refreshRulesButton'))" />
+                              </td>
+                              </ui:fragment>
+                            </tr>
+                          </table>
+                        </div>
+                            
+                          <div class="spContentTitle">
+                            <h:outputText value="#{msgs.provisioning_rules}"/>
+                          </div>
+
+                          <div class="spContent">
+                            <table cellspacing="0" cellpadding="5" class="paddedTbl">
+                              <tr>
+                                <td><h:outputText styleClass="textBold" value="#{msgs.label_before_provisioning_rule}" /></td>
+                                <td>
+                                  <h:selectOneMenu id="beforeProvisioningRule" style="width:300px"
+                                    value="#{applicationObject.object.beforeProvisioningRule}"
+                                    disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                    readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                                    <f:selectItems value="#{applicationObject.beforeProvisioningRules}" />
+                                  </h:selectOneMenu>
+                                </td>
+                                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                                <td>
+                                       <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                                           onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:beforeProvisioningRule').value,
+                                                                               'BeforeProvisioning',
+                                                                               Ext.get('editForm:refreshRulesButton'))" />
+                                </td>
+                                </ui:fragment>
+                              </tr>   
+                              
+                              <tr>
+                                <td><h:outputText styleClass="textBold" value="#{msgs.label_after_provisioning_rule}" /></td>
+                                <td>
+                                  <h:selectOneMenu id="afterProvisioningRule" style="width:300px"
+                                    value="#{applicationObject.object.afterProvisioningRule}"
+                                    disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                    readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                                    <f:selectItems value="#{applicationObject.afterProvisioningRules}" />
+                                  </h:selectOneMenu>
+                                </td>
+                                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                                <td>
+                                       <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                                           onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:afterProvisioningRule').value,
+                                                                               'AfterProvisioning',
+                                                                               Ext.get('editForm:refreshRulesButton'))" />
+                                </td>
+                                </ui:fragment>
+                              </tr>
+                            </table>
+                          </div>
+
+
+                      <div class="spContentTitle">
+                        <h:outputText value="#{msgs.schema_rules}"/>
+                      </div>
+
+                      <div class="spContent">
+                        <table cellspacing="0" cellpadding="5" class="paddedTbl">
+
+                          <!-- Schema level rules -->
+                          <t:dataList id="schemaRules" value="#{applicationObject.schemaDTOs}" var="schemaDto" rowKey="#{schemaDto.objectType}">
+                            <ui:fragment rendered="#{schemaDto.showSchemaRules}">
+                              <tr>
+                                <th>
+                                  <h:outputText styleClass="spContentTitle" value="#{schemaDto.objectType}"/>
+                                </th>
+                              </tr>
+                                <ui:fragment rendered="#{schemaDto.supportsCorrelationRule}">
+                                  <tr>
+                                    <td><h:outputText styleClass="textBold" value="#{msgs.label_correlation_rule}" /></td>
+                                    <td>
+                                      <h:selectOneMenu id="schemaCorrelationRule" style="width:300px"
+                                                       value="#{schemaDto.correlationRule}"
+                                                       disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                                       readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                                        <f:selectItems value="#{schemaDto.correlationRules}" />
+                                      </h:selectOneMenu>
+                                    </td>
+                                    <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                                      <td>
+                                        <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                                               onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:schemaRules:r_id_#{schemaDto.objectType}:schemaCorrelationRule').value,
+                                                                                     '#{schemaDto.correlationRuleType}',
+                                                                                     Ext.get('editForm:refreshRulesButton'))" />
+                                      </td>
+                                    </ui:fragment>
+                                  </tr>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{schemaDto.supportsCreationRule}">
+                                  <tr>
+                                    <td><h:outputText styleClass="textBold" value="#{msgs.label_creation_rule}" /></td>
+                                    <td>
+                                      <h:selectOneMenu id="schemaCreationRule" style="width:300px"
+                                                       value="#{schemaDto.creationRule}"
+                                                       disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                                       readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                                        <f:selectItems value="#{schemaDto.creationRules}" />
+                                      </h:selectOneMenu>
+                                    </td>
+                                    <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                                      <td>
+                                        <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                                               onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:schemaRules:r_id_#{schemaDto.objectType}:schemaCreationRule').value,
+                                                                                     '#{schemaDto.creationRuleType}',
+                                                                                     Ext.get('editForm:refreshRulesButton'))" />
+                                      </td>
+                                    </ui:fragment>
+                                  </tr>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{schemaDto.supportsCustomizationRule}">
+                                  <tr>
+                                    <td><h:outputText styleClass="textBold" value="#{msgs.label_customization_rule}" /></td>
+                                    <td>
+                                      <h:selectOneMenu id="schemaCustomizationRule" style="width:300px"
+                                                       value="#{schemaDto.customizationRule}"
+                                                       disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                                       readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                                        <f:selectItems value="#{schemaDto.customizationRules}" />
+                                      </h:selectOneMenu>
+                                    </td>
+                                    <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                                      <td>
+                                        <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                                               onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:schemaRules:r_id_#{schemaDto.objectType}:schemaCustomizationRule').value,
+                                                                                     '#{schemaDto.customizationRuleType}',
+                                                                                     Ext.get('editForm:refreshRulesButton'))" />
+                                      </td>
+                                    </ui:fragment>
+                                  </tr>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{schemaDto.supportsRefreshRule}">
+                                  <tr>
+                                    <td><h:outputText styleClass="textBold" value="#{msgs.refresh_rule}" /></td>
+                                    <td>
+                                      <h:selectOneMenu id="schemaRefreshRule" style="width:300px"
+                                                       value="#{schemaDto.refreshRule}"
+                                                       disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                                       readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                                        <f:selectItems value="#{schemaDto.refreshRules}" />
+                                      </h:selectOneMenu>
+                                    </td>
+                                    <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+                                      <td>
+                                        <input type="button" value="#{msgs.button_ellipsis}" class="ruleEditorBtn"
+                                               onclick="SailPoint.Rule.Editor.edit(Ext.getDom('editForm:schemaRules:r_id_#{schemaDto.objectType}:schemaRefreshRule').value,
+                                                                                     '#{schemaDto.refreshRuleType}',
+                                                                                     Ext.get('editForm:refreshRulesButton'))" />
+                                      </td>
+                                    </ui:fragment>
+                                  </tr>
+                                </ui:fragment>
+                            </ui:fragment>
+                          </t:dataList>
+
+                        </table>
+                      </div>
+
+
+
+
+
+                    <p:commandButton id="refreshRulesButton"
+                                       style="display:none"
+                                       immediate="true"
+                                       update="@([id$=rulesPanel])"/>
+                    </p:outputPanel>
+
+      <ui:fragment rendered="#{applicationObject.rulesForm ne null}">
+        <ui:include src="#{applicationObject.rulesForm}"/>
+      </ui:fragment>
+                  </div> <!-- rulesContent -->
+    </f:view>
+  </ui:composition>
+
+</body>
+</html>

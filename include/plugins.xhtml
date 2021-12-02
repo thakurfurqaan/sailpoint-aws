@@ -1,0 +1,34 @@
+
+<!-- (c) Copyright 2016 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:c="http://java.sun.com/jstl/core">
+
+<h:head>
+    <ui:composition>
+
+    <c:if test="#{base.loggedIn and plugins.enabled}">
+        <ui:include src="../plugins/pluginHelper.xhtml" />
+
+        <c:if test="#{plugins.angularSnippetEnabled and not empty plugins.scriptUrls}">
+            <script type="text/javascript" src="#{base.requestContextPath}/ui/js/bundles/SailPointBundleLibrary.js?#{debug.revision}"></script>
+            <ui:include src="../plugins/pluginHelperSnippet.xhtml" />
+        </c:if>
+
+        <ui:repeat id="pluginScripts" value="#{plugins.scriptUrls}" var="scriptUrl">
+            <script type="text/javascript" src="#{base.requestContextPath}#{scriptUrl}?#{debug.revision}" defer="defer"></script>
+        </ui:repeat>
+
+        <ui:repeat id="pluginStyleSheets" value="#{plugins.styleSheetUrls}" var="styleSheetUrl">
+            <link rel="stylesheet" type="text/css" href="#{base.requestContextPath}#{styleSheetUrl}?#{debug.revision}" />
+        </ui:repeat>
+
+        <div id="snippetAngularApp"></div>
+    </c:if>
+
+    </ui:composition>
+</h:head>
+
+</html>

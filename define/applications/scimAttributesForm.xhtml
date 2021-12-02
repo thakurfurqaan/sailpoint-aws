@@ -1,0 +1,547 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2012 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+
+    <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'APPLICATION';
+
+        function getFieldValue(field) {
+            var val = null;
+            var fieldName = Ext.getDom(field);
+            if ( fieldName ) {
+               val = fieldName.value;
+            }
+            return val;
+        }
+
+        function toggleCredentials(authType) {
+
+            if (typeof(authType) == 'undefined') {
+                authType = "oauth2";
+                var radioInputs = Ext.getDom(document.getElementsByName('editForm:authType'));
+                radioInputs.item(0).checked = true;
+            }
+
+            var userNameObj = Ext.get('userRow');
+            var passwordObj = Ext.get('passwordRow');
+            var oauthHostObj = Ext.get('oauthHostRow');
+            var grantTypeRow = Ext.get('grantTypeRow');
+            var clientIdObj = Ext.get('clientIdRow');
+            var clientSecretObj = Ext.get('clientSecretRow');
+            var apiTokenObj = Ext.get('apiTokenRow');
+            var refreshTokenObj = Ext.get('refreshTokenRow');
+            var pvtKeyObj = Ext.get('pvtKeyRow');
+            var pvtKeyPwdObj = Ext.get('pvtKeyPwdRow');
+
+            if (authType == "basic") {
+                var radioInputs = Ext.getDom(document.getElementsByName('editForm:authType'));
+                radioInputs.item(2).checked = true;
+                grantTypeRow.setVisibilityMode(Ext.Element.DISPLAY);
+                grantTypeRow.hide();
+                userNameObj.setVisibilityMode(Ext.Element.DISPLAY);
+                userNameObj.show();
+                passwordObj.setVisibilityMode(Ext.Element.DISPLAY);
+                passwordObj.show();
+                oauthHostObj.setVisibilityMode(Ext.Element.DISPLAY);
+                oauthHostObj.hide();
+                clientIdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientIdObj.hide();
+                clientSecretObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientSecretObj.hide();
+                apiTokenObj.setVisibilityMode(Ext.Element.DISPLAY);
+                apiTokenObj.hide();
+                refreshTokenObj.setVisibilityMode(Ext.Element.DISPLAY);
+                refreshTokenObj.hide();
+                pvtKeyObj.setVisibilityMode(Ext.Element.DISPLAY);
+                pvtKeyObj.hide();
+                pvtKeyPwdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                pvtKeyPwdObj.hide();
+            } else if (authType == "apiToken") {
+                var radioInputs = Ext.getDom(document.getElementsByName('editForm:authType'));
+                radioInputs.item(1).checked = true;
+                grantTypeRow.setVisibilityMode(Ext.Element.DISPLAY);
+                grantTypeRow.hide();
+                userNameObj.setVisibilityMode(Ext.Element.DISPLAY);
+                userNameObj.hide();
+                passwordObj.setVisibilityMode(Ext.Element.DISPLAY);
+                passwordObj.hide();
+                clientIdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientIdObj.hide();
+                clientSecretObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientSecretObj.hide();
+                oauthHostObj.setVisibilityMode(Ext.Element.DISPLAY);
+                oauthHostObj.hide();
+                apiTokenObj.setVisibilityMode(Ext.Element.DISPLAY);
+                apiTokenObj.show();
+                refreshTokenObj.setVisibilityMode(Ext.Element.DISPLAY);
+                refreshTokenObj.hide();
+                pvtKeyObj.setVisibilityMode(Ext.Element.DISPLAY);
+                pvtKeyObj.hide();
+                pvtKeyPwdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                pvtKeyPwdObj.hide()
+            } else if (authType == "oauth2") {
+                var radioInputs = Ext.getDom(document.getElementsByName('editForm:authType'));
+                radioInputs.item(0).checked = true;
+                grantTypeRow.setVisibilityMode(Ext.Element.DISPLAY);
+                grantTypeRow.show();
+                userNameObj.setVisibilityMode(Ext.Element.DISPLAY);
+                userNameObj.hide();
+                passwordObj.setVisibilityMode(Ext.Element.DISPLAY);
+                passwordObj.hide();
+                oauthHostObj.setVisibilityMode(Ext.Element.DISPLAY);
+                oauthHostObj.show();
+                clientIdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientIdObj.show();
+                clientSecretObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientSecretObj.show();
+
+                toggleGrantType(Ext.getDom('editForm:grant_type').value);
+            }
+        }
+
+        function toggleGrantType(grantType) {
+            
+            var apiTokenObj = Ext.get('apiTokenRow');
+            var refreshTokenObj = Ext.get('refreshTokenRow');
+            var pvtKeyObj = Ext.get('pvtKeyRow');
+            var pvtKeyPwdObj = Ext.get('pvtKeyPwdRow');
+            
+            if (grantType == "CLIENT_CREDENTIALS") {
+                apiTokenObj.setVisibilityMode(Ext.Element.DISPLAY);
+                apiTokenObj.hide();
+                refreshTokenObj.setVisibilityMode(Ext.Element.DISPLAY);
+                refreshTokenObj.hide();
+                pvtKeyObj.setVisibilityMode(Ext.Element.DISPLAY);
+                pvtKeyObj.hide();
+                pvtKeyPwdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                pvtKeyPwdObj.hide();
+            } else if (grantType == "REFRESH_TOKEN") {
+                apiTokenObj.setVisibilityMode(Ext.Element.DISPLAY);
+                apiTokenObj.hide();
+                refreshTokenObj.setVisibilityMode(Ext.Element.DISPLAY);
+                refreshTokenObj.show();
+                pvtKeyObj.setVisibilityMode(Ext.Element.DISPLAY);
+                pvtKeyObj.hide();
+                pvtKeyPwdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                pvtKeyPwdObj.hide();
+            } else if (grantType == "JWT_BEARER") {
+                apiTokenObj.setVisibilityMode(Ext.Element.DISPLAY);
+                apiTokenObj.hide();
+                refreshTokenObj.setVisibilityMode(Ext.Element.DISPLAY);
+                refreshTokenObj.hide();
+                pvtKeyObj.setVisibilityMode(Ext.Element.DISPLAY);
+                pvtKeyObj.show();
+                pvtKeyPwdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                pvtKeyPwdObj.show();
+            }
+        }
+
+        Ext.onReady(function () {
+           Ext.QuickTips.init();
+
+           // Make sure the correct fields are enabled/disabled.
+           toggleCredentials("#{applicationObject.attributes['authType']}");
+
+           // This is our validation hook
+           Page.on('beforeSave', function() {
+
+               if (!hasCredentialConfiguration()) {
+                   var radioInputs = Ext.getDom(document.getElementsByName('editForm:authType'));
+                   var authType;
+                   if (radioInputs.item(0).checked) {
+                       authType = "oauth2";
+                   } else if (radioInputs.item(1).checked) {
+                       authType = "apiToken";
+                   } else if (radioInputs.item(2).checked) {
+                       authType = "basic";
+                   }
+    
+                   var host = getFieldValue('editForm:host');
+                   var userName = getFieldValue('editForm:username');
+                   var password = getFieldValue('editForm:password');
+                   var oAuthHost = getFieldValue('editForm:token_url');
+                   var apiToken = getFieldValue('editForm:apiToken');
+                   var grantType = getFieldValue('editForm:grant_type');
+                   var clientId = getFieldValue('editForm:client_id');
+                   var clientSecret = getFieldValue('editForm:client_secret');
+                   var refreshToken = getFieldValue('editForm:refresh_token')
+                   var privateKeyExists = getFieldValue('editForm:privateKeyExists');
+                   var privateKey = getFieldValue('editForm:private_key');
+                   var pvtKeyPass = getFieldValue('editForm:private_key_password');
+                   
+                   Validator.validateNonBlankString(host, "#{msgs.con_form_scim_error_host_required}");
+    
+                   if (authType == "basic") {
+                       Validator.validateNonBlankString(userName, "#{msgs.con_form_scim_err_message_username_null}");
+                       Validator.validateNonBlankString(password, "#{msgs.con_form_scim_err_message_password_null}");
+                   } else if (authType == "oauth2") {
+                       Validator.validateNonBlankString(oAuthHost, "#{msgs.con_form_scim_error_oauthhost_required}");
+                       Validator.validateNonBlankString(clientId, "#{msgs.con_form_scim_error_clientid_required}");
+                       Validator.validateNonBlankString(clientSecret, "#{msgs.con_form_scim_error_clientsecret_required}");
+                       
+                       if(grantType == "REFRESH_TOKEN") {
+                         Validator.validateNonBlankString(refreshToken, "#{msgs.con_form_scim_error_refreshToken_required}");
+                       } else if (grantType == "JWT_BEARER") {
+                           if (privateKey == "" || privateKey == null) {
+                               Validator.validateNonBlankString(privateKeyExists, "#{msgs.con_form_scim_error_privatekey_required}");
+                           } else {
+                               Validator.validateNonBlankString(privateKey, "#{msgs.con_form_scim_error_privatekey_required}");
+                           }
+                           Validator.validateNonBlankString(pvtKeyPass, "#{msgs.con_form_scim_error_privatekey_pass_required}");
+                       }
+                   } else if (authType == "apiToken") {
+                       Validator.validateNonBlankString(apiToken, "#{msgs.con_form_scim_error_apitoken_required}");
+                   }
+    
+                   var errors = Validator.getErrors();
+                   if (errors && errors.length > 0) {
+                       Validator.displayErrors('appErrorsTop');
+                       return false;
+                   }
+               }
+               //return false will kill cancel the save
+               return true;
+           });
+
+        });
+
+       //--><!]]>
+    </script>
+    <f:view>
+
+      <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_scim_config_title}"/><br/><br/>
+
+      <div id="accountSettings" class='spContent'>
+        <table class="spTable" style="border:0px" cellspacing="0">
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_base_url}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpHostName" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.con_help_scim_base_url}"/>
+
+            </td>
+            <td>
+              <h:inputText id="host"
+                           value="#{applicationObject.attributes['host']}"
+                           size="40"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_auth_type}"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpAuthType" 
+                              styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.con_help_scim_auth_type}"/>
+            </td>
+
+            <td>
+              <h:selectOneRadio id="authType" 
+                                value="#{applicationObject.attributes['authType']}" 
+                                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                layout="pageDirection"
+                                onchange="toggleCredentials(this.value)">
+                  <f:selectItem itemValue="oauth2" itemLabel="#{msgs.con_form_scim_auth_type_oauth}"/>
+                  <f:selectItem itemValue="apiToken" itemLabel="#{msgs.con_form_scim_auth_type_api_token}"/>
+                  <f:selectItem itemValue="basic" itemLabel="#{msgs.con_form_scim_auth_type_basic}"/>
+              </h:selectOneRadio>
+            </td>
+          </tr>
+
+          <tr id="grantTypeRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_grant_type}"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpGrantType" 
+                              styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_SCIM_grant_type}"/>
+            </td>
+
+            <td>
+              <h:selectOneMenu id="grant_type" 
+                                value="#{applicationObject.attributes['grant_type']}" 
+                                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                onchange="toggleGrantType(this.value)">
+                  <f:selectItem itemValue="CLIENT_CREDENTIALS" itemLabel="#{msgs.con_form_scim_grant_type_client_credentials}"/>
+                  <f:selectItem itemValue="REFRESH_TOKEN" itemLabel="#{msgs.con_form_scim_grant_type_refresh_token}"/>
+                  <f:selectItem itemValue="JWT_BEARER" itemLabel="#{msgs.con_form_scim_grant_type_jwt}"/>
+              </h:selectOneMenu>
+            </td>
+          </tr>
+
+          <tr id="userRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_username}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpUser" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.con_help_scim_username}"/>
+            </td>
+            <td>
+              <h:inputText id="username"
+                           value="#{applicationObject.attributes['user']}"
+                           size="20"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr id="passwordRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_password}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpPassword" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.con_help_scim_password}"/>
+            </td>
+             <td>
+               <sp:inputSecret id="password"
+                               size="20" 
+                               value="#{applicationObject.attributes['password']}" redisplay="true"
+                               autocomplete="off"
+                               disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                               readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/> 
+             </td>
+          </tr>
+
+          <tr id="apiTokenRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_auth_type_api_token}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpApiToken" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.con_help_scim_api_token}"/>
+            </td>
+             <td>
+               <sp:inputSecret id="apiToken"
+                               size="20" 
+                               value="#{applicationObject.attributes['apiToken']}" redisplay="true"
+                               autocomplete="off"
+                               disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                               readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/> 
+             </td>
+          </tr>
+
+          <tr id="clientIdRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_client_id}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpClientId" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_SCIM_client_id}"/>
+            </td>
+            <td>
+              <h:inputText id="client_id"
+                           value="#{applicationObject.attributes['client_id']}"
+                           size="20"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr id="clientSecretRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_client_secret}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpClientSecret" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_SCIM_client_secret}"/>
+            </td>
+            <td>
+              <sp:inputSecret id="client_secret"
+                           value="#{applicationObject.attributes['client_secret']}"
+                           size="20" redisplay="true" autocomplete="off"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr id="oauthHostRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_token_host}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpOauthHost" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_SCIM_oauth_host}"/>
+            </td>
+            <td>
+              <h:inputText id="token_url"
+                           value="#{applicationObject.attributes['token_url']}"
+                           size="20"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr id="refreshTokenRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_grant_type_refresh_token}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpIssuer" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_SCIM_refresh_token}"/>
+            </td>
+            <td>
+              <sp:inputSecret id="refresh_token"
+                           value="#{applicationObject.attributes['refresh_token']}"
+                           size="20" redisplay="true" autocomplete="off"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr id="pvtKeyRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_jwt_pvt_key}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpPrivateKey" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                              alt="#{help.help_con_form_jwt_private_key}"/>
+            </td>
+            <td>
+              <ui:include src="privateKey.xhtml"/>
+            </td>
+          </tr>
+          
+          <tr id="pvtKeyPwdRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_jwt_pvt_key_pwd}"/>
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpPrivateKeyPassword" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                              alt="#{help.help_con_form_jwt_private_key_password}"/>
+            </td>
+            <td>
+              <sp:inputSecret id="private_key_password"
+                           value="#{applicationObject.attributes['private_key_password']}"
+                           redisplay="true"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_page_size}" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpPageSize" styleClass="helpIcon"
+                 url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_SCIM_page_size}" />
+            </td>
+            <td>
+              <h:inputText id="pageSize" value="#{applicationObject.attributes['pageSize']}" size="20"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+               <f:validateLongRange minimum="0" />
+              </h:inputText>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_scim_content_type}"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpContentType" 
+                              styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.con_help_scim_content_type}"/>
+            </td>
+            <td>
+              <h:selectOneMenu id="contentType" 
+                                value="#{applicationObject.attributes['contentType']}" 
+                                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                  <f:selectItem itemValue="json" itemLabel="#{msgs.con_form_scim_content_type_json}"/>
+                  <f:selectItem itemValue="xml" itemLabel="#{msgs.con_form_scim_content_type_xml}"/>
+              </h:selectOneMenu>
+            </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'><h:outputText
+                style='padding:5px'
+                value="#{msgs.con_form_SCIM_filter_attribute_account}" />
+            </td>
+            <td class="certScheduleHelpCol"><h:graphicImage
+                id="imgHlpAccountFilter" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_SCIM_filter_attribute_account}" />
+            </td>
+            <td><h:inputText id="accountFilterString"
+                value="#{applicationObject.attributes['accountFilterString']}"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+          
+           <tr>
+            <td class='titleColumn certScheduleTitleCol'><h:outputText
+                style='padding:5px'
+                value="#{msgs.con_form_SCIM_filter_attribute_group}" />
+            </td>
+            <td class="certScheduleHelpCol"><h:graphicImage
+                id="imgHlpGroupFilter" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_SCIM_filter_attribute_group}" />
+            </td>
+            <td><h:inputText id="groupFilterString"
+                value="#{applicationObject.attributes['groupFilterString']}"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+        </table>
+
+      </div>
+
+
+    </f:view>
+</ui:composition>
+
+</body>
+</html>

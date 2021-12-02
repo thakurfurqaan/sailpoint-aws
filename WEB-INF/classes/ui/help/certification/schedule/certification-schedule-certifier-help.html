@@ -1,0 +1,40 @@
+<h2>Choose Certifier</h2>
+<p>Choose the <strong>Primary Certifier</strong> for the access reviews:</p>
+<ul>
+  <li><strong>Manager:</strong> The manager of each identity will act as the primary certifier for that identity. A backup certifier is also required.</li>
+  <li><strong>Owner:</strong> For Roles, the role owner always acts as the primary certifier. For Additional Entitlements, you can choose from the Application Owner or the Entitlement Owner as the primary certifier. A backup certifier is also required.</li>
+  <li><strong>Rule:</strong> Choose the certifier via a rule. The Targeted Certification does not include a rule editor, so you are limited to choosing existing rules from the list. Only rules with a rule type of “Certifier” are included in this list. A backup certifier is also required. If you want to use a rule to manage reassignments, use a Certifier Rule here to control reassignments rather than a pre-delegation rule; pre-delegation rules do not support reassignments in the Targeted Certification.</li>
+  <li><strong>Single Certifier:</strong> Choose the identity or workgroup who will be responsible for the access review. You have the option to add a backup certifier, but a backup certifier is not required.</li>
+</ul>
+<p><strong>Advanced Options</strong></p>
+<ul>
+  <li><strong>Reassignments</strong></li>
+  <li>With reassignment, you can pass individual line items or an entire identity to another user to review. The person the items are reassigned to assumes complete responsibility for all decisions on those items, and must sign off on those decisions themselves.</li>
+  <li>
+    <ul>
+      <li><strong>Enable Bulk Reassignment:</strong> Allow reviewers to reassign multiple items simultaneously within an access review.</li>
+      <li><strong>Limit Reassignments/ Reassignment Limit:</strong> Limit the number of times reviewers can reassign an item in the access review. If you opt to limit reassignments, include the number of reassignments allowed.</li>
+      <li><strong>Require Reassignment Completion:</strong> Require the completion of all reassigned reviews before the parent review can be completed.</li>
+      <li><strong>Return Reassignments to Original Access Review:</strong> When a reassigned review is signed off, return the reassigned review to the original access review owner. When items are returned, the original owner can modify the decisions the reassigned reviewer has made.</li>
+      <li><strong>Automatically Sign Off When All Items Are Reassigned:</strong> Allow the access review to be automatically signed off when all items in the access review are reassigned. This option can only be enabled if the Require Reassignment Completion and Return Reassignments to Original Access Review options are not enabled.</li>
+    </ul>
+  </li>
+  <li><strong>Self Certification</strong></li>
+  <li>
+    <ul>
+      <li><strong>Allow self certification for:</strong> Choose which users may self-certify - that is, be the certifier for their own access, either by forwarding or reassigning an access review.</li>
+      <li><strong>Self Certification Violation Owner:</strong> For users that are not allowed to self-certify, this is the identity or workgroup that will receive any items that would require a self-certification - that is, when the reviewer and the user whose access is under review are the same person. If a Self Certification Violation Owner is not specified, any items that require self-certification will be read-only to the reviewer.</li>
+    </ul>
+  </li>
+  <li><strong>Other</strong></li>
+  <li>
+    <ul>
+      <li><strong>Prompt for Sign Off:</strong> Display an overlay prompting reviewers to sign off, when the access review is complete.</li>
+      <li><strong>Require Electronic Signature:</strong> Require an electronic signature as part of the sign-off process. Reviewers use their IdentityIQ login as authorization for the electronic signature.</li>
+      <li><strong>Electronic Signature Meaning:</strong> If you choose to require electronic signature, choose the meaning (the text that goes with the electronic signature) from the list. Electronic signature meanings are defined in Global Settings > Electronic Signatures.</li>
+      <li><strong>Automatically Sign Off When Nothing to Certify:</strong> If the access review contains no items, allow the review to be signed off automatically with the assigned reviewer’s credentials. This sign-off occurs even if there are subordinate access reviews.</li>
+      <li><strong>Suppress Notification When Nothing to Certify:</strong> Do not send a notification email when the assignee has nothing to certify.</li>
+      <li><strong>Sign Off Approval Rule:</strong> A rule can determine if any additional review is needed on the Sign-Off decision. If you enable this option, you also choose the rule to run after initial sign-off by the reviewer, and a Sign Off Approval Notice Email Template. The rule determines if the decisions need to be reviewed by another approver. If so, the user is notified via email using the email template, and the certification request is sent to that user’s inbox. This process is repeated until no more reviewers are discovered by the rule. The Targeted Certification does not include a rule editor, so you are limited to choosing existing rules from the list. Only rules with a rule type of “CertificationSignOffApprover” are included in this list.</li>
+    </ul>
+  </li>
+</ul>

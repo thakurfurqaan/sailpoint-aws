@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+
+<!-- (c) Copyright 2015 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<sailpoint>
+    <TaskDefinition name="Run Connector Tests" concurrent="true" resultAction="RenameNew" executor="sailpoint.connector.testframework.TestNGExecutor" template="true"
+                    progressInterval="5000"
+                    progressMode="String" type="Identity">
+        <Description>
+            Template for connector test automation.
+        </Description>
+        <Signature>
+            <Inputs>
+                <Argument name="fileNames" type="string" helpKey="">
+                    <Prompt>Comma separated file names</Prompt>
+                </Argument>
+                <Argument name="proxyApp" type="string" helpKey="">
+                    <Prompt>Cluster application name</Prompt>
+                </Argument>
+                <Argument name="selectAll" type="boolean" helpKey="">
+                    <Prompt>Run for all connectors</Prompt>
+                </Argument>
+                <Argument name="runType" type="string" helpKey="">
+                    <Prompt>Input Run Type e.g. sanity </Prompt>
+                </Argument>
+            </Inputs>
+            <Returns>
+                <Argument name="testsPassed" type="int">
+                    <Prompt>Number of tests passed</Prompt>
+                </Argument>
+                <Argument name="testsFailed" type="int">
+                    <Prompt>Number of tests failed</Prompt>
+                </Argument>
+                <Argument name="testsSkipped" type="int">
+                    <Prompt>Number of tests skipped</Prompt>
+                </Argument>
+                <Argument name="failedTestNames" type="string">
+                    <Prompt>Name of failed tests</Prompt>
+                </Argument>
+            </Returns>
+        </Signature>
+    </TaskDefinition>
+</sailpoint>

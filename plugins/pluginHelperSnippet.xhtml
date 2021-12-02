@@ -1,0 +1,68 @@
+<script type="text/javascript">
+//<![CDATA[
+
+    /**
+    * Helper method to add a widget function when the snippet runs.
+    * This is to be called inside a plugin snippet, so they only get stored on demand.
+    *
+    * @param {Function} func - The plugin widget function needed for the widget to run.
+    */
+    PluginHelper.addWidgetFunction = function(func) {
+        if (SailPoint.widgetFunctions) {
+            SailPoint.widgetFunctions.push(func);
+        }
+    };
+
+    /**
+    * Method called by the AppInitializer to load the widget functions so that
+    * the desktop home app can register any dependencies needed for thw widget.
+    */
+    PluginHelper.loadWidgetFunctions = function() {
+        if (SailPoint.widgetFunctions) {
+            SailPoint.widgetFunctions.forEach(function(func) {
+               func();
+            });
+        }
+    };
+    /**
+     * Helper method for an angular plugin to attach itself to our app.
+     * Creates a div with an angular sp-isolate-app directive that we know about
+     * in order to skip over it and make it load last in the order of angular apps to load.
+     * An optional selector is there so that the snippet can attach itself to any valid
+     * selector on the DOM.
+     *
+     * @param {string} moduleName - The name of the angular snippet module
+     * @param {string} innerHtml - The contents of any custom html defined by the plugin to be injected into the DOM
+     * @param {string} selector - An optional selector where the snippet will live on the DOM, the default of '#snippetAngularApp' will be used if not given
+     */
+    PluginHelper.addSnippetController = function(moduleName, innerHtml, selector) {
+        var ctrlName = moduleName + 'Ctrl',
+        elementId = ctrlName + 'El',
+        element = '<div sp-isolate-app="'+ moduleName +'"> <span id="' + elementId + '" ng-controller="' + ctrlName + ' as ctrl"></span> </div>';
+
+        // css selector to attach the snippet to
+        if (!selector || selector.length === 0) {
+            selector = '#snippetAngularApp';
+        }
+
+        angular.element(document).ready(function () {
+            var snippet = angular.element(selector);
+            snippet.append(element);
+            var snippetElement = angular.element('#' + elementId);
+            if (snippetElement) {
+                if (innerHtml) {
+                    snippetElement.append(innerHtml);
+                }
+
+                // All SailPoint angular apps are bootstrapped to an element with the class sp-ui-app.
+                // So check if snippetElement is a child of a .sp-ui-app element, otherwise we need to bootstrap it
+                // ourselves.
+                if (angular.element(document).find('.sp-ui-app').find(selector).length === 0) {
+                    angular.bootstrap(snippetElement, [moduleName]);
+                }
+
+            }
+        });
+    };
+  //]]>
+</script>

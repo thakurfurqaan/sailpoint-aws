@@ -1,0 +1,64 @@
+/* override iiq-extjs styling for ul li */
+ul li.list-group-item {
+  margin-left: 0;
+}
+
+/* override iiq-extjs styling for th */
+th {
+  font-weight: bold;
+}
+
+/*
+ * The sp-body-container, sp-body, and sp-footer are used to make the footer be pushed to the
+ * bottom of the page.
+ */
+.sp-body-container {
+  min-height: 100%;
+  position: relative;
+}
+
+.sp-body {
+  padding-bottom: 35px;
+}
+
+.sp-footer {
+  position: absolute;
+  bottom: 25px;
+  height: 25px;
+  width: 100%;
+  /* make it stack behind any footer button bars */
+  z-index: -1;
+}
+
+.bodyDivFooter {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+/* dont force list style with margins for angular apps, gotta do it explicitly.
+ * boo on tag-override.css and iiq-extjs.css */
+ul, ul li,
+ol, ol li {
+  list-style: inherit;
+  margin-left: inherit;
+}
+
+/* override classic-override.css style that sets this background color to white */
+.bodyDiv, .bodyHeaderDiv, #bodyTitleTd, #bodyContentTd, #bodyBottomTd, #appTable {
+  background-color: #edeff3;
+}
+
+.modal-body .eSigDiv ul li,
+.modal-body .eSigDiv ol li {
+    margin-left: 25px;
+}
+
+/* Needed since angular is loaded dynamically by JSPM */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+/* Used by the translate-cloak directive to hide areas before messages are loaded. */
+.translate-cloak {
+  display: none !important;
+}

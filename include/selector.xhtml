@@ -1,0 +1,698 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2013 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:remove><!--
+  Include for editing an IdentitySelector object.
+  Expected to be called with these parameters:
+    prefix
+      A prefix to put in front of all component ids in case we need
+      to edit more than one IdentitySelector on a page.
+    listener
+      A bean to receive the actionListener events from the 
+      command buttons in this file.
+    selector
+      An instanceof IdentitySelectorDTO
+    noFilter, noScript, noRule, noPouplation
+      When true suppresses these match types from the radio button.
+    noMenu
+      When true suppresses the style selector menu.
+      The selector will be displayed in the type determined
+      initially by SelectorBean and cannot be changed.  Currently
+      this is used only for Entitlement SOD policies which we
+      are limiting to just match lists.
+    manageRight
+      Name of the right you must have to edit the selector.
+    ruleType
+      [Optional] Type of rule to display; defaults to "IdentitySelector"
+    enableValueSelect
+      [Optional] If true, selectors will be used instead of text fields for attribute values
+    qlpEnableDirty
+      [Optional] If true, used in the QuickLink Population page to mark that page as dirty
+      for whenever the selector panel detects a change made
+      
+  Also note that to properly use this file you have to include assignmentRuleSelector.js
+  and call the initialization function as needed
+--></ui:remove>
+
+<body>
+<ui:composition>
+  <script type="text/javascript" defer="defer">
+    // sigh, think of a way to share the same functions
+    // for multiple selectors
+    function #{prefix}UpdateSelectorType(el) {
+        var type = el.value;
+        //$('#{prefix}HiddenSelectorType).value = type;
+        #{prefix}UpdateSelectorTypeFields(type);
+    }
+    // derived from workItemConfig.xhtml, seems like there
+    // ought to be an easier way...
+    function #{prefix}UpdateSelectorTypeFields(type) {
+      //alert("#{prefix}Type = " + type);
+      if (type == 'match') {
+        Ext.getDom('#{prefix}SelectorMatchFields').style.display='';
+        Ext.getDom('#{prefix}SelectorFilterFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorScriptFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorRuleFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorPopulationFields').style.display='none';
+      }
+      else if (type == 'filter') {
+        Ext.getDom('#{prefix}SelectorMatchFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorFilterFields').style.display='';
+        Ext.getDom('#{prefix}SelectorScriptFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorRuleFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorPopulationFields').style.display='none';
+        resizeTextArea('#{prefix}filterTextArea');
+      }
+      else if (type == 'script') {
+        Ext.getDom('#{prefix}SelectorMatchFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorFilterFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorScriptFields').style.display='';
+        Ext.getDom('#{prefix}SelectorRuleFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorPopulationFields').style.display='none';
+        resizeTextArea('#{prefix}scriptTextArea');
+      }
+      else if (type == 'rule') {
+        Ext.getDom('#{prefix}SelectorMatchFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorFilterFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorScriptFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorRuleFields').style.display='';
+        Ext.getDom('#{prefix}SelectorPopulationFields').style.display='none';
+      }
+      else if (type == 'population') {
+        Ext.getDom('#{prefix}SelectorMatchFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorFilterFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorScriptFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorRuleFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorPopulationFields').style.display='';
+      }
+      else if (type == 'none' || type == 'all') {
+        Ext.getDom('#{prefix}SelectorMatchFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorFilterFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorScriptFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorRuleFields').style.display='none';
+        Ext.getDom('#{prefix}SelectorPopulationFields').style.display='none';
+      }
+
+      // if contained in panel redo layout
+      var assignmentRulePanel = Ext.getCmp('assignmentRule');
+
+      if (assignmentRulePanel) {
+        assignmentRulePanel.doLayout();
+      }
+    }
+    
+    function resizeTextArea(id) {
+        var cb = Ext.get('certificationScheduleForm:' + id);
+        var tbl = Ext.get('#{prefix}TTable');
+        if(cb &amp;&amp; tbl) {
+            var dw = tbl.getWidth();
+            var cw = Math.floor((dw * 1.1) / 7); // width / multiplier / ave cols width in px
+            cb.set( {cols:cw} );
+        }
+    }
+    
+    function #{prefix}InitSelectorTypeFields() {
+      //doesn't work
+      #{prefix}UpdateSelectorTypeFields(Ext.getDom('#{prefix}SelectorType').value);
+    }
+    // travel up the DOM tree looking for the parent form
+    function #{prefix}findFormName(button) {
+        var node = button;
+        while (node.parentNode.nodeName != "FORM") {
+            node = node.parentNode;
+        }
+            
+        return node.parentNode.id;
+    }
+    // If "is null" is selected on a match list, make sure that the associated
+    // value textbox is disabled.
+    function #{prefix}disableAssociatedTextBox(checkbox) {
+        var tableRow = checkbox.parentNode.parentNode;
+        var arrayOfDomNodes = Ext.query('.matchListValue', tableRow);
+        
+        if (arrayOfDomNodes.length > 0) {        
+        	var input = arrayOfDomNodes[0];
+        	input.disabled = checkbox.checked;
+        } else {
+        	var selectorDivs = Ext.query('.#{prefix}attrValueSelect', tableRow);
+        	if (selectorDivs.length > 0) {
+        		#{prefix}updateValueSelect(selectorDivs[0]);
+        	}
+        }
+    }
+    
+    function #{prefix}updateValueSelect(selectorDiv) {
+    	var tableRow = selectorDiv.parentNode.parentNode;
+    	var nameValueInput = Ext.query('[id$=${prefix}SelectorNameValue]', tableRow)[0]
+    	var nullCheck = Ext.query('.#{prefix}nullCheck', tableRow)[0];
+    	
+    	var valueSelect = Ext.getCmp(selectorDiv.getAttribute('componentId'));
+    	
+    	if (nameValueInput.value &amp;&amp; !nullCheck.checked) {
+    	 	valueSelect.setDisabled(false);
+    	} else {
+    		valueSelect.clearValue();
+    		valueSelect.setDisabled(true);
+    	}
+    }
+    
+    // If "is null" is selected on a match list, make sure that the associated
+    // value textbox is disabled.
+    // This is for selectOneMenu
+    function #{prefix}disableAssociatedTextBoxForSelect(options) {
+        var tableRow = options.parentNode.parentNode;
+        var arrayOfDomNodes = Ext.query('.matchListValue', tableRow);
+        var isnull = options.value == 'isNull';
+        if (arrayOfDomNodes.length > 0) {        
+          var input = arrayOfDomNodes[0];
+          input.disabled = isnull;
+          if (isnull) {
+            input.value = '';
+          }
+        } else {
+          var selectorDivs = Ext.query('.#{prefix}attrValueSelect', tableRow);
+          if (selectorDivs.length > 0) {
+            #{prefix}updateValueSelectForSelect(selectorDivs[0], isnull);
+          }
+        }
+    }
+    
+    function #{prefix}updateValueSelectForSelect(selectorDiv, isnull) {
+      var tableRow = selectorDiv.parentNode.parentNode;
+      var nameValueInput = Ext.query('[id$=${prefix}SelectorNameValue]', tableRow)[0]
+      
+      var valueSelect = Ext.getCmp(selectorDiv.getAttribute('componentId'));
+      
+      if (nameValueInput.value &amp;&amp; !isnull) {
+        valueSelect.setDisabled(false);
+      } else {
+        valueSelect.clearValue();
+        valueSelect.setDisabled(true);
+      }
+    }
+
+
+    function reconfigForAllowedValues(combobox, hasZeroAllowedValues) {
+        var currentValue = combobox.getValue();
+        if (hasZeroAllowedValues) {
+            combobox.setHideTrigger(true);
+            combobox.emptyText = '#{msgs.lcm_request_entitlements_enter_value}';
+        }
+        else {
+            combobox.setHideTrigger(false);
+            combobox.emptyText = '#{msgs.lcm_request_entitlements_select_value}';
+        }
+        combobox.applyEmptyText();
+        combobox.reset();
+        combobox.setValue(currentValue);
+    }
+
+    // Called when the attribute name is changed.  Update the
+    // disabled state or the allowed values for the value select field.
+    function #{prefix}updateAttributeName(combobox, newValue, oldValue, eOpts) {
+
+        var dom = combobox.container.dom;
+        var tableRow = dom.parentNode.parentNode;
+        var nullCheck = Ext.query('.#{prefix}nullCheck', tableRow)[0];
+        var val = combobox.getValue();
+
+        var e = Ext.query('[nameComboBoxId=' + combobox.id + ']')
+        e[0].value = val;
+
+        var valueSelectDiv = Ext.query('[valueSelectComboBoxId=' + combobox.id + ']')[0];
+        valueSelect = Ext.getCmp(valueSelectDiv.getAttribute('componentId'));
+
+        if (valueSelect) {
+            valueSelect.clearValue();
+            if (val) {
+                valueSelect.setAttribute(val);
+                valueSelect.getStore().load({
+                    callback: function () {
+                        var hasZeroRows = valueSelect.getStore().data.length &lt;= 0;
+                        reconfigForAllowedValues(valueSelect, hasZeroRows)
+                    }
+                });
+            }
+            if (val &amp;&amp; !nullCheck.checked) {
+                valueSelect.setDisabled(false);
+            } else {
+                valueSelect.setDisabled(true);
+            }
+        }
+    }
+
+    // Create the comboboxes to select the attribute names
+    function #{prefix}createAttributeNameSelectors() {
+        var attrNameDivs = Ext.query('.#{prefix}attrSelect');
+        if (attrNameDivs) {
+            Ext.each(attrNameDivs, function (attrNameDiv) {
+                if (attrNameDiv.innerHTML) {
+                    // already created the combobox for attr name
+                    return;
+                }
+
+                // we haven't created the combobox yet, so let's do it
+                var tableRow = attrNameDiv.parentNode.parentNode;
+
+                var allowedValuesInput = Ext.get(Ext.query('[id$=${prefix}nameAllowedValues]', tableRow)[0]);
+                var storeData = JSON.parse(allowedValuesInput.getValue());
+                var store = SailPoint.Store.createStore({
+                             fields: ['label', 'value','description','disabled','escape','noSelectionOption'],
+                             data: storeData
+                });
+
+                var editable = #{showTargetPermissions == true};
+                var emptyText = '#{msgs.selector_select_attribute}';
+
+                var nameInput =  Ext.get(Ext.query('[id$=${prefix}SelectorNameValue]', tableRow)[0]);
+                var nameValue = nameInput.getValue();
+
+                var combo = Ext.create('Ext.form.ComboBox', {
+                    store: store,
+                    queryMode: 'local',
+                    renderTo: attrNameDiv,
+                    value: nameValue,
+                    editable: editable,
+                    disabled: #{readOnly == true},
+                    displayField: 'label',
+                    valueField: 'value',
+                    emptyText: emptyText,
+                    listeners: {
+                        change: function(combo, newValue, oldValue, eOpts) {
+                            #{prefix}updateAttributeName(combo, newValue, oldValue, eOpts);
+                            Page.fireEvent('selectorPanelChanged');
+                        }
+                    }
+                });
+
+                nameInput.dom.setAttribute('nameComboBoxId', combo.id);
+            });
+        }
+    }
+    
+    function #{prefix}createAttributeValueSelectors() {
+    	var selectorDivs = Ext.query('.#{prefix}attrValueSelect');
+    	if (selectorDivs) {
+    		Ext.each(selectorDivs, function(selectorDiv) {
+    		    if (selectorDiv.innerHTML) {
+    		        return;
+    		    }
+
+    			var tableRow = selectorDiv.parentNode.parentNode;
+    			
+    			var nameInput = Ext.get(Ext.query('[id$=${prefix}SelectorNameValue]', tableRow)[0]);
+    			
+    			var relatedInput = Ext.query('input[type="hidden"]', selectorDiv.parentElement)[0];
+
+    			var itemValue = relatedInput.value;
+
+                var valueSelect = Ext.create('SailPoint.form.ManagedAttributeValueCombo', {
+                    renderTo: selectorDiv,
+                    applicationName: selectorDiv.getAttribute('applicationId'),
+                    attribute: nameInput.getValue(),
+                    initialValue: itemValue,
+                    disabled: #{readOnly == true} || !nameInput.getValue() || (nameInput.getValue() == ''),
+                    listeners: {
+                       afterrender : function(comp, opt) {
+                            var val = comp.initialValue;
+                            var proxy = comp.getStore().getProxy();
+                            proxy.extraParams.value = val;
+                            proxy.extraParams.attribute = comp.initialConfig.attribute;
+                            proxy.extraParams.purview = comp.initialConfig.applicationName;
+                            
+                            comp.getStore().load({cid:comp.id, dn:val, callback:function(rec, o, s) {
+                                var proxy = Ext.getCmp(o.cid).getStore().getProxy();
+                                delete proxy.extraParams.value; // reset
+                                if (rec &amp;&amp; rec.length > 0) {
+                                    Ext.each(rec, function(r){
+                                        if(r.get('value') === o.dn) {
+                                            comp.initialRecord = r;
+                                            comp.setValue(r.get('value'));
+                                            return false;
+                                        }
+                                    });
+                                } else {
+                                    //This must not be a managed attribute, so
+                                    //make a new record for it
+                                    var newRecord = {};
+                                    newRecord[comp.displayField] = o.dn;
+                                    newRecord[comp.valueField] = o.dn;                
+                                    var newRecordModels = comp.getStore().add(newRecord);
+                                    comp.initialRecord = newRecordModels[0];
+                                    comp.setValue(o.dn);
+                                    reconfigForAllowedValues(valueSelect, true)
+                                    return false;
+                                }
+                            }});
+                        },
+                        change: function(combo, newValue, oldValue, eOpts) {
+                            relatedInput.value = newValue;
+                        } 
+                    } 
+                });
+
+    		    nameInput.on('change', function() {
+    		    	if (nameInput.getValue()) {
+    		    		valueSelect.setAttribute(nameInput.getValue());
+    		    	 	valueSelect.getStore().load(); 
+    		    	}
+    		    	
+    		    	#{prefix}updateValueSelect(selectorDiv);
+    		    });
+
+    		    nameInput.on('select', function() {
+    		        if (nameInput.getValue()) {
+    		            valueSelect.setAttribute(nameInput.getValue());
+    		            valueSelect.getStore().load();
+    		        }
+
+    		        #{prefix}updateValueSelect(selectorDiv);
+    		    });
+
+    		    selectorDiv.setAttribute('componentId', valueSelect.getId());
+    		    selectorDiv.setAttribute('valueSelectComboBoxId', nameInput.getAttribute('nameComboBoxId'));
+    		});
+    	}
+    }
+    
+    Ext.onReady(function() {
+        #{prefix}createAttributeNameSelectors();
+    	if (#{enableValueSelect == true}) {
+    	    #{prefix}createAttributeValueSelectors();
+    	}
+
+        if (#{showTargetPermissions == true}) {
+            var sourceTypes = Ext.create('Ext.data.Store', {
+                fields: ['val', 'disp'],
+                data: [
+                    {'val':'application', 'disp':'#{msgs.label_application}'},
+                    {'val': 'targetSource', 'disp':'#{msgs.label_targ_source}'}
+                ]
+            });
+
+            Ext.create('Ext.form.ComboBox', {
+                id: '#{prefix}sourcePickerId',
+                store: sourceTypes,
+                queryMode: 'local',
+                displayField: 'disp',
+                valueField: 'val',
+                renderTo: '#{prefix}sourcePicker',
+                value: "application",
+                editable: false,
+                listeners: {
+                    select: {
+                        fn: function (combo, records, opts) {
+                            var v = records[0].get('val');
+                            if (v === 'application') {
+                                Ext.getElementById('#{prefix}appButtons').style.display = 'inline-block';
+                                Ext.getDom('#{prefix}SelectorApplicationSuggest').style.display = 'inline-block';
+                                Ext.getDom('#{prefix}SelectorApplication').value = v;
+                                Ext.getDom('#{prefix}SelectorTargetSourceSuggest').style.display = 'none';
+                                Ext.getDom('#{prefix}SelectorTargetSourceSuggest').value = '';
+                                Ext.getDom('#{prefix}SelectorTargetSource').value = '';
+                                Ext.getCmp('#{prefix}SelectorApplicationCmp').setValue(v);
+                                Ext.getCmp('#{prefix}SelectorTargetSourceCmp').clearValue();
+                            } else if (v === 'targetSource') {
+                                Ext.getElementById('#{prefix}appButtons').style.display = 'none';
+                                Ext.getDom('#{prefix}SelectorTargetSourceSuggest').style.display = 'inline-block';
+                                Ext.getDom('#{prefix}SelectorTargetSource').value = v;
+                                Ext.getDom('#{prefix}SelectorApplicationSuggest').style.display = 'none';
+                                Ext.getDom('#{prefix}SelectorApplicationSuggest').value = '';
+                                Ext.getDom('#{prefix}SelectorApplication').value = '';
+                                Ext.getCmp('#{prefix}SelectorTargetSourceCmp').setValue(v);
+                                Ext.getCmp('#{prefix}SelectorApplicationCmp').clearValue();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+    });
+    
+    Page.on('selectorPanelChanged', function() {
+        #{prefix}createAttributeNameSelectors();
+    	if (#{enableValueSelect == true}) {
+    	    #{prefix}createAttributeValueSelectors();
+    	}
+    	if (#{qlpEnableDirty == true}) {
+    	    SailPoint.systemSetup.QuickLinkPopulationEditor.markPageDirty(true);
+    	}
+    });
+  </script>
+    <c:if test="#{!noMenu}">
+      <h:selectOneMenu id="#{prefix}SelectorType" value="#{selector.type}"
+        onchange="javascript:#{prefix}UpdateSelectorType(this);Page.fireEvent('selectorPanelChanged');"
+        disabled="#{(readOnly == true) || ((null != manageRight) and !sp:hasRight(facesContext, manageRight))}"
+        readonly="#{(readOnly == true) || ((null != manageRight) and !sp:hasRight(facesContext, manageRight))}">
+        <c:if test="#{not empty selector and selector.allowTypeNone}">
+          <f:selectItem itemValue="none" itemLabel="#{null != noneLabel ? noneLabel : msgs.selector_type_none}"/>
+        </c:if>
+        <c:if test="#{not empty selector and selector.allowTypeAll}">
+          <f:selectItem itemValue="all" itemLabel="#{msgs.selector_type_all}"/>
+        </c:if>
+        <f:selectItem itemValue="match" itemLabel="#{msgs.selector_type_match}"/>
+        <c:if test="#{!noFilter}">
+          <f:selectItem itemValue="filter" itemLabel="#{msgs.selector_type_filter}"/>
+        </c:if>
+        <c:if test="#{!noScript}">
+          <f:selectItem itemValue="script" itemLabel="#{msgs.selector_type_script}"/>
+        </c:if>
+        <c:if test="#{!noRule}">
+          <f:selectItem itemValue="rule" itemLabel="#{msgs.selector_type_rule}" />
+        </c:if>
+        <c:if test="#{!noPopulation}">
+          <f:selectItem itemValue="population" itemLabel="#{msgs.selector_type_population}" />
+        </c:if>
+      </h:selectOneMenu>
+    </c:if>
+
+    <div id="#{prefix}TTable">
+      <div id="#{prefix}SelectorMatchFields" class="m-t-sm" style="#{selector.type == 'match' ? '' : 'display: none;'}">
+        <h:panelGroup>
+        <table class="spTable nopad">
+          <ui:fragment rendered="#{manageRight == null || sp:hasRight(facesContext, manageRight)}">
+            <tr>
+              <th>
+                  <!-- Add firing of 'selectorPanelChanged' event to all buttons because Chrome does not 
+                  want to parse the script returned in the response, perhaps because the response type is text/xml?? -->
+                  <ui:fragment rendered="#{!noIdentityAttributes}">
+                      <div class="m-t-sm m-l-sm">
+                        <strong>#{msgs.identityiq} #{msgs.items}</strong><br/>
+                      </div>
+                  </ui:fragment>
+              </th>
+              <th>
+                <ui:fragment rendered="#{!noApplicationSuggest}">
+                  <div class="m-t-sm m-l-sm">
+                    <strong>#{msgs.label_application} #{msgs.items}</strong><br/>
+                  </div>
+                </ui:fragment>
+              </th>
+              <th>
+                  <ui:fragment rendered="#{showAdditionalItems}">
+                      <div class="m-t-sm m-l-sm">
+                        <strong>#{msgs.additional_items}</strong><br/>
+                      </div>
+                  </ui:fragment>
+              </th>
+            </tr>
+            <tr>
+              <td style="vertical-align:top;">
+                <ui:fragment rendered="#{!noIdentityAttributes}">
+                    <div class="m-l-sm">
+                      <p:commandButton update='@([id$=#{prefix}selectorPanel])' id="#{prefix}_AddIdentityAttributeButton" value="#{msgs.selector_add_identity_attribute}" styleClass="secondaryBtn m-t-sm m-b-sm"
+                          actionListener="#{listener.addSelectorIdentityAttribute}" oncomplete="Page.fireEvent('selectorPanelChanged');" disabled="#{readOnly == true}" />
+                    </div>
+                </ui:fragment>
+              </td>
+              <td>
+                <div class="m-t-sm m-l-sm">
+                  <ui:fragment rendered="#{!noApplicationSuggest}">
+
+                    <ui:fragment rendered="#{showTargetPermissions}">
+                      <div id="#{prefix}sourcePicker" style='display: inline-block;'></div>
+                    </ui:fragment>
+
+                    <div style="display:none">
+                      <t:inputText id="#{prefix}SelectorApplication"
+                                   styleClass="selectorApplicationSuggest"
+                                   style="display:none; border:none"
+                                   value="#{selector.application}"
+                                   forceId="true">
+                      </t:inputText>
+                    </div>
+                    <div id="#{prefix}SelectorApplicationSuggest" style='display: inline-block;'></div>
+
+                    <div style="display:none">
+                      <t:inputText id="#{prefix}SelectorTargetSource"
+                                   styleClass="selectorTargetSourceSuggest"
+                                   style="display:none; border:none"
+                                   value="#{selector.targetSource}"
+                                   forceId="true">
+                      </t:inputText>
+                    </div>
+                    <div id="#{prefix}SelectorTargetSourceSuggest" style='display: none;'></div>
+                  </ui:fragment>
+                </div>
+                <div class="m-t-sm m-l-sm" style='display: inline-block;'>
+                  <div id="#{prefix}appButtons" style='display: inline-block;'>
+                    <p:commandButton update='@([id$=#{prefix}selectorPanel])' id="#{prefix}_AddAttributeButton" value="#{msgs.selector_add_attribute}" styleClass="secondaryBtn m-t-sm m-b-sm"
+                        actionListener="#{listener.addSelectorAttribute}" oncomplete="Page.fireEvent('selectorPanelChanged');" disabled="#{readOnly == true}" />
+                        <h:message for="#{prefix}_AddAttributeButton"/>
+                    <p:commandButton update='@([id$=#{prefix}selectorPanel])' id="#{prefix}_AddPermissionButton" value="#{msgs.selector_add_permission}" styleClass="secondaryBtn m-l-sm m-t-sm m-b-sm m-r-sm"
+                        actionListener="#{listener.addSelectorPermission}" oncomplete="Page.fireEvent('selectorPanelChanged');" disabled="#{readOnly == true}" />
+                  </div>
+                  <ui:fragment rendered="#{showTargetPermissions}">
+                    <p:commandButton update='@([id$=#{prefix}selectorPanel])' id="#{prefix}_AddTargetPermissionButton" value="#{msgs.selector_add_target_permission}" styleClass="secondaryBtn m-t-sm m-b-sm"
+                                       actionListener="#{listener.addSelectorTargetPermission}" oncomplete="Page.fireEvent('selectorPanelChanged');" disabled="#{readOnly == true}" />
+                  </ui:fragment>
+                </div>
+              </td>
+              <td style="vertical-align:top;">
+                <ui:fragment rendered="#{showAdditionalItems}">
+                    <div class="m-l-sm">
+                      <p:commandButton update='@([id$=#{prefix}selectorPanel])' id="#{prefix}_AddRoleAttributeButton" value="#{msgs.selector_add_role_attribute}" styleClass="secondaryBtn m-t-sm m-b-sm"
+                          actionListener="#{listener.addSelectorRoleAttribute}" oncomplete="Page.fireEvent('selectorPanelChanged');" disabled="#{readOnly == true}" />
+                    </div>
+                    <div class="m-l-sm">
+                      <p:commandButton update='@([id$=#{prefix}selectorPanel])' id="#{prefix}_AddEntitlementAttributeButton" value="#{msgs.selector_add_entitlement_attribute}" styleClass="secondaryBtn m-t-sm m-b-sm"
+                          actionListener="#{listener.addSelectorEntitlementAttribute}" oncomplete="Page.fireEvent('selectorPanelChanged');" disabled="#{readOnly == true}" />
+                    </div>
+                </ui:fragment>
+              </td>
+            </tr>
+          </ui:fragment>
+        
+          <tr>
+            <td colspan="3">
+              <p:outputPanel id='#{prefix}selectorPanel'>
+                <ui:fragment rendered="#{selector.matchTermCount > 0}">
+                  <table class="spTable" style="border-left-width:0px; border-right-width:0px;">
+                    <tr>
+                      <th align="center" class="noBorder">#{msgs.filter_operation}</th>
+                      <th class="noBorder"></th>
+                      <th align="center" class="noBorder">#{msgs.type}</th>
+                      <th align="center" class="noBorder">#{msgs.selector_application_or_source}</th>
+                      <th align="center" class="noBorder">#{msgs.name}</th>
+                      <th align="center" class="noBorder">&nbsp;</th>
+                      <th align="center" class="noBorder">#{msgs.value}</th>
+                      <th align="center" class="noBorder">
+                        <ui:fragment rendered="#{!showNewOperators}">
+                          #{msgs.selector_type_is_null}
+                        </ui:fragment>
+                      </th>
+                    </tr>
+                    <t:dataList id="#{prefix}matchTermsTbl" value="#{selector.matchTerms}" var="term" >
+                      <tr>
+                        <ui:fragment rendered="#{term.first}">
+                        <td style="padding:10px !important;" rowspan='#{sp:size(selector.matchTerms)}'>
+                          <h:selectOneMenu id="#{prefix}_matchOperator" disabled="#{readOnly == true}" 
+                            value="#{selector.matchOperator}" onchange="Page.fireEvent('selectorPanelChanged');">
+                            <f:selectItems value="#{selector.matchOperators}" />
+                          </h:selectOneMenu>
+                        </td>
+                        </ui:fragment>
+                        <td style="padding:10px !important;" width="50" align="center"><h:selectBooleanCheckbox value="#{term.selected}" /> </td>
+                        <ui:fragment rendered='#{!term.container}'>
+                          <ui:include src="selectorTerm.xhtml">
+                            <ui:param name="matchTerm" value="#{term}"/>
+                            <ui:param name="prefix" value="#{prefix}"/>
+                            <ui:param name="enableValueSelect" value="#{enableValueSelect}"/>
+                            <ui:param name="readOnly" value="#{readOnly == true}" />
+                            <ui:param name="showTargetPermissions" value="#{showTargetPermissions}" />
+                            <ui:param name="showNewOperators" value="#{showNewOperators}"/>
+                          </ui:include>
+                        </ui:fragment>
+                        <ui:fragment rendered='#{term.container}'>
+                          <ui:include src="selectorGroup.xhtml">
+                            <ui:param name="matchTerm" value="#{term}"/>
+                            <ui:param name="prefix" value="#{prefix}"/>
+                            <ui:param name="readOnly" value="#{readOnly == true}"/>
+                            <ui:param name="showNewOperators" value="#{showNewOperators}"/>
+                          </ui:include>
+                        </ui:fragment>
+                      </tr>
+                    </t:dataList>
+                  </table>
+              
+                  <p:commandButton update='@([id$=#{prefix}selectorPanel])' id="#{prefix}_GroupButton" value="#{msgs.group_selected}" styleClass="secondaryBtn m-l-sm m-t-sm m-b-sm"
+                                     actionListener="#{listener.groupSelectedTerms}" oncomplete="Page.fireEvent('selectorPanelChanged');" disabled="#{readOnly == true}" />
+                  <p:commandButton update='@([id$=#{prefix}selectorPanel])' id="#{prefix}_UngroupButton" value="#{msgs.ungroup_selected}" styleClass="secondaryBtn m-l-sm m-t-sm m-b-sm"
+                                     actionListener="#{listener.ungroupSelectedTerms}" oncomplete="Page.fireEvent('selectorPanelChanged');" disabled="#{readOnly == true}" />
+                  <p:commandButton update='@([id$=#{prefix}selectorPanel])' id="#{prefix}_DeleteButton" value="#{msgs.selector_delete_selected}" styleClass="secondaryBtn m-l-sm m-t-sm m-b-sm"
+                                     actionListener="#{listener.deleteSelectorTerms}" oncomplete="Page.fireEvent('selectorPanelChanged');" disabled="#{readOnly == true}" />
+                </ui:fragment>
+              </p:outputPanel>
+            </td>
+          </tr>
+        </table>
+        </h:panelGroup>        
+      </div>
+      
+      <div id="#{prefix}SelectorFilterFields" class="m-t-sm" style="#{selector.type == 'filter' ? '' : 'display: none;'}">
+        <h:inputTextarea style="width:100%" value="#{selector.filterSource}" rows="20" id="#{prefix}filterTextArea"
+                         disabled="#{(readOnly == true) || (manageRight != null and !sp:hasRight(facesContext, manageRight))}"
+                         readonly="#{(readOnly == true) || (manageRight != null and !sp:hasRight(facesContext, manageRight))}"
+                         onchange="Page.fireEvent('selectorPanelChanged');"/>
+      </div>
+      
+      <div id="#{prefix}SelectorScriptFields" class="m-t-sm" style="#{selector.type == 'script' ? '' : 'display: none;'}">
+          <h:inputTextarea style="width:100%" value="#{selector.scriptSource}" rows="20" id="#{prefix}scriptTextArea"
+                           disabled="#{(readOnly == true) || (manageRight != null and !sp:hasRight(facesContext, manageRight))}"
+                           readonly="#{(readOnly == true) || (manageRight != null and !sp:hasRight(facesContext, manageRight))}"
+                           onchange="Page.fireEvent('selectorPanelChanged');"/>
+      </div>
+      
+      <div id="#{prefix}SelectorRuleFields" class="m-t-sm" style="#{selector.type == 'rule' ? '' : 'display: none;'}">
+        <p:outputPanel id="#{prefix}selectorRulePanel">
+        <c:if test="#{(ruleType == null) or (ruleType == 'IdentitySelector')}">
+            <h:selectOneMenu id="#{prefix}SelectorRule" value="#{selector.rule}" disabled="#{readOnly == true}" onchange="Page.fireEvent('selectorPanelChanged');">
+              <f:selectItems  value="#{util.identitySelectorRules}"/>
+            </h:selectOneMenu>
+        </c:if>
+
+        <c:if test="#{ruleType == 'Policy'}">
+            <h:selectOneMenu id="#{prefix}SelectorRule" value="#{selector.rule}" disabled="#{readOnly == true}">
+              <f:selectItems  value="#{util.policyRules}"/>
+            </h:selectOneMenu>
+        </c:if>
+        
+        <p:commandButton id="#{prefix}refreshSelectorRulesButton"
+                         style="display:none"
+                         immediate="true"
+                         update="@([id$=#{prefix}selectorRulePanel])"/>
+        </p:outputPanel>
+        <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageRules')}" >
+          <div>
+            <input type="button" value="#{msgs.button_edit_rule}" class="secondaryBtn m-t-sm"
+                   style="display: #{readOnly == true ? 'none' : ''}"
+                   onclick="SailPoint.Rule.Editor.edit(Ext.getDom(#{prefix}findFormName(this) + ':#{prefix}SelectorRule').value,
+                                                       (#{ruleType != null} ? '#{ruleType}' : 'IdentitySelector'),
+                                                       Ext.getDom(#{prefix}findFormName(this) + ':#{prefix}refreshSelectorRulesButton'))" />
+          </div>
+        </ui:fragment>              
+      </div>
+      
+      <div id="#{prefix}SelectorPopulationFields" class="m-t-sm" style="#{selector.type == 'population' ? '' : 'display: none;'}">
+          <h:selectOneMenu id="#{prefix}SelectorPopulation" value="#{selector.population}" disabled="#{readOnly == true}" onchange="Page.fireEvent('selectorPanelChanged');">
+            <f:selectItems  value="#{util.populations}"/>
+          </h:selectOneMenu>
+      </div>
+    </div>
+    
+</ui:composition>
+</body>
+</html>

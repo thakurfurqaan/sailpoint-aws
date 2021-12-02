@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2015 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html">
+<body>
+
+<ui:composition>
+
+  <div class="spTabledContent" style="margin:5px">
+  <table class="spTable" cellspacing="0">
+    <tr>
+      <th><h:outputText value="#{msgs.attributes}"/></th>
+    </tr>
+    <tr>
+      <td>
+        <h:dataTable var="attribute" value="#{workItem.attributeList}" columnClasses="titleColumn,noClass">
+          <h:column>
+            <h:outputText value="#{attribute.key}"/>
+          </h:column>
+          <h:column>
+            <h:outputText value="#{attribute.prettyValue}"/>
+          </h:column>
+        </h:dataTable>
+      </td>
+    </tr>
+  </table>
+  </div>
+
+</ui:composition>
+
+</body>
+</html>

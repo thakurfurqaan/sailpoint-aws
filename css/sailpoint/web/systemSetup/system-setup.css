@@ -1,0 +1,264 @@
+/*******************************
+ * Identity Mappings Config
+ *******************************/
+.selectionBox {
+  border: 1px solid #CCCCCC;
+  padding: 0;
+  width: 375px;
+}
+
+.borderlessSelectionBox {
+  padding: 0;
+  width: 375px;
+}
+
+.selectedSourceMapping {
+  border-color: #dfdfdf;
+  background-color: #f1f1f1
+}
+
+/*******************************
+ * Scopes
+ *******************************/
+.scopeNode, .scopeNodeDormant {
+  background-image: url(../../../../images/icons/chart_organisation.png) !important;
+}
+
+
+/*******************************
+ * LCM Config
+ *******************************/
+ .lcmEditorStatusBar {
+  margin-top: 10px;
+  padding-left: 0 !important;
+ }
+ 
+/*******************************
+ * Login Config
+ *******************************/
+.firstColumn {
+  width: 5%;
+  white-space: nowrap;
+}
+ 
+.middleColumn {
+  width: 1%;
+}
+ 
+.x-form-item-label {
+  font-weight: normal;
+}
+ 
+.smallText {
+  margin-left: 20px; 
+  font-size: 0.8em; 
+  height: 1.4em;
+}
+ 
+ /** This is here temporarily to limit the effect of changing HTML input heights to just the login configuration page. 
+     something similar exists in css/sailpoint/web/analyze/search.css                                                 **/
+#configForm input[type=text] {
+  height: 30px !important;
+  line-height: 26px;
+  vertical-align: middle !important;
+  border: 1px solid #b5b8c8;
+}
+
+.expandedTextArea {
+  width : 600px !important;
+  height : 230px;
+}
+
+.wideInput {
+  width: 250px;
+}
+
+.disabled {
+    color: #999;
+}
+
+/*******************************
+ * Quicklink Populations
+ *******************************/
+.pageInfo {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-left: 40px;
+  display: inline-block;
+  color: grey;
+}
+
+.bodyHeaderDiv #bodyDivSubTitle {
+  float: right;
+  margin-top: 23px;
+  margin-right: 10px;
+}
+/* prevents a horizontal scroll bar after selecting a dynamic scope */
+#qlpEditorDiv .x-grid-row-selected {
+  border: none;
+}
+
+/* background and font color on selected items in a grid */
+#qlpEditorDiv .selectableGrid .x-grid-row-selected .x-grid-cell {
+  background-color: #2BA4C7 !important;
+  background-image: none;
+  color: #FFFFFF;
+}
+
+#qlpEditorDiv .spTable caption, #qlpEditorDiv h3 {
+  color: #037DA1;
+  font-size: 15px;
+  font-weight: bold;
+  text-indent: 3px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+#qlpEditorDiv .spTable caption, #qlpEditorDiv .spTable th {
+  background-color: #F2F2F2;
+  background-image: none;
+  height: inherit;
+  border-top-color: #C9BFBF;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-bottom-color: #C9BFBF;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+
+/* adds a top border to the page-able grid on the left side */
+#qlpEditorDiv .selectableGrid .x-panel-body-default {
+  border-top-style: solid !important;
+}
+
+/* anything smaller than 1210 pixels we need to render small paging buttons */
+@media (max-width: 1209px) {
+  #qlpEditorDiv div.tinytoolbar .x-btn {
+    padding: 2px;
+  }
+}
+/* 1210 appears to be the min-width needed to render 1 pixel of whitespace between 'last page' button and grid */
+@media (min-width: 1210px) {
+  #qlpEditorDiv div.tinytoolbar .x-btn {
+    padding: 5px;
+  }
+}
+
+#qlpEditorDiv #AttributeSelectorPanel .x-panel-default,
+#qlpEditorDiv #AttributeSelectorPanel .x-toolbar-default,
+#qlpEditorDiv #AttributeSelectorPanel .x-panel-body-default {
+  border: none;
+}
+
+#qlpEditorDiv #AttributeSelectorPanel .x-toolbar .x-toolbar-item {
+  margin: 5px;
+}
+
+#qlpEditorDiv .sp-toolbar > div.x-toolbar .x-toolbar-item {
+  margin: 20px 10px 0px 0px;
+}
+
+#nameTable thead td {
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+i.fa-pencil, i.fa-times {
+  font-size: 18px;
+}
+
+#qlpEditorDiv label {
+  font-weight: normal;
+  margin-left: 5px;
+}
+
+#qlpEditorDiv hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#qlpEditorDiv input[type="checkbox"] {
+  margin: 3px;
+}
+
+/* Quicklinks Tab */
+#qlpEditorDiv .x-grid-row-checker {
+  width: 100%;
+  margin: auto;
+}
+
+#qlpQuicklinksGrid .x-column-header {
+  border-right: 1px solid #d4d4d4;
+}
+
+#qlpQuicklinksGrid .x-column-header.x-column-header-last {
+  border-right: none;
+}
+
+#qlpQuicklinksGrid .x-grid-row .x-grid-cell-special {
+  background-image: none;
+  background-color: inherit;
+}
+
+#qlpQuicklinksGrid .x-grid-row-over .x-grid-cell,
+#qlpQuicklinksGrid .x-grid-row-over .x-grid-cell-special {
+  background-color: #FFFFFF;
+}
+
+#qlpQuicklinksGrid .x-grid-row-selected.x-grid-row-over {
+  border: inherit;
+}
+
+#qlpQuicklinksGrid .x-grid-row-selected .x-grid-cell {
+  background-color: #FFFFFF !important;
+}
+
+#qlpQuicklinksGrid .x-grid-row .x-grid-cell {
+  border-left: 1px solid #d4d4d4;
+  border-right: 1px solid #d4d4d4;
+  border-bottom: 1px solid #d4d4d4;
+}
+
+#qlpQuicklinksGrid .x-grid-row .x-grid-cell.x-grid-cell-first {
+  border-left: none;
+}
+
+#qlpQuicklinksGrid .x-grid-row .x-grid-cell.x-grid-cell-last {
+  border-right: none;
+}
+
+.qlpNoWrap .x-grid-cell-inner {
+  white-space: nowrap !important;
+}
+/* End Quicklinks Tab */
+
+/* Quicklinks Options Popup */
+#qlpOptionsPopup .x-window-body {
+  border: none;
+}
+
+#qlpOptionsPopup .x-window-header {
+  border: none;
+  background-color: #058CB1 !important;
+}
+
+#qlpOptionsPopup .x-window-header-text {
+  color: #FFFFFF;
+  font-size: 16px;
+}
+/* Adjust the image tags for the tooltips to align the checkboxes */
+#qlpOptionsPopup img {
+  padding-bottom: 2px;
+}
+
+#qlpOptionsPopup .x-form-item-label, .x-form-cb-label {
+  margin-right: 10px;
+}
+
+#qlpOptionsPopup .x-panel-body {
+  border-left: none;
+  border-right: none;
+}
+/* End Quicklinks Options Popup */

@@ -1,0 +1,159 @@
+<!--
+  ~ /* (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. */
+  -->
+
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+
+    <sp:script>
+        <src>#{base.requestContextPath}/scripts/sailpoint/Suggest.js?#{debug.revision}</src>
+    </sp:script>
+
+    <script type="text/javascript">
+
+
+
+
+        Ext.onReady(function () {
+
+            var sourceTypes = Ext.create('Ext.data.Store', {
+                fields: ['val', 'disp'],
+                data: [
+                    {'val':'application', 'disp':'#{msgs.label_application}'},
+                    {'val': 'targetSource', 'disp':'#{msgs.label_targ_source}'}
+                ]
+            });
+            Ext.create('Ext.form.ComboBox', {
+                store: sourceTypes,
+                queryMode: 'local',
+                displayField: 'disp',
+                valueField: 'val',
+                renderTo: 'sourcePicker',
+                value: "#{not empty taskDefinition.argMap['targetSource'].value ? 'targetSource' : 'application'}",
+                listeners: {
+                    select: {
+                        fn: function(combo, records, opts) {
+                            var v = records[0].get('val');
+                            if (v === 'application') {
+                                Ext.getCmp('targetSourceSuggest').hide();
+                                Ext.getCmp('targetSourceSuggest').clearValue();
+                                Ext.getDom('targSourceSuggest').value = '';
+                                Ext.getCmp('targetSourceAppSuggest').show();
+                            } else if (v === 'targetSource') {
+                                Ext.getCmp('targetSourceAppSuggest').hide();
+                                Ext.getCmp('targetSourceAppSuggest').clearValue();
+                                Ext.getDom('applicationSuggest').value = '';
+                                Ext.getCmp('targetSourceSuggest').show();
+                            }
+                        }
+                    }
+                }
+            });
+
+            var applicationSuggest = Ext.create('SailPoint.BaseSuggest', {
+                    id: 'targetSourceAppSuggest',
+                    pageSize: 10,
+                    renderTo: 'applicationSuggestDiv',
+                    value: "#{taskDefinition.argMap['targetApplication'].objectValue}",
+                    initialData: "#{taskDefinition.argMap['targetApplication'].objectValue}",
+                    contextPath: CONTEXT_PATH,
+                    binding: 'applicationSuggest',
+                    valueField: 'name',
+                    sortable: true,
+                    extraParams: {aggregationType: 'unstructured'},
+                    baseParams: {suggestType: 'application'},
+                    hidden: #{not empty taskDefinition.argMap['targetSource'].value},
+                    fields : [ 'id', 'name', 'displayName' ]
+                }
+            );
+
+            var targSourceSuggest = new SailPoint.BaseSuggest({
+                id: 'targetSourceSuggest',
+                pageSize: 10,
+                renderTo: 'targSourceSuggestDiv',
+                value: "#{taskDefinition.argMap['targetSource'].objectValue}",
+                initialData: "#{taskDefinition.argMap['targetSource'].objectValue}",
+                binding: 'targSourceSuggest',
+                valueField:'name',
+                sortable:true,
+                baseParams: {suggestType: 'targetSource'},
+                hidden: #{empty taskDefinition.argMap['targetSource'].value},
+                fields : [ 'id', 'name', 'displayName' ]
+
+            });
+        });
+    </script>
+
+    <ui:fragment>
+        <div class="spContent">
+            <table id="targOptsTab" class="argumentTbl argumentTblWithHelp customWidth paddedTbl" cellspacing="0">
+                <tr>
+                    <th>
+                        <h:outputText styleClass="spContentTitle" value="#{msgs.task_target_aggregation_options}"/>
+                    </th>
+                </tr>
+                <tr>
+                    <td><sp:outputText value="#{taskDefinition.argMap['targetApplication'].argument.prompt}"/></td>
+                    <td><h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['targetApplication'].argument.name}"
+                                        rendered="#{taskDefinition.argMap['targetApplication'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help[taskDefinition.argMap['targetApplication'].argument.helpKey]}"/>
+                    </td>
+                    <td>
+                        <div id="sourcePicker" style='display: inline-block;'></div>
+                        <div class="task-sub-option" style='display: inline-block;'>
+                        <div id="applicationSuggestDiv" style='display: inline-block;'></div>
+                        <div id="targSourceSuggestDiv" style='display: inline-block;'></div>
+                        </div>
+                        <t:inputHidden id="applicationSuggest"
+                                       value="#{taskDefinition.argMap['targetApplication'].value}" forceId="true">
+                        </t:inputHidden>
+                        <t:inputHidden id="targSourceSuggest"
+                                       value="#{taskDefinition.argMap['targetSource'].value}" forceId="true">
+                        </t:inputHidden>
+                    </td>
+                </tr>
+                <tr>
+                    <td><sp:outputText  value="#{taskDefinition.argMap['promoteInherited'].argument.prompt}"/></td>
+                    <td><h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['promoteInherited'].argument.name}"
+                                        rendered="#{taskDefinition.argMap['promoteInherited'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help[taskDefinition.argMap['promoteInherited'].argument.helpKey]}"/>
+                    </td>
+                    <td>
+                        <h:selectBooleanCheckbox id="promoteInherited" value="#{taskDefinition.argMap['promoteInherited'].booleanValue}"/>
+                    </td>
+                </tr>
+                 <tr>
+                    <td><sp:outputText  value="#{taskDefinition.argMap['disableEmptyTargetFilter'].argument.prompt}"/></td>
+                    <td><h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['disableEmptyTargetFilter'].argument.name}"
+                                        rendered="#{taskDefinition.argMap['disableEmptyTargetFilter'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                        alt="#{help[taskDefinition.argMap['disableEmptyTargetFilter'].argument.helpKey]}"/>
+                    </td>
+                    <td>
+                        <h:selectBooleanCheckbox id="disableEmptyTargetFilter" value="#{taskDefinition.argMap['disableEmptyTargetFilter'].booleanValue}"/>
+                    </td>
+                </tr>
+           </table>
+        </div>
+        <script defer="defer">
+            makeTableMulticolored(Ext.getDom('targOptsTab'),true,false, "even", "odd" );
+        </script>
+    </ui:fragment>
+
+</ui:composition>
+
+</body>
+
+</html>

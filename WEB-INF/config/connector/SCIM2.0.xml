@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ImportAction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ImportAction name="connectorRegistryUpdateAction">
+  <Application connector="sailpoint.connector.OpenConnectorAdapter"
+    featuresString="DISCOVER_SCHEMA, PROVISIONING, SYNC_PROVISIONING, ENABLE, PASSWORD" icon="internetIcon" name="SCIM 2.0" 
+    type="SCIM 2.0">
+    <Attributes>
+      <Map>
+        <entry key="authType" value="oauth2"/>
+        <entry key="grant_type" value="REFRESH_TOKEN"/>
+         <entry key="encrypted" value="client_secret,oauthBearerToken,oauthTokenInfo,refresh_token"/>
+        <entry key="connectorClass" value="openconnector.connector.scim2.SCIM2Connector"/>
+        <entry key="pageSize"/>
+        <entry key="explicitAttributesRequest"/>
+        <entry key="formPath" value="scim2AttributesForm.xhtml"/>
+        <entry key="skipGrpUpdate" value="true"/>
+      </Map>
+    </Attributes>
+    <Schemas>
+      <Schema displayAttribute="userName" identityAttribute="id" nativeObjectType="User" objectType="account"/>
+      <Schema displayAttribute="displayName" identityAttribute="id" nativeObjectType="Entitlement" objectType="entitlements" aggregationType="group"/>
+      <Schema displayAttribute="displayName" identityAttribute="id" nativeObjectType="Role" objectType="roles" aggregationType="group"/>
+      <Schema displayAttribute="displayName" identityAttribute="id" nativeObjectType="Group" objectType="group"/>
+    </Schemas>
+  </Application>
+</ImportAction>

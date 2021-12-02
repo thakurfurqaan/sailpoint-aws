@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2012 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html   xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:t="http://myfaces.apache.org/tomahawk"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+  <ui:composition>
+
+    <ui:include src="scim2AttributesFormInclude.xhtml">
+        <ui:param name="config" value="#{applicationObject.attributes}"/>
+    </ui:include>
+
+  </ui:composition>
+
+</body>
+</html>

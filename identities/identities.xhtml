@@ -1,0 +1,46 @@
+<!-- (c) Copyright 2016 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+
+<ui:composition template="/ngAppPage.xhtml">
+  <ui:define name="headerItems">
+
+    <ui:include src="/ui/scriptData.xhtml" />
+    <ui:include src="/ui/jspmInclude.xhtml" />
+
+    <script type="text/javascript">
+      System.import('#{base.requestContextPath}/ui/js/identity/IdentityAppModule.js');
+    </script>
+
+  </ui:define>
+
+  <ui:define name="title">#{msgs.quicklink_category_manage}</ui:define>
+
+  <ui:define name="body">
+    <div class="sp-ui-app">
+      <sp-register-config sp-config-key="disableInitialManageAccountsGridLoad"
+                          sp-config-value="#{sp:getSystemConfigurationValue('disableInitialManageAccountsGridLoad', false)}" />
+
+      <sp-register-config sp-config-key="disableInitialManagePasswordsGridLoad"
+                          sp-config-value="#{sp:getSystemConfigurationValue('disableInitialManagePasswordsGridLoad', false)}" />
+
+      <sp-register-config sp-config-key="disableInitialManageAttributesGridLoad"
+                          sp-config-value="#{sp:getSystemConfigurationValue('disableInitialManageAttributesGridLoad', false)}" />
+
+      <sp-register-config sp-config-key="disableInitialViewIdentityGridLoad"
+                          sp-config-value="#{sp:getSystemConfigurationValue('disableInitialViewIdentityGridLoad', false)}" />
+
+      <sp-register-config sp-config-key="uiApprovalItemsColumnsEntitlement"
+                          sp-column-configs="#{sp:getColumnConfigJSON('uiApprovalItemsColumnsEntitlement')}" />
+
+      <div ui-view=""></div>
+    </div>
+  </ui:define>
+</ui:composition>
+</body>
+</html>

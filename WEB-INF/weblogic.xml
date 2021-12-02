@@ -1,0 +1,52 @@
+<!DOCTYPE weblogic-web-app PUBLIC
+        "-//BEA Systems, Inc.//DTD Web Application 8.1//EN"
+        "weblogic810-web-jar.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<weblogic-web-app>
+  <container-descriptor>
+    <prefer-application-packages>
+      <package-name>javax.faces.*</package-name>
+      <package-name>javax.ws.rs.*</package-name>
+      <package-name>com.fasterxml.*</package-name>
+      <package-name>com.google.*</package-name>
+      <package-name>com.sun.faces.*</package-name>
+      <package-name>com.sun.jersey.*</package-name>
+      <package-name>org.glassfish.jersey.*</package-name>
+      <package-name>jersey.repackaged.*</package-name>
+      <package-name>com.sun.research.ws.wadl.*</package-name>
+      <package-name>org.apache.myfaces.*</package-name>
+      <package-name>org.opensaml.*</package-name>
+      <package-name>org.sl4j.*</package-name>
+      <package-name>org.jboss.logging.*</package-name>
+      <package-name>org.hibernate.*</package-name>
+      <package-name>antlr.*</package-name>
+      <package-name>net.sf.*</package-name>
+      <package-name>net.minidev.json.*</package-name>
+    </prefer-application-packages>
+    <prefer-application-resources>
+      <resource-name>META-INF/services/org.glassfish.jersey.*</resource-name>
+      <resource-name>javax.faces.*</resource-name>
+      <resource-name>com.sun.faces.*</resource-name>
+      <resource-name>META-INF/services/javax.servlet.ServletContainerInitializer</resource-name>
+      <resource-name>META-INF/services/com.sun.faces.spi.FacesConfigResourceProvider</resource-name>
+      <resource-name>META-INF/services/org.opensaml.*</resource-name>
+      <resource-name>default-config.xml</resource-name>
+      <resource-name>schema-config.xml</resource-name>
+      <resource-name>saml2-assertion-config.xml</resource-name>
+      <resource-name>saml2-metadata-config.xml</resource-name>
+      <resource-name>saml2-protocol-config.xml</resource-name>
+      <resource-name>META-INF/resources/javax.faces/jsf.js</resource-name>
+      <resource-name>META-INF/resources/javax.faces/jsf-uncompressed.js</resource-name>
+      <resource-name>META-INF/services/org.glassfish.jersey.*</resource-name>
+      <resource-name>jersey.repackaged.*</resource-name>
+      <resource-name>org.glassfish.jersey.*</resource-name>
+      <resource-name>META-INF/services/com.sun.faces.*</resource-name>
+      <resource-name>META-INF/mojarra_ext.taglib.xml</resource-name>
+      <resource-name>org.slf4j.*</resource-name>
+      <resource-name>soap11-config.xml</resource-name>
+      <resource-name>schema/*</resource-name>
+    </prefer-application-resources>
+  </container-descriptor>
+</weblogic-web-app>

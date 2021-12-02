@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2017 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui">
+<body>
+
+<ui:composition>
+  <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'LOGIN_CONFIGURATION';
+        
+        Ext.onReady(function () {
+            Ext.create('SailPoint.systemSetup.mfaconfig.MFAContainer', {
+                config: '#{mfaConfig.config}',
+                renderTo: 'mfaContainerContent',
+                id: 'mfaConfigContainer',
+                configField: 'mfaConfigField',
+                mfaPopulationsLabel: '#{msgs.mfa_populations}',
+                mfaPopulationsHelp: '#{help.help_mfa_workflow}',
+                mfaAddWorkflows: '#{msgs.mfa_add_workflows}'
+            });
+        });
+        //--><!]]>
+  </script>
+  
+  <div id="mfaContainerContent" class="paddedContainer"/>
+    
+  <h:outputLink id="jumpToBPELink" value="#{base.requestContextPath}/define/workflow/workflow.jsf?forceLoad=true" />
+  
+  <t:inputHidden id="mfaConfigField" value="#{mfaConfig.config}" forceId="true"/>
+</ui:composition>
+
+</body>
+</html>

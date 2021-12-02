@@ -1,0 +1,20 @@
+/* Primefaces override
+
+   Unset various styles for classes included with primefaces components.
+   We are already avoiding the theme.css from primeface, but some component styling exists, so undo that here */
+
+.ui-button {
+    margin-right: unset;
+    padding: unset;
+    white-space: pre;
+}
+
+.ui-button.ui-button-text-only .ui-button-text {
+    padding: unset;
+    line-height: unset;
+}
+
+.ui-button.ui-button-icon-only .ui-icon {
+    left: unset;
+    top: unset;
+}

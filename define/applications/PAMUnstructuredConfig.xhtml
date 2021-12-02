@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2017 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+  <script type="text/javascript">
+    Ext.onReady(function() {
+        // The PAM Collector Config is the exact same as the PAM application config.  Instead of having users enter
+        // it twice, we'll just copy the application config properties onto the target source.
+        var pamApplicationConfig = {
+            host: "#{sp:escapeJavascript(targetSource.applicationObject.attributes['host'])}",
+            authType: "#{sp:escapeJavascript(targetSource.applicationObject.attributes['authType'])}",
+            user: "#{sp:escapeJavascript(targetSource.applicationObject.attributes['user'])}",
+            password: "#{sp:escapeJavascript(targetSource.applicationObject.attributes['password'])}",
+            oauthBearerToken: "#{sp:escapeJavascript(targetSource.applicationObject.attributes['oauthBearerToken'])}",
+            explicitAttributesRequest: "#{sp:escapeJavascript(targetSource.applicationObject.attributes['explicitAttributesRequest'])}",
+            pageSize: "#{sp:escapeJavascript(targetSource.applicationObject.attributes['pageSize'])}"
+        };
+
+        var isCreate = #{null == targetSource.object.id};
+        // Copy all of the values from the application config to the target source config.
+        if (isCreate) {
+            var attrNames = Object.keys(pamApplicationConfig);
+            attrNames.forEach(function(attrName) {
+                initializePamAttribute(attrName);
+            });
+        }
+
+        /**
+         * Initialize the hidden element value for the given PAM attribute with the value from the application.
+         *
+         * @param {String} attrName  The name of the attribute to initialize.
+         */
+        function initializePamAttribute(attrName) {
+            var elt = getPamField(attrName),
+                appValue = pamApplicationConfig[attrName];
+            // Set the field to use the app's value.
+            elt.value = appValue;
+        }
+
+        /**
+         * Return the hidden element for the given PAM attribute name.
+         *
+         * @param {String} attrName  The name of the PAM attribute.
+         *
+         * @return {Element} The hidden element for the given PAM attribute name.
+         */
+        function getPamField(attrName) {
+            var fieldId = 'editForm:' + attrName;
+            return document.getElementById(fieldId);
+        }
+    });
+  </script>
+
+  <div class="pamUnstructuredConfig">
+    <ui:include src="scim2AttributesFormInclude.xhtml">
+      <ui:param name="config" value="#{targetSource.object.configuration}"/>
+    </ui:include>
+
+    <h:inputHidden id="pageSize" value="#{targetSource.object.configuration['pageSize']}" />
+  </div>
+
+</ui:composition>
+
+</body>
+</html>

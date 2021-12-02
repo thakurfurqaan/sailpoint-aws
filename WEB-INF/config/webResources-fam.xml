@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<!-- (c) Copyright 2019 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<sailpoint>
+    
+    <ImportAction name="merge">
+      <Configuration name="WebResource">
+        <Attributes>
+          <Map>
+            <entry key="webResources">
+              <value>
+                <List>
+                    <!--
+                      FAM Menu
+                    -->
+                    <WebResource rights="ViewFAMNavigationMenu" url="dashboard/admin-dashboard"/>
+                    <WebResource rights="ViewFAMNavigationMenu" url="forensics/activities"/>
+                    <WebResource rights="ViewFAMNavigationMenu" url="compliance/data-classification/dc-policies"/>
+                    <WebResource rights="ViewFAMNavigationMenu" url="tasks/owners-election/overview"/>
+                    <WebResource rights="ViewFAMNavigationMenu" url="resources"/>
+                    <WebResource rights="ViewFAMNavigationMenu" url="reports/my-reports"/>
+                    <WebResource rights="ViewFAMNavigationMenu" url="tasks/access-certification/overview"/>
+
+                    <!-- 
+                      FAM Configuration
+                     -->
+                    <WebResource rights="FullAccessFAMConfiguration" url="systemSetup/index.*">
+                      <ChildResources>
+                        <String>systemSetup/famConfig.*</String>
+                      </ChildResources>
+                    </WebResource>
+                    <WebResource rights="FullAccessFAMConfiguration" url="systemSetup/famConfig.*"/>
+                </List>
+              </value>
+            </entry>
+          </Map>
+        </Attributes>
+      </Configuration>
+    </ImportAction>
+</sailpoint>

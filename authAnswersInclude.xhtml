@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC
+  "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:c="http://java.sun.com/jstl/core" 
+  xmlns:f="http://java.sun.com/jsf/core" 
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:t="http://myfaces.apache.org/tomahawk"
+  xmlns:sp="http://sailpoint.com/ui"
+  xmlns:p="http://primefaces.org/ui">
+<body>
+<ui:composition>
+
+    <script type="text/javascript">
+        function showAnswer(index, formName) {
+            var form = 'editForm';
+            if (!Ext.isEmpty(formName)) {
+                form = formName;
+            }
+            var rowNum = index-1;
+            var el = Ext.getDom(form+':answers:'+rowNum+':hiddenAuthAnswer');
+            if (el) {
+                if (el.type === "text") {
+                    el.type = "password";
+                } else {
+                    el.type="text";
+                }
+            }
+        }
+    </script>
+  <t:saveState value="#{authAnswersBeanParam.preLoginUrl}" />
+
+  <table id="answersTable" class="width100 paddedTbl #{tableClass}">
+    <tbody>
+      <ui:repeat id="answers" value="#{authAnswersBeanParam.authAnswers}" var="answer">
+        <tr>
+          <td class="titleColumn">
+            <h:outputFormat value="#{msgs.auth_answers_question}">
+              <f:param value="#{answer.index}"/>
+            </h:outputFormat>:
+          </td>
+          <td>
+            <h:selectOneMenu value="#{answer.questionId}">
+              <f:selectItems value="#{authAnswersBeanParam.questions}" />
+            </h:selectOneMenu>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="titleColumn">
+            <h:outputFormat value="#{msgs.auth_answers_answer}">
+              <f:param value="#{answer.index}"/>
+            </h:outputFormat>:
+          </td>
+          <td>
+            <h:inputText id="authAnswer" value="#{answer.answer}" size="40" rendered="#{not sp:getSystemConfigurationValue('obscureAuthAnswers', false)}"/>
+            <h:inputSecret id="hiddenAuthAnswer" value="#{answer.answer}" size="40" redisplay="true" rendered="#{sp:getSystemConfigurationValue('obscureAuthAnswers', false)}"/>
+            <h:commandLink onclick="showAnswer('#{answer.index}', '#{formName}'); return false;" value="#{msgs.auth_answers_show_hide}" rendered="#{sp:getSystemConfigurationValue('obscureAuthAnswers', false)}"/>
+          </td>
+        </tr>
+      </ui:repeat>
+    </tbody>
+  </table>
+  <script defer="defer">
+    makeTableMulticolored(Ext.getDom('answersTable'), true, true, 'odd', 'even', null, 0, 0, 2);
+  </script>
+
+</ui:composition>
+
+</body>
+</html>

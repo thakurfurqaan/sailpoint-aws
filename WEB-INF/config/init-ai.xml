@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+
+<!-- (c) Copyright 2019 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<!--
+  Initialization file for SailPoint IdentityAI integration with IdentityIQ.
+-->
+<sailpoint>
+
+    <ImportAction name="installPlugin" value="plugins/identityai-recommender-plugin.zip" >
+        <Attributes>
+            <Map>
+                <entry key="throwOnError" value="true"/>
+            </Map>
+        </Attributes>
+    </ImportAction>
+
+    <!-- 
+      Declare the IdentityAI module
+    -->
+    <Module name="IdentityAI" description="ui_identityai_module_desc">
+        <Attributes>
+            <Map>
+                <entry key="healthCheckClass" value="sailpoint.identityai.IdentityAIHealthChecker"/>
+                <entry key="enabledConfigKey" value="identityAIEnabled"/>
+            </Map>
+        </Attributes>
+    </Module>
+
+    <!--
+      By setting identityAIEnabled, we enable the configuration and use of IdentityAI.
+
+      By setting recommenderSelected, IdentityIQ will use the recommender
+      defined by the RecommenderDefinition named "IdentityAI", which
+      is loaded by the plugin.
+
+      If lcmEnableApprovalRecommendations is true, then LCM workflows will calculate
+      recommendations for approvals, assuming that a recommender
+      like IdentityAI is properly configured.
+
+      If certificationShowRecommendations is true, the default behavior is for
+      certifications to generate and show recommendations. This can be overridden on
+      a per-certification basis at creation or during Staging phase
+    -->
+    <ImportAction name="merge">
+        <Configuration name="SystemConfiguration">
+            <Attributes>
+                <Map>
+                    <entry key="identityAIEnabled" value="true" />
+                    <entry key="recommenderSelected" value="IdentityAI" />
+                    <entry key="lcmEnableApprovalRecommendations" value="true" />
+                    <entry key="certificationShowRecommendations" value="true" />
+                </Map>
+            </Attributes>
+        </Configuration>
+    </ImportAction>
+
+    <ImportAction name='execute' value='sailpoint.identityai.IdentityAIMonitoringConfigUpdater'/>
+
+    <Identity name="IdentityAI" protected="true" workgroup="true">
+        <Attributes>
+            <Map>
+                <entry key="displayName" value="IdentityAI"/>
+                <entry key="systemUser">
+                    <value>
+                        <Boolean>true</Boolean>
+                    </value>
+                </entry>
+            </Map>
+        </Attributes>
+    </Identity>
+
+    <ImportAction name="include" value="WEB-INF/config/webResources-ai.xml"/>
+
+    <Capability name="IdentityAIAdministrator" displayName="capability_iai_administrator">
+        <Description>capability_desc_iai_administrator</Description>
+        <RightRefs>
+            <!-- Edit IdentityAI Configuration -->
+            <Reference class="sailpoint.object.SPRight" name="FullAccessIAIConfiguration" />
+        </RightRefs>
+    </Capability>
+
+</sailpoint>

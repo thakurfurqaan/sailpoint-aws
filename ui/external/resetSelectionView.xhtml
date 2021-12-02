@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sp="http://sailpoint.com/ui">
+      
+<sp:loadBundle basename="sailpoint.web.messages.iiqMessages" var="msgs" />
+<section class="panel">
+  <header class="panel-heading bg-light lter text-center">
+    <span class="h3 font-thin">#{msgs.ui_reset_selection_title}</span>
+  </header>
+
+  <div class="panel-body">
+    <section>
+      <span class="text h4">#{msgs.ui_reset_choose_verification_method}</span>
+
+      <div class="radio">
+        <label for="radioAuth"><input type="radio" name="selectionType" value="questions" id="radioAuth" ng-model="selectionModel.authMethod"/>#{msgs.ui_reset_answer_auth_questions}</label>
+      </div>
+      <div class="radio">
+        <label for="radioSMS"><input type="radio" name="selectionType" value="sms" id="radioSMS" ng-model="selectionModel.authMethod"/>#{msgs.ui_reset_send_sms_code}</label>
+      </div>
+      
+      <div class="m-t-lg">
+        <a id="selectionHaveCodeLink" class="font-thin text-info"
+           href="" ng-click="navigateHaveACode()">
+          <strong>#{msgs.ui_reset_already_have_code}</strong>
+        </a>
+      </div>
+      <div id="smsStatusDiv" ng-show="smsStatus.show" aria-live="rude" role="alert"
+         ng-bind-html="smsStatus.text" ng-class="{'text-success':!smsStatus.hasError, 'text-danger':smsStatus.hasError}">
+      </div>
+    </section>
+
+    <span ng-show="errorMessages">
+      <br/><div id="alertDiv" tabindex="0" class="text-danger" aria-live="assertive" ng-bind-html="errorMessages"></div>
+    </span>
+  </div>
+  <footer class="panel-footer clearfix text-center bg-light lter">
+    <div class="inline">
+      <button id="cancelBtn" class="btn btn-secondary" ng-click="cancel()">#{msgs.button_cancel}</button>
+    </div>
+    <div class="inline">
+      <button id="submitBtn" class="btn btn-info" ng-click="submit()" aria-disabled="{{disableSubmit}}"
+              ng-disabled="disableSubmit">#{msgs.button_submit}</button>
+    </div>
+  </footer>
+</section>
+</html>

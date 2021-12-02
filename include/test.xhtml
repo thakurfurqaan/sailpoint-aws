@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2012 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:sp="http://sailpoint.com/ui"
+  xmlns:t="http://myfaces.apache.org/tomahawk"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui">
+<body>
+
+<ui:composition template="/extAppPage.xhtml">
+  <ui:define name="title">This page is used for test only
+  </ui:define>
+  <ui:define name="headerItems">
+    <sp:style serveOffset="#{base.requestContextPath}/css/sailpoint/form">
+      <src>form-editor.css</src>
+    </sp:style>
+    <sp:script>
+      <src>#{base.requestContextPath}/scripts/sailpoint/component/RuleCombo.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/component/PagingTreeStore.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/component/TreeGridPanel.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/model/FormItem.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/FormItemTree.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/DynamicValue.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/AttributeFactory.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/DivisionPanel.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/FormItemEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/SectionEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/RowEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/FieldEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/ButtonEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/FormEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/FormEditorWindow.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/FormItemHelper.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/ApprovalPanel.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/WorkflowFormEditor.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/form/editor/plugin/FormItemDragDrop.js?#{debug.revision}</src>
+    </sp:script>
+    <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        Ext.onReady(function () {
+            // Initialize FormEditor class
+            var formEditor = new SailPoint.form.editor.FormEditor({
+                id: 'formEditor',
+                beanType: 'application',
+                usage: 'Standalone',
+                window: new Ext.window.Window({
+                    height: 800,
+                    width: 400
+                })
+            });
+
+            // Initialize FieldEditor class
+            var fieldEditor = new SailPoint.form.editor.FieldEditor({
+                formEditor: formEditor,
+                height: 800
+            });
+
+            // Field form
+            var fieldEditorPanel = new Ext.Panel ({
+                id: 'fieldEditorPanel',
+                cls: 'fieldEditorPanel',
+                title: 'Simple Form',
+                height: Ext.getBody().getViewSize().height,
+                items: fieldEditor,// field editor form
+                renderTo: 'container'// Ext.getBody()
+            });
+        });
+
+        //--><!]]>
+    </script>
+  </ui:define>
+  <ui:define name="body">
+    <f:view>
+        <div id='container'/>
+     </f:view>
+  </ui:define>
+</ui:composition>
+
+</body>
+</html>

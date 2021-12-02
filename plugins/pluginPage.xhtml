@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<!-- (c) Copyright 2016 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html lang="en"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+
+<ui:composition template="/ngAppPage.xhtml">
+
+  <ui:define name="title">
+    <h:outputText value="#{plugins.pageTitle}" />
+  </ui:define>
+  <ui:define name="headerItems">
+    <ui:include src="../ui/scriptData.xhtml" />
+  </ui:define>
+
+  <ui:define name="body">
+    <ui:include src="${plugins.pageIncludeUrl}" />
+
+    <ui:fragment rendered="#{!plugins.pageFound}">
+      <div class="row m-t">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-xs-12 text-center">
+              <h3 class="text-muted">
+                #{msgs.plugin_page_not_found}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ui:fragment>
+  </ui:define>
+
+</ui:composition>
+
+</body>
+</html>

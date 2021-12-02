@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2017 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+<body>
+  <ui:composition>
+    <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+      helpKey = 'APPLICATION';
+
+      function getFieldValue(fieldname) {
+          var val = null;
+          var field = Ext.getDom(fieldname);
+          if ( field ) {
+              val = field.value;
+          }
+          return val;
+      }
+
+      Ext.onReady(function () {
+          Ext.QuickTips.init();
+          
+          var pageSize = getFieldValue('editForm:pageSize');
+          if (pageSize.length == 0) {
+              // Maximum page size supported by Okta is 200, hence keeping default value is 200.
+              Ext.getDom('editForm:pageSize').value = '200';
+          }
+
+          // This is our validation hook
+          Page.on('beforeSave', function() {
+              if (!hasCredentialConfiguration()) {
+                  var host = getFieldValue('editForm:host');
+                  Validator.validateNonBlankString(host, "Host URL cannot be null!");
+
+                  var apiToken = getFieldValue('editForm:apiToken');
+                  Validator.validateNonBlankString(apiToken, "API Token cannot be null!");
+
+                  var errors = Validator.getErrors();
+                  if (errors && errors.length > 0) {
+                      Validator.displayErrors('appErrorsTop');
+                      return false;
+                  }
+              }
+              return true;
+          });
+      });
+
+      //--><!]]>
+    </script>
+    <f:view>
+      <div id="oktaConnectivitySettings" class='spContent'>
+        <h:outputText styleClass="sectionHeader" value="#{applicationObject.type} Connection Settings" />
+        <table class="spTable" style="border: 0px" cellspacing="0">
+          <tr id="oktaURLRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_okta_api_host_name}" />
+              <h:outputText styleClass="requiredText" value="*" /></td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpUrl" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                 alt="#{help.help_con_okta_host}" />
+            </td>
+            <td>
+              <h:inputText id="host" value="#{applicationObject.attributes['host']}" size="40" redisplay="true"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+          <tr id="oktaAPIKeyRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_okta_api_token}" />
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpUser" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                 alt="#{help.help_con_okta_api_token}" /></td>
+            <td>
+              <h:inputSecret id="apiToken" value="#{applicationObject.attributes['apiToken']}" size="40"
+                redisplay="true" disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_okta_page_size}" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpPageSize" styleClass="helpIcon"
+                 url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_okta_page_size}" />
+            </td>
+            <td>
+              <h:inputText id="pageSize" value="#{applicationObject.attributes['pageSize']}" size="20"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+               <f:validateLongRange minimum="1" maximum="200" />
+              </h:inputText>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div id="oktaAggrgationFilterSettings" class='spContent'>
+       <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_okta_agg_filter_label}" />
+       <table class="spTable" style="border: 0px" cellspacing="0">
+          <tr id="accountFilterRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_okta_account_agg_filter}" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpAccountFilter" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+               alt="#{help.help_con_okta_account_agg_constraint}" />
+            </td>
+            <td>
+              <h:inputText id="accountAggFilter"
+                value="#{applicationObject.attributes['accountAggFilter']}"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+          
+           <tr id="groupFilterRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_okta_group_agg_filter}" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpGroupFilter" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+               alt="#{help.help_con_okta_group_agg_constraint}" />
+            </td>
+            <td>
+              <h:inputText id="groupAggFilter"
+                value="#{applicationObject.attributes['groupAggFilter']}"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+          <tr id="applicationFilterRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_okta_app_agg_filter}" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpAppFilter" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+               alt="#{help.help_con_okta_app_agg_constraint}" />
+            </td>
+            <td>
+              <h:inputText id="applicationAggFilter"
+                value="#{applicationObject.attributes['applicationAggFilter']}"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+          </table>
+       </div>
+    </f:view>
+  </ui:composition>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC
+  "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:t="http://myfaces.apache.org/tomahawk"
+  xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+    <f:view>
+      <div class="spLightBlueTabledContent" style="width: 98%">        
+        <table class="spLightBlueTable" cellspacing="0">
+          <tr>
+            <th colspan="3">#{msgs.saved_searches}</th>
+          </tr>
+          <tr>
+            <td width="20%">
+                <h:outputText styleClass="sectionHeader" value="#{msgs.label_search_name}" style="white-space: nowrap; font-weight:bold"/>
+            </td>
+            <td colspan="2">
+              <t:dataList value="#{searchBean.mySearchItemsByType}" var="searchItem">
+                <p:commandButton rendered="#{searchBean.searchType == searchItem.type}"
+                  styleClass="#{searchBean.selectedSearchItemName==searchItem.name ? 'loadedSavedSearch' : 'savedSearch'}" 
+                  value="#{searchItem.name}"
+                  onclick="SailPoint.Analyze.loadSearch('#{formName}', '#{sp:escapeJavascript(searchItem.name)}', '#{loadBtnName}');"/>
+              </t:dataList>
+            </td>
+           </tr>
+          
+          <ui:fragment rendered="#{searchBean.selectedSearchItemName!=null and !empty searchBean.selectedSearchItemName and searchBean.searchItem.type == searchBean.searchType}">
+
+          <tr class="loadedSearchItem">
+            <td style="border-top:1px dashed #ccc" valign="top">
+              <h:outputText style="font-weight:bold" styleClass="font10" value="#{msgs.label_loaded_search} "/><br/>
+              <h:outputText styleClass="font10" style="whitespace:nowrap" value="#{searchBean.selectedSearchItemName}"/>
+            </td>
+            <td style="border-top:1px dashed #ccc" valign="top">
+              <ui:fragment rendered="#{!('' eq search.searchItem.description)}">
+                <h:outputText style="font-weight:bold" styleClass="font10" value="#{msgs.label_description} "/>
+                <h:outputText styleClass="font10" value="#{searchBean.searchItem.description}"/>
+              </ui:fragment>
+            </td>
+            <td align="right" style="border-top:1px dashed #ccc" valign="top">
+              <input type="button" class="secondaryBtn" value="#{msgs.button_delete_search}"
+                onclick="SailPoint.Analyze.deleteSearch('#{formName}', '#{sp:escapeJavascript(searchBean.selectedSearchItemName)}')"/>
+            </td>
+          </tr>
+          
+            <ui:fragment rendered="#{searchBean.searchItem.converted eq true}">
+              <tr>
+                <td colspan="3">
+                  <div class="formWarn">
+                    <h:outputText value="#{msgs.saved_search_cannot_display}"/>
+                  </div>
+                </td>
+              </tr>
+            </ui:fragment>
+          </ui:fragment>
+          
+          <ui:fragment rendered="#{searchBean.reportDef!=null and  search.searchItem.type == searchType}">
+          <tr class="loadedReportItem">
+            <td style="border-top:1px dashed #ccc">
+              <h:outputText style="font-weight:bold" styleClass="font10" value="#{msgs.label_loaded_report_name} "/>
+              <h:outputText styleClass="font10" value="#{searchBean.searchItem.name}"/>
+            </td>
+            <td style="border-top:1px dashed #ccc">
+              <h:outputText style="font-weight:bold" styleClass="font10" value="#{msgs.label_description} "/>
+              <h:outputText styleClass="font10" value="#{searchBean.searchItem.description}"/>
+            </td>
+
+            <td style="border-top:1px dashed #ccc" align="right">
+              <p:commandButton style="margin-left:30px" styleClass="secondaryBtn"
+                value="#{msgs.clear_search_report}" action="#{searchBean.clearSearchItem}"/>
+              
+            </td>
+          </tr>
+          </ui:fragment>
+          
+        </table>
+        
+      </div>
+      <p:commandButton id="deleteBtn" value="Delete"
+                         oncomplete="if (Ext.getDom('stateForm')) {
+                                         Ext.getDom('stateForm:updatePanelStateBtn').click();
+                                     }"
+                         action="#{searchBean.deleteSearchItem}" style="display:none"/>
+      
+      <h:inputHidden id="searchName" value="#{searchBean.selectedSearchItemName}"/>
+      <p:commandButton  id="identityLoadBtn"
+                          onclick="SailPoint.Identity.Search.clearSearchFields();"
+                          action="#{searchBean.loadSearchItem}" 
+                          update="@([id$=identityReRenderOnClear])"
+                          oncomplete="SailPoint.Analyze.Identity.finishRerender();" 
+                          style="display:none" />
+      
+      <p:commandButton  id="advancedIdentityLoadBtn"
+                          onclick="SailPoint.Identity.Search.clearAdvancedSearchFields();"
+                          action="#{searchBean.loadSearchItem}" 
+                          updatexx="#{p.component('advancedIdentityAttributesToRerender')}"
+                          oncomplete="SailPoint.Analyze.Identity.finishRerender();" 
+                          style="display:none" />
+                          
+      <p:commandButton  id="accountGroupLoadBtn"
+                          onclick="SailPoint.AccountGroup.Search.clearSearchFields();"
+                          action="#{searchBean.loadSearchItem}" 
+                          update="@([id$=accountGroupReRenderOnClear])"
+                          oncomplete="SailPoint.Analyze.AccountGroup.finishRerender();" 
+                          style="display:none" />
+                          
+      <p:commandButton  id="activityLoadBtn"
+                          onclick="SailPoint.Activity.Search.clearSearchFields();"
+                          action="#{searchBean.loadSearchItem}" 
+                          update="@([id$=activityReRenderOnClear])"
+                          oncomplete="SailPoint.Analyze.Activity.finishRerender();" 
+                          style="display:none" />
+                          
+      <p:commandButton  id="auditLoadBtn"
+                          onclick="SailPoint.Audit.Search.clearSearchFields();"
+                          action="#{searchBean.loadSearchItem}" 
+                          update="@([id$=auditReRenderOnClear])"
+                          oncomplete="SailPoint.Analyze.Audit.finishRerender();" 
+                          style="display:none" />
+                          
+      <p:commandButton  id="certificationLoadFinishBtn"
+                          onclick="SailPoint.Certification.Search.clearSearchFields();"
+                          action="#{searchBean.loadSearchItem}" 
+                          update="@([id$=certificationReRenderOnClear])"
+                          oncomplete="SailPoint.Analyze.Certification.finishRerender();SailPoint.Utils.styleSelects();" 
+                          style="display:none" />
+
+      <p:commandButton  id="certificationLoadBtn"
+                          style="display:none"
+                          action="#{searchBean.groupFilter.reset}"
+                          update="@([id$=certificationSearchGroupFilter])"
+                          oncomplete="if (Ext.getDom('certificationSearchForm')) {
+                                          Ext.getDom('certificationSearchForm:certificationLoadFinishBtn').click();
+                                      }"/> 
+                          
+      <p:commandButton  id="roleLoadBtn"
+                          onclick="SailPoint.Role.Search.clearSearchFields();"
+                          action="#{searchBean.loadSearchItem}" 
+                          update="@([id$=roleReRenderOnClear])"
+                          oncomplete="SailPoint.Analyze.Role.finishRerender();" 
+                          style="display:none" />
+                          
+      <p:commandButton  id="identityRequestLoadBtn"
+                          onclick="SailPoint.IdentityRequest.Search.clearSearchFields();"
+                          action="#{searchBean.loadSearchItem}" 
+                          update="@([id$=identityRequestReRenderOnClear])"
+                          oncomplete="SailPoint.Analyze.IdentityRequest.finishRerender();" 
+                          style="display:none" />
+
+      <p:commandButton  id="linkLoadBtn"
+                          onclick="SailPoint.Link.Search.clearSearchFields();"
+                          action="#{searchBean.loadSearchItem}" 
+                          update="@([id$=linkReRenderOnClear])"
+                          oncomplete="SailPoint.Analyze.Link.finishRerender();" 
+                          style="display:none" />
+
+     <p:commandButton  id="syslogLoadBtn"
+                          onclick="SailPoint.Syslog.Search.clearSearchFields();"
+                          action="#{searchBean.loadSearchItem}" 
+                          update="@([id$=syslogReRenderOnClear])"
+                          oncomplete="SailPoint.Analyze.Syslog.finishRerender();" 
+                          style="display:none" />
+    </f:view>
+</ui:composition>
+</body>
+</html>

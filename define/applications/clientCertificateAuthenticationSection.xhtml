@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:t="http://myfaces.apache.org/tomahawk" xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:sp="http://sailpoint.com/ui">
+    <h:body>
+        <ui:composition>
+            <script type="text/javascript">
+                <!--//--><![CDATA[//><!--
+                function validateClientCertParams(){
+                  var clientCertExists = document.getElementById("editForm:clientCertExists");
+                  var certificate = document.getElementById("editForm:clientCertificate").value;
+                  var certKey = document.getElementById("editForm:clientKeySpec").value;
+                  
+                  if (clientCertExists && !certKey && !certificate) {
+                      return;
+                  }
+                  
+                  if (clientCertExists) {
+                      if (!certificate && certKey) {
+                        Validator.validateNonBlankString(certificate, '#{msgs.err_msg_client_cert_cert_empty}');
+                      }
+                      if (certificate && !certKey) {
+                        Validator.validateNonBlankString(certKey, '#{msgs.err_msg_client_cert_cert_key_empty}');
+                      }
+                  } else {
+                      if (!certificate) {
+                        Validator.validateNonBlankString(certificate, '#{msgs.err_msg_client_cert_cert_empty}');
+                      }
+                      if (!certKey) {
+                        Validator.validateNonBlankString(certKey, '#{msgs.err_msg_client_cert_cert_key_empty}');
+                      }
+                  }
+                }
+       
+              //--><!]]>
+            </script>
+            
+            <div class ="row">
+                <div class="col-md-3" style="text-align:right;">
+                    <label for="name"><h:outputText value="#{msgs.con_form_client_cert_certificate}"/>
+                      <h:outputText styleClass="requiredText" value=" *"/>
+                    </label>
+                    <h:graphicImage id="imgHlpCCert" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                        alt="#{help.help_con_form_client_certificate}"/>
+                </div>
+                <div class="col-md-6">
+                    <c:if test="${applicationObject.attributes['clientCertificate'] ne null}">
+                        <h:inputHidden id="clientCertExists" value="true" />
+                        <div>
+                            <b><h:outputFormat
+                                 value="#{msgs.con_form_client_cert_present}">
+                                 <f:param
+                                    value="#{applicationObject.attributes['clientCertUploadedOn']}" />
+                            </h:outputFormat></b><br />
+                            <h:outputFormat value="#{msgs.con_form_client_cert_certselectnew}" />
+                        </div>
+                    </c:if>
+                    <h:inputTextarea id="clientCertificate"
+                        value="#{applicationObject.attributes['client_cert_to_update']}"
+                        rows="5" cols="80" style="width: 35%;"
+                        disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                        readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+                </div>
+            </div>
+            <div class="row" style='margin-top: 15px;'>
+                <div class="col-md-3" style="text-align:right;">
+                    <label for="name"><h:outputText value="#{msgs.con_form_client_cert_key}"/>
+                      <h:outputText styleClass="requiredText" value=" *"/>
+                    </label>
+                    <h:graphicImage id="imgHlpCCertKey" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                        alt="#{help.help_con_form_client_certificate_key}"/>
+                </div>
+                <div class="col-md-6">
+                    <h:inputTextarea id="clientKeySpec"
+                        value="#{applicationObject.attributes['clientKeySpec_to_update']}"
+                        rows="5" cols="80" style="width: 35%;"
+                        disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                        readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+                </div>
+            </div>
+        </ui:composition>
+    </h:body>
+</html>

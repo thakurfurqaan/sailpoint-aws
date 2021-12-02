@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC
+"-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2015 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<body>
+        <ui:composition>
+
+       <tr>
+          <td class='titleColumn certScheduleTitleCol'>
+            <h:outputText style='padding:5px' value="#{msgs.iq_service_host}"/>
+            <h:outputText styleClass="requiredText" value="*" rendered="#{IQServiceInfoRequired}"/>
+          </td>
+          <td class="certScheduleHelpCol">
+            <h:graphicImage id="imgHlpIQServiceHost"
+                            styleClass="helpIcon"
+                            url="/images/icons/dashboard_help_16.png"
+                            alt="#{IQServiceHostHelpTextKey}"/>
+          </td>
+          <td>
+            <h:inputText value="#{applicationObject.IQServiceHost}"
+                    size="40"
+                    disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                    readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                    required="#{IQServiceInfoRequired}" requiredMessage="#{msgs.err_iqservice_host_required}"/>
+            </td>
+        </tr>
+
+        <tr>
+          <td class='titleColumn certScheduleTitleCol'>
+            <h:outputText style='padding:5px' value="#{msgs.iq_service_port}"/>
+            <h:outputText styleClass="requiredText" value="*" rendered="#{IQServiceInfoRequired}"/>
+          </td>
+          <td class="certScheduleHelpCol">
+            <h:graphicImage id="imgHlpIQServicePort"
+                            styleClass="helpIcon"
+                            url="/images/icons/dashboard_help_16.png"
+                            alt="#{help.help_con_form_iq_service_port}"/>
+          </td>
+          <td>
+            <h:inputText value="#{applicationObject.IQServicePort}"
+                         size="40"
+                         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                         readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                         required="#{IQServiceInfoRequired}" requiredMessage="#{msgs.err_iqservice_port_required}"/>
+          </td>
+        </tr>
+        
+        <tr>
+          <td class='titleColumn certScheduleTitleCol'>
+            <h:outputText style='padding:5px' value="IQService User"/>
+          </td>
+          <td class="certScheduleHelpCol">
+            <h:graphicImage id="imgHlpIQServiceUser"
+                            styleClass="helpIcon"
+                            url="/images/icons/dashboard_help_16.png"
+                            alt="#{help.help_con_form_iq_service_user}"/>
+          </td>
+          <td>
+            <h:inputText value="#{applicationObject.IQServiceUser}"
+                    size="40"
+                    disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                    readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+        </tr>
+        
+        <tr>
+          <td class='titleColumn certScheduleTitleCol'>
+            <h:outputText style='padding:5px' value="IQService Password"/>
+            
+          </td>
+          <td class="certScheduleHelpCol">
+            <h:graphicImage id="imgHlpIQServicePassword"
+                            styleClass="helpIcon"
+                            url="/images/icons/dashboard_help_16.png"
+                            alt="#{help.help_con_form_iq_service_password}"/>
+          </td>
+          <td>
+            <sp:inputSecret value="#{applicationObject.IQServicePassword}"
+                    size="40"
+                    disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                    readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                    redisplay="true" autocomplete="off"/>
+            </td>
+        </tr>
+        
+        <tr>
+          <td class='titleColumn certScheduleTitleCol'>
+            <h:outputText style='padding:5px' value="#{msgs.iq_service_tls}"/>
+          </td>
+          <td class="certScheduleHelpCol">
+            <h:graphicImage id="imgHlpUseTLSForIQServcie"
+                            styleClass="helpIcon"
+                            url="/images/icons/dashboard_help_16.png"
+                            alt="#{help.help_con_form_iq_service_tls}"/>
+          </td>
+          <td>
+            <h:selectBooleanCheckbox id="useTLSForIQService" value="#{applicationObject.useTLSForIQService}"></h:selectBooleanCheckbox>
+          </td>
+        </tr>
+        </ui:composition>
+        </body>
+        </html>

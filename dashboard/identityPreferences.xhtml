@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2019 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+
+<ui:composition template="/ngAppPage.xhtml">
+    <sp:loadBundle basename="sailpoint.web.messages.iiqMessages" var="msgs"/>
+
+    <ui:define name="title">#{msgs.title_edit_preferences}</ui:define>
+    <ui:define name="headerItems">
+        <ui:include src="../ui/scriptData.xhtml" />
+        <ui:include src="../ui/jspmInclude.xhtml" />
+
+        <script type="text/javascript">
+            System.import('#{base.requestContextPath}/ui/js/identityPreferences/IdentityPreferencesAppModule.js');
+        </script>
+    </ui:define>
+
+    <ui:define name="body">
+        <div class="sp-ui-app">
+            <sp-register-config sp-config-key="obscureAuthAnswers"
+                                sp-config-value="#{sp:getSystemConfigurationValue('obscureAuthAnswers', false)}" />
+            <div ui-view=""></div>
+        </div>
+    </ui:define>
+</ui:composition>
+
+</body>
+</html>

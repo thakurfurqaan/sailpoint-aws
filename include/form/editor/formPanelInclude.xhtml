@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+<body>
+
+<ui:composition>
+    <div id="formEditorPanel"/>
+    <div class="spacerDiv"></div>
+                       
+    <p:commandButton action="#{formEditor.loadForm}"
+                       onclick="Ext.MessageBox.wait('#{sp:escapeJavascript(msgs.loading_data)}');"
+                       id="formPanelLoadBtn"
+                       update="@([id$=formId],[id$=formName],[id$=formApplicationId],[id$=formApplicationName],[id$=formFields])"
+                       oncomplete="SailPoint.form.editor.FormEditor.ShowEditorPanel('#{beanType}'); Ext.MessageBox.hide();"
+                       style="display:none"/> 
+
+</ui:composition>
+
+</body>
+</html>

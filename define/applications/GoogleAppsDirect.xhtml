@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+
+    <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'APPLICATION';
+
+        function getFieldValue(field) {
+            var val = null;
+            var fileName = Ext.getDom(field);
+            if ( fileName ) {
+               val = fileName.value;
+            }
+            return val;
+        }
+        
+        function togglePartitioning() {
+            var pdiv1 = Ext.getDom('partitionsRow_1');
+            var pdiv2 = Ext.getDom('partitionsRow_2');
+            var pdiv3 = Ext.getDom('partitionsRow_3');
+            
+            // If the checkbox is enabled show the div for partitions
+            var partitioningEnabled = Ext.getDom('editForm:partitionMode_');
+            if ( partitioningEnabled && partitioningEnabled.checked == true) {
+                if ( pdiv1 ) {                   
+                    pdiv1.style.display = "";
+                }
+                if ( pdiv2 ) {                   
+                    pdiv2.style.display = "";
+                }
+                if ( pdiv3 ) {                   
+                    pdiv3.style.display = "";
+                }
+            } else {    
+                Ext.getDom('editForm:partitions_1').value = "";
+                Ext.getDom('editForm:partitions_2').value = "";
+                Ext.getDom('editForm:partitions_3').value = "";
+                pdiv1.style.display = "none";
+                pdiv2.style.display = "none";
+                pdiv3.style.display = "none";
+
+          }
+        }
+        Ext.onReady(function () {
+           Ext.QuickTips.init();
+
+           // This is our validation hook
+           Page.on('beforeSave', function() {
+               if (!hasCredentialConfiguration()) {
+                   var clientID = getFieldValue('editForm:clientID');
+                   Validator.validateNonBlankString(clientID, "Client ID cannot be null!");
+
+                   var clientSecret = getFieldValue('editForm:clientSecret');
+                   Validator.validateNonBlankString(clientSecret, "Client Secret cannot be null!");
+
+                   var refreshToken = getFieldValue('editForm:refreshToken');
+                   Validator.validateNonBlankString(refreshToken, "Refresh Token cannot be null!");
+
+                   var groupDetails = getFieldValue('editForm:groupDetails');
+                   Validator.validateNonBlankString(groupDetails, "Choose a value for Read Group Details!");
+
+                   var errors = Validator.getErrors();
+                   if (errors && errors.length > 0) {
+                       Validator.displayErrors('appErrorsTop');
+                       return false;
+                   }
+               }
+
+               //return false will kill cancel the save
+               return true;
+           });
+           togglePartitioning();
+        });
+
+       //--><!]]>
+    </script>
+    <f:view>
+
+      <h:outputText styleClass="sectionHeader" value="#{applicationObject.type} #{msgs.label_configuration}"/><br/><br/>
+
+
+      <div id="accountSettings" class='spContent'>
+        <table class="spTable" style="border:0px" cellspacing="0">
+        
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_GAR_client_ID}"/>   
+              <h:outputText styleClass="requiredText" value="*"/>           
+            </td>
+
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpClientID" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_GAR_client_ID}"/>
+
+            </td>
+            <td>
+              <h:inputText id="clientID"
+                           value="#{applicationObject.attributes['clientID']}"                           
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+          
+           <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_GAR_client_secret}"/>
+              <h:outputText styleClass="requiredText" value="*"/>           
+            </td>
+
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpClientSecret" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_GAR_client_secret}"/>
+            </td>
+            <td>
+              <sp:inputSecret id="clientSecret"
+                           value="#{applicationObject.attributes['clientSecret']}"  redisplay="true"                         
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_GAR_refresh_token}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpRefreshToken" styleClass="helpIcon" 
+                              url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_GAR_refresh_token}"/>
+            </td>
+             <td>
+               <sp:inputSecret id = "refreshToken"
+                               size = "50"                                
+                               value="#{applicationObject.attributes['refreshToken']}" redisplay="true"
+                               disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                               readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/> 
+             </td>
+          </tr>          
+
+        <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_GAR_group_details}"/>
+              <h:outputText styleClass="requiredText" value="*"/>           
+            </td>
+
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpIndexGDetails" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_GAR_group_details}"/>
+            </td>
+            <td>
+            <h:selectOneMenu id="groupDetails" 
+                                value="#{applicationObject.attributes['groupDetails']}"                               
+                                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                  <f:selectItem itemValue="Y" itemLabel="Y"/>
+                  <f:selectItem itemValue="N" itemLabel="N"/>
+              </h:selectOneMenu>  
+              </td>
+          </tr>                                          
+          
+		<tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_page_size}"/>
+            </td>
+             <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpPageSize" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_form_page_size}"/>
+
+            </td>
+            <td>
+              <h:inputText id = "pageSize"
+                                   value="#{applicationObject.attributes['pageSize']}"                                 
+                           size="20"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                           <f:validateLongRange minimum="1" maximum="500"/>
+                           </h:inputText>
+            </td>
+            </tr>     
+            
+                    
+
+        </table>
+
+        <ui:fragment>
+          <!--  Partitioning Config -->
+          <br/><h:outputText styleClass="sectionHeader" value="#{msgs.con_form_GAR_partitioning}"/><br/>
+          <table class="spTable" style="border:0px" cellspacing="0">
+            <tr>
+              <td class='titleColumn certScheduleTitleCol'>
+                <h:outputText style='padding:5px' value="#{msgs.con_form_GAR_partitioningMode}"/>
+              </td>
+              <td class="certScheduleHelpCol">
+                <h:graphicImage id="imgHlpPartitioningMode_" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                                alt="#{msgs.help_con_form_GAR_partitionEnable}"/>
+              </td>
+              <td width="100%">
+                <h:selectBooleanCheckbox id='partitionMode_' onclick='togglePartitioning()'
+                                         value="#{applicationObject.attributes['partitionMode']}"
+                                         disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+              </td>
+            </tr>
+              <tr id='partitionsRow_1'>
+                <td class='titleColumn certScheduleTitleCol'>
+                  <h:outputText style='padding:5px' value="#{msgs.con_form_GAR_email_partition}"/>
+                </td>
+                <td class="certScheduleHelpCol">
+                  <h:graphicImage id="imgHlpPartitioningStatements_1" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                                  alt="#{msgs.help_con_form_GAR_email_partitions}"/>
+                </td>
+                <td>              
+                  <h:inputTextarea id='partitions_1' 
+                                   converter="NewLineList"
+                                   value="#{applicationObject.attributes['partitionEmail']}"
+                                   rows="3" cols="10"
+                                   disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                   readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                </td>
+              </tr>
+              
+               <tr id='partitionsRow_2'>
+                <td class='titleColumn certScheduleTitleCol'>
+                  <h:outputText style='padding:5px' value="#{msgs.con_form_GAR_given_name_partition}"/>
+                </td>
+                <td class="certScheduleHelpCol">
+                  <h:graphicImage id="imgHlpPartitioningStatements_2" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                                  alt="#{msgs.help_con_form_GAR_given_name_partitions}"/>
+                </td>
+                <td>              
+                  <h:inputTextarea id='partitions_2'
+                                   converter="NewLineList"
+                                   value="#{applicationObject.attributes['partitionGivenName']}"
+                                   rows="3" cols="10"
+                                   disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                   readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                </td>
+              </tr>
+
+             <tr id='partitionsRow_3'>
+                <td class='titleColumn certScheduleTitleCol'>
+                  <h:outputText style='padding:5px' value="#{msgs.con_form_GAR_family_name_partition}"/>
+                </td>
+                <td class="certScheduleHelpCol">
+                  <h:graphicImage id="imgHlpPartitioningStatements_3" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                                  alt="#{msgs.help_con_form_GAR_family_name_partitions}"/>
+                </td>
+                <td>              
+                  <h:inputTextarea id='partitions_3'
+                                   converter="NewLineList"
+                                   value="#{applicationObject.attributes['partitionFamilyName']}"
+                                   rows="3" cols="10"
+                                   disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                   readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                </td>
+              </tr>
+              
+            </table>
+        </ui:fragment>
+
+      </div>
+
+
+    </f:view>
+</ui:composition>
+
+</body>
+</html>

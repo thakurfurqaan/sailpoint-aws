@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+<body>
+
+<ui:composition> 
+  <div class="width100" style="margin:5px">
+
+    <p:outputPanel id="formsList">
+      <table class="" style="width:98%"><tr><td>
+        <h:outputFormat value="#{msgs.form_editor_intro}">
+          <f:param value="#{beanType}"/>
+        </h:outputFormat>
+      </td></tr></table>
+      <div class="spacerDiv"/>
+      <table class="spTable" style="width:98%" id="formUsageListTbl">
+        <tr>
+          <th width="10%">#{msgs.type}</th>
+          <th>#{msgs.name}</th>
+          <th colspan="2">#{msgs.description}</th>
+        </tr>
+        <ui:repeat value="#{formEditor.usages}" var="usage">
+          <tr>
+            <td>#{sp:localizedUsage(usage)}</td>
+            <ui:fragment rendered="#{!(sp:mapValue(formEditor.formUsageMap, usage) eq null)}">
+
+              <td width="20%">
+                <a href="javascript:editPolicy('#{sp:mapValue(formEditor.formUsageMap, usage).id}', '#{usage}');">
+                  #{(sp:mapValue(formEditor.formUsageMap, usage)).name}
+                </a>
+              </td>
+              <td width="60%">#{sp:mapValue(formEditor.formUsageMap, usage).description}</td>
+              <td width="10%">
+                <a href="javascript:deletePolicy('#{sp:mapValue(formEditor.formUsageMap, usage).id}', '#{usage}');" class="deleteLink">#{msgs.delete_policy}</a>
+              </td>
+
+            </ui:fragment>
+
+            <ui:fragment rendered="#{sp:mapValue(formEditor.formUsageMap, usage) eq null}">
+            <td width="20%"></td>
+            <td width="60%"></td>
+            <td align="left" width="10%">
+              <a href="javascript:addPolicy('#{sp:mapValue(formEditor.formUsageMap, usage).id}', '#{usage}');" class="addLink">#{msgs.add_policy}</a>
+            </td>
+            </ui:fragment>
+          </tr>
+        </ui:repeat>
+      </table>
+
+      <script type="text/javascript">
+      makeTableMulticolored(Ext.getDom('formUsageListTbl'),true,false, "even", "odd");
+      </script>
+    </p:outputPanel>
+
+    <div class="spacerDiv"></div>
+
+    <script type="text/javascript">
+      // Form IDs are wiped out on each request.  The role editor keeps
+      // the FormEditBean in the session so it can use IDs.  Others don't
+      // do that so they rely on usages instead.  We're not consistent because
+      // Role forms don't have usages.
+      function addPolicy(formId, usage) {
+          Ext.getDom('editForm:formId').value = formId;
+          Ext.getDom('editForm:formUsage').value = usage;
+          Ext.getDom('editForm:formAddBtn').click();
+      }
+
+      function editPolicy(formId, usage) {
+          Ext.getDom('editForm:formId').value = formId;
+          Ext.getDom('editForm:formUsage').value = usage;
+          Ext.getDom('editForm:formLoadBtn').click();
+      }
+
+      function deletePolicy(formId, usage) {
+          Ext.MessageBox.confirm('#{msgs.delete}?', Ext.String.format('#{msgs.form_editor_delete_policy}', usage), function(btn){
+              if(btn === 'yes') {
+                  Ext.getDom('editForm:formUsage').value = usage;
+                  Ext.getDom('editForm:formDeleteBtn').click();
+              }
+          });
+      }
+    </script>
+
+    <h:inputHidden value="#{formEditor.usage}" name="formUsage" id="formUsage"/>
+    <p:commandButton action="#{formEditor.addForm}"
+                       id="formAddBtn"
+                       update="@([id$=formId],[id$=formName],[id$=formApplicationId],[id$=formApplicationName],[id$=formAttributes],[id$=createAttributesPanel])"
+                       oncomplete="SailPoint.form.editor.FormEditor.ShowEditorWindow('#{beanType}', Ext.getDom('editForm:formUsage').value);"
+                       value="#{msgs.form_editor_add_form}"
+                       style="display:none"/>
+
+    <p:commandButton action="#{formEditor.deleteForm}"
+                       id="formDeleteBtn"
+                       update="@([id$=formsList])"
+                       value="#{msgs.form_editor_delete_form}"
+                       style="display:none"/>
+
+    <p:commandButton action="#{formEditor.loadForm}"
+                       id="formLoadBtn"
+                       name="formLoadBtn"
+                       update="@([id$=formId],[id$=formName],[id$=formApplicationId],[id$=formApplicationName],[id$=formAttributes],[id$=createAttributesPanel])"
+                       oncomplete="SailPoint.form.editor.FormEditor.ShowEditorWindow('#{beanType}', Ext.getDom('editForm:formUsage').value);"
+                       style="display:none"/>
+  </div>
+</ui:composition>
+
+</body>
+</html>

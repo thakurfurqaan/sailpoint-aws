@@ -1,0 +1,492 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+
+
+    <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'APPLICATION';
+
+        function getFieldValue(field) {
+            var val = null;
+            var fileName = Ext.getDom(field);
+            if ( fileName ) {
+               val = fileName.value;
+            }
+            return val;
+        }
+
+        function engageCoreWSSecurity() {
+            var checkCorewss = Ext.getDom('editForm:engageCoreWSSecurity').checked;
+            var wssCoreUnameRow = Ext.get('wssCoreUnameRow');
+            var wssCorePasswordRow = Ext.get('wssCorePasswordRow');
+
+            if (checkCorewss) {
+                wssCoreUnameRow.setVisibilityMode(Ext.Element.DISPLAY);
+                wssCoreUnameRow.show();
+                wssCorePasswordRow.setVisibilityMode(Ext.Element.DISPLAY);
+                wssCorePasswordRow.show();
+            } else {
+                wssCoreUnameRow.setVisibilityMode(Ext.Element.DISPLAY);
+                wssCoreUnameRow.hide();
+                wssCorePasswordRow.setVisibilityMode(Ext.Element.DISPLAY);
+                wssCorePasswordRow.hide();
+            }
+        }
+
+        function engageWSSecurity() {
+            var checkwss = Ext.getDom('editForm:engageWSSecurity').checked;
+            var wssUnameRow = Ext.get('wssUnameRow');
+            var wssPasswordRow = Ext.get('wssPasswordRow');
+
+            if (checkwss) {
+                wssUnameRow.setVisibilityMode(Ext.Element.DISPLAY);
+                wssUnameRow.show();
+                wssPasswordRow.setVisibilityMode(Ext.Element.DISPLAY);
+                wssPasswordRow.show();
+            } else {
+                wssUnameRow.setVisibilityMode(Ext.Element.DISPLAY);
+                wssUnameRow.hide();
+                wssPasswordRow.setVisibilityMode(Ext.Element.DISPLAY);
+                wssPasswordRow.hide();
+            }
+        }
+        
+        function engageCommonWSSecurity() {
+            var checkCommonwss = Ext.getDom('editForm:engageCommonWSSecurity').checked;
+            var wssCommonUnameRow = Ext.get('wssCommonUnameRow');
+            var wssCommonPasswordRow = Ext.get('wssCommonPasswordRow');
+
+            if (checkCommonwss) {
+                wssCommonUnameRow.setVisibilityMode(Ext.Element.DISPLAY);
+                wssCommonUnameRow.show();
+                wssCommonPasswordRow.setVisibilityMode(Ext.Element.DISPLAY);
+                wssCommonPasswordRow.show();
+            } else {
+                wssCommonUnameRow.setVisibilityMode(Ext.Element.DISPLAY);
+                wssCommonUnameRow.hide();
+                wssCommonPasswordRow.setVisibilityMode(Ext.Element.DISPLAY);
+                wssCommonPasswordRow.hide();
+            }
+        }
+
+        function enableAuditing() {
+            var enableAuditing = Ext.getDom('editForm:enableAuditing').checked;
+            var auditUserIdRow = Ext.get('auditUserIdRow');
+            var auditUserIdTypeRow = Ext.get('auditUserIdTypeRow');
+            var auditUserPasswordRow = Ext.get('auditUserPasswordRow');
+
+            if (enableAuditing) {
+                auditUserIdRow.setVisibilityMode(Ext.Element.DISPLAY);
+                auditUserIdRow.show();
+                auditUserIdTypeRow.setVisibilityMode(Ext.Element.DISPLAY);
+                auditUserIdTypeRow.show();
+                auditUserPasswordRow.setVisibilityMode(Ext.Element.DISPLAY);
+                auditUserPasswordRow.show();
+            } else {
+                auditUserIdRow.setVisibilityMode(Ext.Element.DISPLAY);
+                auditUserIdRow.hide();
+                auditUserIdTypeRow.setVisibilityMode(Ext.Element.DISPLAY);
+                auditUserIdTypeRow.hide();
+                auditUserPasswordRow.setVisibilityMode(Ext.Element.DISPLAY);
+                auditUserPasswordRow.hide();
+            }
+        }
+
+        Ext.onReady(function () {
+           Ext.QuickTips.init();
+
+           //setting isActive checkbox true for new applications.
+           var isActive = '#{applicationObject.attributes['isActive']}';
+           if ( !isActive ) {
+               Ext.getDom('editForm:isActive').checked = true;
+           }
+           
+           //Setting pageSize 500 by default for new application.
+           var pageSize = getFieldValue('editForm:pageSize');
+           var url = '#{applicationObject.attributes['xmlURL']}';
+           if ( !url && !pageSize ) {
+               Ext.getDom('editForm:pageSize').value = '500';
+           }
+           
+         //Setting adminUserType External by default for new application.
+           var adminUserType = getFieldValue('editForm:adminUserType');
+           var url = '#{applicationObject.attributes['xmlURL']}';
+           if ( !url && !adminUserType ) {
+               Ext.getDom('editForm:adminUserType').value = 'External';
+           }
+
+           engageWSSecurity();
+           engageCoreWSSecurity();
+           engageCommonWSSecurity();
+           enableAuditing();
+        });
+       //--><!]]>
+    </script>
+
+    <f:view>
+      <h:outputText styleClass="sectionHeader" value="Epic Configuration" />
+      <div id="accountSettings" class='spContent'>
+        <table class="spTable" style="border: 0px" cellspacing="0">
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_url}" /> 
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpHostName" styleClass="helpIcon"
+                            url="/images/icons/dashboard_help_16.png"
+                            alt="#{help.con_help_EPIC_url}" />
+            </td>
+            <td valign="center">
+              <h:inputText id="xmlURL" value="#{applicationObject.attributes['xmlURL']}"
+                size="80" disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" required="true"
+                requiredMessage="#{msgs.con_form_EPIC_url_required}" />
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_adminUserID}" /> 
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpUser" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.con_help_EPIC_UserName}" />
+            </td>
+            <td>
+              <h:inputText value="#{applicationObject.attributes['siteName']}" size="50" id="siteName"
+                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" required="true"
+                 requiredMessage="#{msgs.con_form_EPIC_username_required}" />
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'><h:outputText style='padding:5px'
+                value="#{msgs.con_form_EPIC_adminUserType}" /></td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpAdminUserType" styleClass="helpIcon"
+                  url="/images/icons/dashboard_help_16.png" alt="#{help.con_help_EPIC_adminUserType}" /></td>
+            <td>
+              <h:inputText value="#{applicationObject.attributes['adminUserType']}" size="50" id="adminUserType"
+                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_isActive}" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpIsActive" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.con_help_EPIC_isActive}" />
+            </td>
+            <td>
+              <h:selectBooleanCheckbox id="isActive" value="#{applicationObject.attributes['isActive']}"
+                  redisplay="true" disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_page_size}" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpPageSize" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_EPIC_PageSize}" />
+            </td>
+            <td>
+              <h:inputText id="pageSize" value="#{applicationObject.attributes['pageSize']}" size="20"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+              </h:inputText>
+            </td>
+          </tr>
+
+          <tr id="partitionCountRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_partition_count}" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpPartitionCount" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_EPIC_partition_count}" />
+            </td>
+            <td>
+              <h:inputText id="partitionCount" value="#{applicationObject.attributes['partitionCount']}"
+                  size="20" disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+              <f:validateLongRange minimum="1" />
+              </h:inputText>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Core Web services settings -->
+      <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_EPIC_core_webService_configuration}" />
+
+      <div id="coreWebServicesSettings" class='spContent'>
+        <table class="spTable" style="border: 0px" cellspacing="0">
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_coreUserID}" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpCoreUserId" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_EPIC_coreUserID}" />
+            </td>
+            <td>
+              <h:inputText value="#{applicationObject.attributes['coreUserId']}" size="50" id="coreUserId"
+                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+          <!-- Engage Core WS Security Section -->
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px'
+                value="#{msgs.con_form_EPIC_enable_wssecurity}" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpEnableCoreWS"
+                  styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                  alt="#{msgs.con_help_EPIC_core_enable_wssecurity}" />
+            </td>
+            <td>
+              <h:selectBooleanCheckbox id="engageCoreWSSecurity"
+                  value="#{applicationObject.attributes['engageCoreWSSecurity']}" redisplay="true"
+                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" onchange="engageCoreWSSecurity()" />
+            </td>
+          </tr>
+
+          <tr id="wssCoreUnameRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_username}" /> 
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpCoreWSUserName" styleClass="helpIcon"
+                  url="/images/icons/dashboard_help_16.png" alt="#{help.con_help_EPIC_core_wssecurity_UserName}" />
+            </td>
+            <td>
+              <h:inputText value="#{applicationObject.attributes['coreWSSecurityUserName']}"
+                  id="coreWSSecurityUserName" disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" /></td>
+          </tr>
+          <tr id="wssCorePasswordRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_password}" /> 
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpCoreWSPassword" styleClass="helpIcon"
+                  url="/images/icons/dashboard_help_16.png" alt="#{help.con_help_EPIC_core_wssecurity_Password}" />
+            </td>
+            <td>
+               <sp:inputSecret id="coreWSSecurityPassword"
+                  value="#{applicationObject.attributes['coreWSSecurityPassword']}" redisplay="true" autocomplete="off"
+                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Personnel Management Web services settings -->
+      <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_EPIC_personnel_management_webService_configuration}" />
+
+      <div id="personnelManagementWebServicesSettings" class='spContent'>
+        <table class="spTable" style="border: 0px" cellspacing="0">
+          <!-- Engage Personnel WS Security Section -->
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px'
+                  value="#{msgs.con_form_EPIC_enable_wssecurity}" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpEnableWS"
+                 styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                 alt="#{msgs.con_help_EPIC_enable_wssecurity}" />
+            </td>
+            <td>
+              <h:selectBooleanCheckbox id="engageWSSecurity"
+                  value="#{applicationObject.attributes['engageWSSecurity']}" redisplay="true"
+                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" onchange="engageWSSecurity()" />
+            </td>
+          </tr>
+
+          <tr id="wssUnameRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_username}" />
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpWSUserName" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png" alt="#{help.con_help_EPIC_wssecurity_UserName}" />
+            </td>
+            <td>
+              <h:inputText value="#{applicationObject.attributes['authUserID']}" id="authUserID"
+                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+          <tr id="wssPasswordRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_password}" /> 
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpWSPassword" styleClass="helpIcon"
+                  url="/images/icons/dashboard_help_16.png" alt="#{help.con_help_EPIC_wssecurity_Password}" />
+            </td>
+            <td>
+              <sp:inputSecret id="authUserPassword" value="#{applicationObject.attributes['authUserPassword']}"
+                  redisplay="true" autocomplete="off" disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_enable_auditing}" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpEnableAuditing"
+                  styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                  alt="#{msgs.con_help_EPIC_enable_auditing}" />
+            </td>
+            <td>
+              <h:selectBooleanCheckbox id="enableAuditing"
+                  value="#{applicationObject.attributes['enableAuditing']}" redisplay="true"
+                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" onchange="enableAuditing()" />
+            </td>
+          </tr>
+
+          <tr id="auditUserIdRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_auditUserId}" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpAuditUserId" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png" alt="#{help.con_help_EPIC_auditUserId}" />
+            </td>
+            <td>
+              <h:inputText value="#{applicationObject.attributes['auditUserId']}" id="auditUserId"
+                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+          <tr id="auditUserPasswordRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_auditUserPassword}" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpAuditUserPassword" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png" alt="#{help.con_help_EPIC_auditUserPassword}" />
+            </td>
+            <td>
+              <h:inputSecret value="#{applicationObject.attributes['auditUserPassword']}" id="auditUserPassword"
+                  redisplay="true" disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+          <tr id="auditUserIdTypeRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_auditUserIdType}" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpAuditUserIdType" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.con_help_EPIC_auditUserIdType}" />
+            </td>
+            <td>
+              <h:inputText value="#{applicationObject.attributes['auditUserIdType']}" id="auditUserIdType"
+                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- Common Web services settings -->
+      <h:outputText styleClass="sectionHeader" value="Common Web Services Configuration" />
+      <br />
+      <br />
+
+      <div id="commonWebServicesSettings" class='spContent'>
+        <table class="spTable" style="border: 0px" cellspacing="0">
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_enable_wssecurity}" />
+            </td>
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpEnableCommonWS"
+                  styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                  alt="#{msgs.con_help_EPIC_common_enable_wssecurity}" /></td>
+            <td>
+              <h:selectBooleanCheckbox id="engageCommonWSSecurity"
+                  value="#{applicationObject.attributes['engageCommonWSSecurity']}" redisplay="true"
+                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" onchange="engageCommonWSSecurity()" /></td>
+          </tr>
+
+          <tr id="wssCommonUnameRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_username}" /> 
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpCommonWSUserName" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.con_help_EPIC_common_wssecurity_UserName}" />
+            </td>
+            <td>
+              <h:inputText value="#{applicationObject.attributes['commonWSSecurityUserName']}"
+                  id="commonWSSecurityUserName" disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+          <tr id="wssCommonPasswordRow">
+            <td class='titleColumn certScheduleTitleCol'>
+              <h:outputText style='padding:5px' value="#{msgs.con_form_EPIC_password}" /> 
+              <h:outputText styleClass="requiredText" value="*" />
+            </td>
+            <td class="certScheduleHelpCol">
+              <h:graphicImage id="imgHlpCommonWSPassword" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.con_help_EPIC_common_wssecurity_Password}" />
+            </td>
+            <td>
+              <sp:inputSecret id="commonWSSecurityPassword"
+                  value="#{applicationObject.attributes['commonWSSecurityPassword']}" redisplay="true" autocomplete="off"
+                  disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                  readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+        </table>
+      </div>
+
+    </f:view>
+  </ui:composition>
+
+</body>
+</html>

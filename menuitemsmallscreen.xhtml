@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<head/>
+<body>
+<ui:composition>
+  <!-- menus with sub items large screen -->
+  <ui:fragment rendered="#{menuitem.hasSubItems}">
+    <li class="panel visible-xs visible-sm" role="presentation">
+      <a href="#" class="panel-heading dropdown-toggle collapsed clearfix menuitem" data-toggle="collapse" 
+      data-target="#menuitem_#{sp:escapeHTMLElementId(menuitem.label != null ? menuitem.label : menuitem.ariaLabel)}_list" 
+      data-parent="#menuList" role="menuitem" id="#{menuitem.cssClass == 'fa-cog' ? 'preferenceMenu' : ''}#{menuitem.cssClass == 'fa-wrench' ? 'debugMenu' : ''}">
+        <!-- show label if available -->
+        <ui:fragment rendered="#{null != menuitem.label}">
+          <span class="pull-left">
+              #{sp:localizeKey(menuitem.label)}
+          </span>
+        </ui:fragment>
+        <!-- no label probably means its an icon. icon with submenus is probably Admin menu cog icon -->
+        <ui:fragment rendered="#{null == menuitem.label and menuitem.cssClass != null}">
+          <span class="pull-left" role="presentation">
+            <i role="presentation" aria-hidden="true" class="fa #{menuitem.cssClass} fa-lg"></i>
+          </span>
+          <ui:fragment rendered="#{null != menuitem.ariaLabel}">
+            <span class="sr-only">#{sp:localizeKey(menuitem.ariaLabel)}</span>
+          </ui:fragment>
+        </ui:fragment>
+        <span class="pull-right" role="presentation">
+          <i class="fa fa-angle-up" role="presentation"></i>
+          <i class="fa fa-angle-down" role="presentation"></i>
+        </span>
+        <span class="sr-only">
+          #{msgs.menu_aria_help}
+        </span>
+      </a>
+      <div id="menuitem_#{sp:escapeHTMLElementId(menuitem.label != null ? menuitem.label : menuitem.ariaLabel)}_list" class="panel-collapse panel-body collapse" role="tabpanel" aria-expanded="false">
+       <ul class="nav" role="list">
+         <ui:repeat value="#{menuitem.decoratedSubMenu}" var="submenuitem">
+           <ui:fragment rendered="#{submenuitem.separator}">
+             <li role="presentation" aria-hidden="true" class="divider"></li>
+           </ui:fragment>
+           <ui:fragment rendered="#{not submenuitem.separator}">
+             <li role="presentation">
+               <a href="#{submenuitem.fullPath}" role="listitem" class="menuitem">
+                 #{sp:localizeKey(submenuitem.label)}
+               </a>
+             </li>
+           </ui:fragment>
+         </ui:repeat>
+       </ul>
+      </div>
+    </li>
+  </ui:fragment>
+</ui:composition>
+</body>
+</html>

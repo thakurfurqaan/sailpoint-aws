@@ -1,0 +1,17 @@
+diff --git a/web/ui/css/animate.css b/web/ui/css/animate.css
+index 77e4ae4..a7597f2 100644
+--- a/web/ui/css/animate.css
++++ b/web/ui/css/animate.css
+@@ -1107,6 +1107,12 @@ body { /* Addresses a small issue in webkit: http://bit.ly/NEdoDq */
+        -moz-animation-name: fadeInRightBig;
+        -o-animation-name: fadeInRightBig;
+        animation-name: fadeInRightBig;
++
++
++    -webkit-animation-duration: 0.5s;
++    -moz-animation-duration: 0.5s;
++    -o-animation-duration: 0.5s;
++    animation-duration: 0.5s;
+ }
+ @-webkit-keyframes fadeOut {
+        0% {opacity: 1;}

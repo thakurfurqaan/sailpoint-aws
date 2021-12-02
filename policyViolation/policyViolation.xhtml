@@ -1,0 +1,43 @@
+<!--
+  ~ (c) Copyright 2017. SailPoint Technologies, Inc., All Rights Reserved.
+  -->
+
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+
+<ui:composition template="/ngAppPage.xhtml">
+  <sp:loadBundle basename="sailpoint.web.messages.iiqMessages" var="msgs"/>
+
+  <ui:define name="title">#{msgs.ui_policyviolations_title}</ui:define>
+  <ui:define name="headerItems">
+
+    <ui:include src="../ui/scriptData.xhtml" />
+    <ui:include src="../ui/jspmInclude.xhtml" />
+
+    <script type="text/javascript">
+      System.import('#{base.requestContextPath}/ui/js/policyViolation/PolicyViolationAppModule.js');
+    </script>
+
+  </ui:define>
+
+  <ui:define name="body">
+    <div class="sp-ui-app">
+      <sp-register-config sp-config-key="uiPolicyViolationsColumns"
+                          sp-column-configs="#{sp:getColumnConfigJSON('uiPolicyViolationsColumns')}" />
+
+      <sp-register-notifications sp-messages="#{sp:getMessagesJSON()}"></sp-register-notifications>
+      <promise-tracker-mask></promise-tracker-mask>
+
+      <div ui-view="" />
+    </div>
+  </ui:define>
+
+</ui:composition>
+</body>
+</html>

@@ -1,0 +1,1 @@
+Same as the jquery-plugins included in primefaces jar, moving to resources folder so it can be loaded by JS unit tests.

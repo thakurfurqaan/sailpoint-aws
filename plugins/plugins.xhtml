@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<!-- (c) Copyright 2016 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html lang="en"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jstl/core">
+<body>
+
+<ui:composition template="/ngAppPage.xhtml">
+    <ui:define name="title">#{msgs.ui_plugin_title}</ui:define>
+    <ui:define name="headerItems">
+        <ui:include src="../ui/scriptData.xhtml" />
+        <ui:include src="../ui/jspmInclude.xhtml" />
+
+        <script type="text/javascript">
+            System.import('#{base.requestContextPath}/ui/js/plugin/PluginAppModule.js');
+        </script>
+    </ui:define>
+    <ui:define name="body">
+        <c:if test="#{plugins.enabled}">
+            <div class="sp-ui-app">
+                <div id="notificationDiv" class="sr-only" role="alert" aria-live="assertive"></div>
+                <sp-notification sp-triggerable="true"/>
+                <div>
+                    <div ui-view=""></div>
+                </div>
+            </div>
+        </c:if>
+        <c:if test="#{!plugins.enabled}">
+            <div class="row m-t">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <h3 class="text-muted">
+                                #{msgs.plugin_disabled}
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:if>
+
+    </ui:define>
+</ui:composition>
+
+</body>
+</html>

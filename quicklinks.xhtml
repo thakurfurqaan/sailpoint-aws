@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- (c) Copyright 2015 SailPoint Technologies, Inc., All Rights Reserved. -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<head/>
+<body>
+<ui:composition>
+  <h:form id="quickLinksForm" aria-hidden="true">
+
+    <h:inputHidden id="quickLink" value="#{quickLinks.quickLinkName}"/>
+    <h:inputHidden id="identityId" value="#{quickLinks.identityId}"/>
+
+    <h:commandButton id="chooseQuickLinkBtn" style="display:none"
+                     action="#{quickLinks.chooseQuickLink}"/>
+
+  </h:form>
+
+  <section id="quicklinkPanel" class="bg-primary lt quicklink-panel collapse width" aria-expanded="false">
+    <nav class="nav-primary" >
+      <ul class="nav panel-group" id="menuList" role="tablist">
+        <li class="panel" role="presentation">
+          <!-- menus with sub items on small screen -->
+          <ui:repeat value="#{menu.root.leftMenuItems}" var="menuitem" varStatus="menuStatus">
+           <ui:include src="menuitemsmallscreen.xhtml">
+             <ui:param name="menuitem" value="#{menuitem}" />
+           </ui:include>
+          </ui:repeat>   
+        </li>
+      </ul>
+      <ul class="nav panel-group" id="quicklinkList" role="tablist">
+        <ui:repeat value="#{quickLinks.quickLinkCategories}" var="category" varStatus="counter">
+          <ui:fragment rendered="#{sp:getSize(quickLinks.quickLinks[category.name]) > 0}">
+            <li class="panel #{category.cssClass}" role="presentation">
+              <a class="panel-heading dropdown-toggle collapsed clearfix menuitem" data-toggle="collapse" data-parent="#quicklinkList"
+                 href="#quickLinkCategory#{sp:escapeHTMLElementId(category.name)}_list" id="quickLinkCategory#{sp:escapeHTMLElementId(category.name)}"
+                 aria-expanded="false" aria-controls="quickLinkCategory#{sp:escapeHTMLElementId(category.name)}_list"
+                 role="tab">
+                  <span class="pull-right quicklink-panel-link-angle" role="presentation">
+                    <i role="presentation" class="fa fa-angle-up"></i> 
+                    <i role="presentation" class="fa fa-angle-down"></i>
+                  </span>
+                  <span class="pull-left" role="presentation">
+                    <i role="presentation" class="quicklink-panel-category fa"></i>
+                    #{sp:localizeKey(category.messageKey)}
+                  </span>
+                  <span class="sr-only">#{msgs.quicklink_category_aria_label}</span>
+              </a>
+              <div class="panel-collapse panel-body collapse" id="quickLinkCategory#{sp:escapeHTMLElementId(category.name)}_list" role="tabpanel" aria-expanded="false">
+                <ul class="nav" role="list">
+                  <ui:repeat value="#{quickLinks.quickLinks[category.name]}" var="quicklinkWrapper">
+                    <ui:fragment rendered="#{quicklinkWrapper.allowOthers and quicklinkWrapper.allowSelf and quicklinkWrapper.allowSubMenu}">
+                      <li class="dropdown-submenu" role="presentation">
+                        <a href="#" class="dropdown-toggle menuitem" data-toggle="dropdown" role="listitem"
+                           aria-expanded="false" aria-haspopup="true">
+                          #{sp:localizeKey(quicklinkWrapper.label)}
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-expanded="false">
+                          <li role="presentation">
+                            <a href="javascript:SailPoint.Quicklinks.chooseQuickLink('#{quicklinkWrapper.quickLink.name}', '#{base.loggedInUser.id}')"
+                               role="menuitem" class="menuitem">
+                              #{msgs.for_me}
+                            </a>
+                          </li>
+                          <li role="presentation">
+                            <a href="javascript:SailPoint.Quicklinks.chooseQuickLink('#{quicklinkWrapper.quickLink.name}');"
+                               role="menuitem" class="menuitem">
+                              #{msgs.for_others}
+                            </a>
+                          </li>
+                        </ul>                      
+                      </li>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{!(quicklinkWrapper.allowSubMenu) and quicklinkWrapper.allowOthers and quicklinkWrapper.allowSelf}">
+                      <li role="presentation">
+                        <a href="javascript:SailPoint.Quicklinks.chooseQuickLink('#{quicklinkWrapper.quickLink.name}', '#{base.loggedInUser.id}');"
+                           class="menuitem" role="listitem">
+                          #{sp:localizeKey(quicklinkWrapper.label)}
+                        </a>                        
+                      </li>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{!(quicklinkWrapper.allowOthers) and quicklinkWrapper.allowSelf}">
+                      <li role="presentation">
+                        <a href="javascript:SailPoint.Quicklinks.chooseQuickLink('#{quicklinkWrapper.quickLink.name}', '#{base.loggedInUser.id}');"
+                           role="listitem" class="menuitem">
+                          #{sp:localizeKey(quicklinkWrapper.label)}
+                        </a>
+                      </li>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{quicklinkWrapper.allowOthers and !(quicklinkWrapper.allowSelf)}">
+                      <li role="presentation">
+                        <a href="javascript:SailPoint.Quicklinks.chooseQuickLink('#{quicklinkWrapper.quickLink.name}');"
+                           role="listitem" class="menuitem">
+                          #{sp:localizeKey(quicklinkWrapper.label)}
+                        </a>
+                      </li>
+                    </ui:fragment>
+                  </ui:repeat>
+                </ul>
+              </div>
+            </li>
+          </ui:fragment>
+        </ui:repeat>
+      </ul>
+    </nav>
+  </section>
+
+</ui:composition>
+</body>
+</html>

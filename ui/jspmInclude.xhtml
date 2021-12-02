@@ -1,0 +1,14 @@
+<html
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+  <ui:composition>
+    <script type="text/javascript" src="#{base.requestContextPath}/ui/jspm_packages/system-polyfills.js?#{debug.revision}"></script>
+    <script type="text/javascript" src="#{base.requestContextPath}/ui/jspm_packages/system.js?#{debug.revision}"></script>
+    <script type="text/javascript">
+      System.config({ baseURL: '#{base.requestContextPath}/ui'});
+    </script>
+    <script type="text/javascript" src="#{base.requestContextPath}/ui/jspm.config.js?#{debug.revision}"></script>
+  </ui:composition>
+</h:head>
+</html>

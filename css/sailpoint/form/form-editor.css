@@ -1,0 +1,916 @@
+/*******************************
+* Form Editor
+*******************************/
+
+/* css for form editor */
+
+.attributeEdit {
+    background: url(../../../images/icons/gear-icon16.png) 16px center no-repeat;
+    padding-left: 35px;
+    padding-right: 10px;
+    margin-top: 5px;
+    display: block;
+}
+
+#formGrid a {
+    cursor: pointer;
+}
+
+.sp-body-container {
+    background: #ffffff !important;
+}
+
+.sp-body-container .bodyHeaderDiv {
+    background: #ffffff !important;
+}
+
+/* Centralize form*/
+.formReturnButton {
+    margin-left: 30px !important;
+    margin-bottom: 30px !important;
+}
+
+.formHeader {
+    border: 1px solid #d8dde5;
+}
+
+/* Inline workflow */
+.pageTitle {
+    background: #ffffff !important;
+}
+
+.titleText {
+    margin-left: 30px !important;
+    margin-top: 10px !important;
+    margin-bottom: 20px !important;
+}
+
+/* lcm config */
+.attributePanel .x-form-item-label {
+    font-weight: bold;
+}
+
+.lcmErrorMsgsDiv {
+    margin-left: 15px;
+    margin-right: 30px;
+}
+
+/* application page */
+.applicationExtTabs {
+    margin-left: 30px !important;
+    margin-right: 30px !important;
+    margin-top: 50px !important;
+}
+
+.applicationExtTabs .x-tab-bar-body {
+    border: none !important;
+    border-right: 1px solid #c6c1c1 !important;
+    border-left: 1px solid #c6c1c1 !important;
+}
+
+.appButtons {
+    margin-left: 30px;
+    margin-bottom: 20px;
+}
+
+/* Role editor page */
+.roleEditorBody {
+    margin-left: 45px !important;
+    margin-right: 45px !important;
+}
+
+.titleAlign {
+    margin-bottom: -18px !important;
+    margin-left: 20px !important;
+}
+
+.mandatoryText {
+    margin-top: 35px !important;
+}
+
+.roleButtons {
+    margin-bottom: 20px !important;
+    margin-top: 20px !important;
+}
+
+/* Role editor add entitlements drop down */
+#profileentitlementMultiFilter .x-anchor-form-item {
+    width: 380px !important;
+}
+
+/* muted text color-hex */
+.fa-gray-icon {
+    color: #8f98a7;
+}
+
+/* window */
+.FormEditorWindowBody {
+    border: none !important;
+}
+
+.FormEditorWindowBody .x-panel-collapsed {
+    display: block !important;
+}
+
+/* form editor */
+.formEditorBody {
+    border: none !important;
+}
+
+/* window close */
+.closeButton {
+    cursor: pointer !important;
+    text-align: center !important;
+    border: 1px solid #c6c1c1 !important;
+    background: white !important;
+    margin-left: 3px !important;
+    table-layout: fixed !important;
+}
+
+.closeButton .x-form-display-field {
+    font-weight: bold !important;
+}
+
+/* window save */
+.saveButton {
+    margin-top: 3px !important;
+    border: none !important;
+    border-top: 6px solid #e6e6e6 !important;
+    border-right: 6px solid #e6e6e6 !important;
+    border-bottom: 6px solid #e6e6e6 !important;
+}
+
+/* form name and description panel */
+.formNameDescPanel {
+    background: #eeeeee !important;
+}
+
+.formName {
+    margin-top: 3px !important;
+    border: none !important;
+    border-top: 4px solid #e6e6e6 !important;
+    border-left: 4px solid #e6e6e6 !important;
+    border-bottom: 4px solid #e6e6e6 !important;
+}
+
+.formDescription {
+    margin-top: 3px !important;
+    border: 4px solid #e6e6e6 !important;
+}
+
+/* details panel */
+.detailPanel {
+    margin-left: 10px !important;
+}
+
+.detailPanel .x-panel-body-default {
+    border: none !important;
+}
+
+.detailPanel .x-field-label-cell {
+    width: 80px !important;
+}
+
+.detailButton {
+    margin-top: 3px !important;
+    border: 6px solid #e6e6e6 !important;
+    background-color: #efefef !important;
+    background-image: none;
+}
+
+/* components on details panel */
+.attributePanel {
+    margin: 3px 100px 3px 3px !important;
+}
+
+.ownerDetailPanel .x-form-item-label {
+    margin: 3px 3px 3px 3px !important;
+    width: 65px !important;
+}
+
+.formAttribute {
+    margin-top: 10px !important;
+}
+
+.formAttribute .x-form-item-body {
+    width: 300px !important;
+}
+
+.formAttribute .x-form-item-label {
+    margin-top: 6px !important;
+}
+
+.formOwnerCombo {
+    margin-top: 10px !important;
+}
+
+.formOwnerCombo .x-form-trigger-wrap {
+    width: 300px !important;
+}
+
+.formOwnerCombo .x-form-item-label {
+    margin-top: 6px !important;
+}
+
+/* approval panel */
+.workflowDetailPanel {
+    margin-left: 10px !important;
+}
+
+.workflowDetailPanel .x-field-label-cell {
+    width: 80px !important;
+}
+
+.workflowDetailPanel .x-panel-body-default {
+    border: none !important;
+}
+
+.approvalOwner {
+    margin-left: 80px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 300px !important;
+}
+
+.approvalSendReturn {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.approvalSendReturn .x-form-item-body {
+    width: 300px !important;
+}
+
+.aprovalSourceReference {
+    margin-left: 80px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.aprovalSourceReference .x-form-trigger-wrap {
+    width: 300px !important;
+}
+
+.aprovalSourceReference .x-form-trigger-input-cell {
+    width: 345px !important;
+}
+
+.aprovalSourceCall {
+    margin-left: 80px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.aprovalSourceCall .x-form-trigger-wrap {
+    width: 300px !important;
+}
+
+.aprovalSourceCall .x-form-trigger-input-cell {
+    width: 345px !important;
+}
+
+.formOwnerRule {
+    margin-left: 80px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 335px !important;
+}
+
+.formOwnerRule .x-form-trigger-wrap {
+    width: 332px !important;
+}
+
+.formOwnerRule .x-form-trigger-input-cell {
+    width: 345px !important;
+}
+
+.formOwnerScript {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 80px;
+}
+
+.formOwnerScript .x-form-field {
+    height: 50px !important;
+    width: 400px !important;
+}
+
+.applicationSuggest {
+    margin-top: 10px !important;
+}
+
+.applicationSuggest .x-form-trigger-wrap {
+    width: 300px !important;
+}
+
+.applicationSuggest .x-form-item-label {
+    margin-top: 6px !important;
+}
+
+/* button panel for add section, add button and preview form */
+.formButtonsPanel {
+    margin-left: 3px !important;
+    width:100% !important;
+}
+
+/* tree panel */
+.formItemCls {
+    border: none !important;
+    border-top: 1px solid #c6c1c1 !important;
+}
+
+.section-cell {
+    background-color: #f9fafc !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+}
+
+.alter-section-cell {
+    background-color: #f3ffff !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+}
+
+.field-cell {
+    background-color: #ffffff !important;
+}
+
+.alter-field-cell {
+    background-color: #f3ffff !important;
+}
+
+.button-cell {
+    background-color: #f9fafc !important;
+    font-size: 14px !important;
+}
+
+.alter-button-cell {
+    background-color: #f3ffff !important;
+    font-size: 14px !important;
+}
+
+.drag-cell {
+    font-size: 14px !important;
+    color: #8f98a7;
+    border-bottom: 1px solid #c6c1c1 !important;
+    border-right: 1px solid #c6c1c1 !important;
+    background-color: #f9fafc !important;
+}
+
+.add-cell {
+    border-left: 1px solid #c6c1c1 !important;
+    background-color: #f9fafc !important;
+}
+
+.hide-field-add-cell {
+    background-color: #ffffff !important;
+    border: none !important;
+    cursor: default !important;
+}
+
+.alter-hide-field-add-cell {
+    background-color: #f3ffff !important;
+    border: none !important;
+    cursor: default !important;
+}
+
+.hide-button-add-cell {
+    background-color: #f9fafc !important;
+    border: none !important;
+    cursor: default !important;
+}
+
+.alter-hide-button-add-cell {
+    background-color: #f3ffff !important;
+    border: none !important;
+    cursor: default !important;
+}
+
+.edit-cell {
+    border-left: 1px solid #c6c1c1 !important;
+    background-color: #f9fafc !important;
+}
+
+.alter-edit-cell {
+    border-left: 1px solid #c6c1c1 !important;
+    background-color: #f3ffff !important;
+}
+
+.delete-cell {
+    border-right: 1px solid #c6c1c1 !important;
+    border-left: 1px solid #c6c1c1 !important;
+    background-color: #f9fafc !important;
+}
+
+.x-tree-elbow {
+    display: none !important;
+}
+
+.x-tree-elbow-plus {
+    display: none !important;
+}
+
+.x-tree-elbow-end {
+    display: none !important;
+}
+
+.x-tree-elbow-line {
+    display: none !important;
+}
+
+.x-tree-elbow-end-plus {
+    display: none !important;
+}
+
+.x-tree-elbow-empty {
+    display: none !important;
+}
+
+.x-tree-icon-leaf {
+    display: none !important;
+}
+
+.x-tree-icon {
+    display: none !important;
+}
+
+.formItemCls .x-grid-table-resizer {
+    width: initial !important;
+}
+
+.formItemCls .x-grid-cell-inner, .x-grid-cell {
+    white-space: normal !important;
+}
+
+.formItemCls .x-grid-table .x-grid-row {
+    border-bottom: 1px solid #c6c1c1 !important;
+    vertical-align: middle !important;
+}
+
+.formItemCls .x-grid-table .x-grid-row .x-grid-cell {
+    line-height: 30px !important;
+    font: normal normal normal 12px/1 FontAwesome;
+}
+
+.formItemCls .x-grid-table .x-grid-row-selected {
+    border: 1px solid #c6c1c1 !important;
+}
+
+.formItemCls .x-grid-row .drag-cell-move-cursor {
+    cursor: move !important;
+}
+
+.formItemCls .x-grid-row .drag-cell .x-grid-cell-inner {
+    cursor: move !important;
+    display: none !important;
+}
+
+.formItemCls .x-grid-row .x-tree-expander .x-grid-cell-inner {
+    padding: 0px 0px 0px 5px !important;
+    cursor: default !important;
+}
+
+.formItemCls .x-grid-row .section-cell .x-grid-cell-inner {
+    cursor: pointer !important;
+}
+
+.formItemCls .x-grid-row .add-cell {
+    cursor: pointer !important;
+}
+
+.formItemCls .x-grid-row .add-cell .x-grid-cell-inner {
+    cursor: pointer !important;
+}
+
+.formItemCls .x-grid-row .hide-field-add-cell .x-grid-cell-inner {
+    cursor: default !important;
+}
+
+.formItemCls .x-grid-row .hide-button-add-cell .x-grid-cell-inner {
+    cursor: default !important;
+}
+
+.formItemCls .x-grid-row .alter-hide-field-add-cell .x-grid-cell-inner {
+    cursor: default !important;
+}
+
+.formItemCls .x-grid-row .alter-hide-button-add-cell .x-grid-cell-inner {
+    cursor: default !important;
+}
+
+.formItemCls .x-grid-row .edit-cell {
+    cursor: pointer !important;
+}
+
+.formItemCls .x-grid-row .edit-cell .x-grid-cell-inner {
+    cursor: pointer !important;
+}
+
+.formItemCls .x-grid-row .delete-cell {
+    cursor: pointer !important;
+}
+
+.formItemCls .x-grid-row .delete-cell .x-grid-cell-inner {
+    cursor: pointer !important;
+}
+
+.drag-cell-cursor {
+    cursor: default !important;
+}
+
+.expander-cell-cursor {
+    padding: 0px 0px 0px 5px !important;
+    cursor: default !important;
+}
+
+.x-tree-ddindicator {
+    height: 1px;
+    border-width: 1px 0px 0px;
+    border-style: solid;
+    border-color: #2ba4c7;
+}
+
+/* field editor panel */
+.fieldEditorPanel {
+    border: none !important;
+    font: normal normal normal 12px/1 FontAwesome;
+    color: #333333;
+}
+
+.fieldEditorPanel .x-panel-header-default {
+    background: #ffffff !important;
+    border: none;
+    border-top: 1px solid #c6c1c1 !important;
+    border-bottom: 1px solid #c6c1c1 !important;
+    color: inherit !important;
+    font-size: 13px !important;
+}
+
+.fieldEditorPanel .x-panel-header-text-default {
+    font-family: inherit !important;
+    font-weight: bold !important;
+    color: inherit !important;
+    font-size: 13px !important;
+    margin: 5px;
+}
+
+.fieldEditorPanel .x-panel-body-default {
+    background: #f9fafc !important;
+    border: none !important;
+}
+
+/* division panel on field editor */
+.divisionPanel {
+    border-left: 1px solid #c6c1c1;
+    border-right: 1px solid #c6c1c1;
+    font: normal normal normal 12px/1 FontAwesome;
+    color: #333333;
+    margin: 10px 10px 0px 10px;
+}
+
+.divisionPanel .x-panel-header-default {
+    background: #ffffff !important;
+    border: none;
+    border-top: 1px solid #c6c1c1 !important;
+    border-bottom: 1px solid #c6c1c1 !important;
+    color: inherit !important;
+    font-size: 13px !important;
+}
+
+.divisionPanel .x-panel-header-text-default {
+    font-family: inherit !important;
+    font-weight: bold !important;
+    font-size: 12px !important;
+    color: inherit !important;
+}
+
+.divisionPanel .x-panel-body-default {
+    background: #f3ffff !important;
+    border: none !important;
+}
+
+.divisionPanel .x-table-layout {
+    width: 100%;
+}
+
+.divisionPanel .x-table-layout-cell {
+    border-bottom: 1px solid #c6c1c1 !important;
+}
+
+.divisionPanel .field {
+    margin: 10px 0px 10px 15px !important;
+    width: 442px !important;
+}
+
+.divisionPanel .textfield {
+    margin: 10px 0px 10px 15px !important;
+    width: 442px !important;
+}
+
+.divisionPanel .textfield .x-form-field {
+    border: 1px solid #c6c1c1 !important;
+}
+
+.divisionPanel .x-tool {
+    left: 438px !important;
+    cursor: pointer;
+}
+
+.divisionPanel .x-form-cb-label-before {
+    width: 73px !important;
+}
+
+/* apply button panel on form item editor */
+.applyButtonPanel {
+    border: 1px solid #c6c1c1 !important;
+    height: 36px !important;
+    width: 470px !important;
+    margin: 10px 0px 0px 10px;
+    background: #ffffff !important;
+}
+
+.applyButtonPanel .x-panel-body-default {
+    background: #ffffff !important;
+}
+
+.applyButtonPanel .applyButton .x-btn-center {
+    height: 17px !important;
+}
+
+.applyButtonPanel .applyButton {
+    margin: 4px 5px 0px 387px;
+    height: 26px !important;
+    width: 70px !important;
+}
+
+/* Dynamic Value */
+.dynamicValue .x-panel-header-default {
+    background: #f3ffff !important;
+    border: none !important;
+    left: -9px !important;
+    margin-top: -9px !important;
+}
+
+.dynamicValue .scriptTextArea {
+    margin-top: 11px !important;
+}
+
+.dynamicValue .scriptTextArea .x-form-field {
+    width: 442px !important;
+    height: 50px !important;
+}
+
+.dynamicValue .valuesMultiSelect {
+    margin-top: 11px !important;
+}
+
+.dynamicValue .valuesMultiSelect .x-grid-with-row-lines {
+    border: 1px solid #c6c1c1 !important;
+}
+
+.dynamicValue .valuesMultiSelect .x-grid-view {
+    background: #ffffff !important;
+}
+
+.dynamicField {
+    width: 442px !important;
+    margin-top: 11px !important;
+}
+
+.dynamicValueCombo {
+    width: 442px !important;
+}
+
+.dynamicRuleCombo {
+    margin-top: 11px !important;
+}
+
+.dynamicValue .defaultValueDate .x-form-trigger-input-cell {
+    width: 407px !important;
+}
+
+.dynamicValue .defaultValueDate {
+    margin-top: 11px !important;
+}
+
+/* Hacked for drop down list showing extra white space at bottom */
+ul,ol {
+    margin-bottom: 0px !important;
+}
+
+/* Error panel */
+.errorPanel {
+    border: 1px solid #fc8d80 !important;
+    border-radius: 5px;
+    background: #fef0ee !important;
+    margin: 3px 3px 3px 3px;
+}
+
+.errorPanel .x-panel-header-text {
+    margin-left: 22px;
+    color: #fb6b5b;
+    background: #fef0ee !important;
+}
+
+.errorPanel .x-panel-header-default {
+    background: #fef0ee !important;
+    font-size: 13px !important;
+    border-bottom: none;
+}
+
+.errorPanel .x-toolbar .x-toolbar-text {
+    color: #fa4c38;
+    font-weight: normal;
+    font-size: 12px;
+}
+
+.errorPanel .x-toolbar-default {
+    background: #fef0ee !important;
+    margin-top: 10px !important;
+}
+
+.errorPanel .x-panel-body-default {
+    background: #fef0ee !important;
+    top: 25px !important;
+}
+
+.errorPanel .x-panel-header-text-container {
+    top: -1px !important;
+}
+
+.errorIcon {
+    position: relative;
+}
+
+.errorIcon:before {
+    content: "\f071";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    color: #fb6b5b;
+    font-size: 18px;
+    padding-right: 0.5em;
+    position: absolute;
+    top: -1px !important;
+    margin-right: 400px !important;
+}
+
+.closeIcon {
+    position: absolute;
+    cursor: pointer !important;
+    margin-left: 950px !important;
+}
+
+.closeIcon:before {
+    content: "\f00d";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    color: #ada5a3;
+    font-size: 14px;
+    padding-right: 0.5em;
+}
+
+/*Dependent field*/
+.divisionPanel .fieldAppDependent {
+    margin-top: 10px !important;
+    border: 1px solid #c6c1c1;
+}
+
+.divisionPanel .fieldAppDependent .fieldDependentAppName .x-form-item-label {
+    margin-top: 10px !important;
+    margin-left: 10px !important;
+}
+
+.divisionPanel .fieldAppDependent .fieldDependentAttr .x-form-item-label {
+    margin-top: 10px !important;
+    margin-left: 10px !important;
+}
+
+.divisionPanel .fieldAppDependent .fieldDependentAppName .x-form-trigger-wrap {
+    width: 313px !important;
+    margin-top: 10px !important;
+    margin-left: 10px !important;
+}
+
+.divisionPanel .fieldAppDependent .fieldDependentAttr .x-form-trigger-wrap {
+    width: 313px !important;
+    margin-top: 10px !important;
+    margin-bottom: 05px !important;
+    margin-left: 10px !important;
+}
+/* Preview Form*/
+.previewLabel {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    width: 100px !important;
+}
+
+.previewPanel .x-panel-body-default {
+    border-top: 1px solid #c6c1c1 !important;
+    background: #eeeeee !important;
+}
+
+.previewPanel .checkbox input[type="checkbox"] {
+    margin-top: 3px !important;
+}
+
+/* Field Menu for showing add field and add row option */
+
+.fieldMenu .x-menu-item-icon {
+    display: none;
+}
+
+.fieldMenuBody {
+    padding: 10px !important;
+}
+
+.fieldMenu .x-menu-icon-separator {
+    display: none;
+}
+
+.fieldMenu .x-menu-item-text {
+  margin-left: -28px !important;
+}
+
+.fieldMenu .x-menu-item-active .x-menu-item-link {
+    background-color: #2ba4c7 !important;
+    border: 1px solid #2ba4c7 !important;
+    font-weight: bold !important;
+    border-radius: 0px !important;
+}
+
+.fieldMenu .x-menu-item-active .x-menu-item-link .x-menu-item-text {
+    color: #ffffff !important;
+}
+
+.fieldMenu .x-box-item {
+    border: 1px solid #c6c1c1 !important;
+    width: 158px !important;
+    background-color: #f9fafc !important;
+}
+
+.fieldMenu .x-menu-body {
+    background: #ffffff !important;
+}
+
+.fieldMenu .x-box-scroller-top {
+    display: none !important;
+}
+
+.createNodeMenuStyle {
+    border-bottom: 1px solid #ffffff !important;
+    background: #ffffff !important;
+}
+
+/* Row editor layout*/
+
+.row-cell {
+    background-color: #f9fafc !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+}
+
+.alter-row-cell {
+    background-color: #f3ffff !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+}
+
+.formItemCls .x-grid-row .row-cell .x-grid-cell-inner {
+    cursor: pointer !important;
+}
+
+.hide_tree_column {
+    display: none !important;
+}
+
+.empty_row_field {
+    border-top: 1px solid #ffffff !important;
+    border-right: 1px solid #c6c1c1 !important;
+    background: #ffffff !important;
+}
+
+.rowcomboLabel {
+    margin: 10px 0px 5px 10px !important;
+}
+
+.rowColumnCombo {
+    margin: 0px 0px 10px 10px !important;
+    width: 70px !important;
+}
+
+.rowColumnCombo .x-form-text {
+    padding-left: 15px !important;
+}
+
+.rowEditorPanel {
+    border: 1px solid #c6c1c1 !important;
+}
+
+.rowEditorPanel .x-panel-body {
+    background: #f3ffff !important;
+}

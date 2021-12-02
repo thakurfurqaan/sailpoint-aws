@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC
+"-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2015 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+<body>
+        <ui:composition>
+                <script type="text/javascript">
+                        <!--//--><![CDATA[//><!--
+                        helpKey = 'APPLICATION';
+                        Ext.onReady(function () {
+                                Ext.QuickTips.init();
+                        });
+                        //--><!]]>
+                 </script>
+                <f:view>
+                        <p:outputPanel id="groupScopeTable">
+                                <table class="width100" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                                <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_ldap_group_search_scope}"/>                                               
+                                                <h:graphicImage
+                                                    id="searchGrpImgTemp" styleClass="helpIcon"
+                                                    url="/images/icons/dashboard_help_16.png"
+                                                    alt="#{help.help_con_form_ldap_search_group}"
+                                                    style="display: none;" />
+                                                <h:graphicImage id="imgHlpSearchGrp"
+                                                    styleClass="helpIcon" 
+                                                    url="/images/icons/dashboard_help_16.png" 
+                                                    alt="#{help.help_con_form_ldap_search_group}"/>
+                                        </tr>
+                                        <tr>
+                                                <td>
+                                                        <div class="spTabledContent">
+                                                                <table class="spTable" cellspacing="0" >
+                                                                        <thead>
+                                                                                <tr>
+                                                                                        <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                                                            <th style="text-align:center ; width: 5px;"><h:selectBooleanCheckbox id="selectAllToggleGroups" value="false" onclick="CheckboxSelector.toggleAll(this.id, this.checked, 'toggleable');"/></th>
+                                                                                        </ui:fragment>
+                                                                                        <th style="width: 200px; margin-left:0px;"><h:outputText value="#{msgs.con_form_ldap_objectType}"/></th>
+                                                                                        <th style="width: 400px; margin-left:0px;"><h:outputText value="#{msgs.con_form_ldap_search_dn}"/></th>
+                                                                                        <th style="width: 400px; margin-left:0px;"><h:outputText value="#{msgs.con_form_AD_iterate_search_filter}"/></th>
+                                                                                </tr>
+                                                                        </thead>
+                                                                        <tfoot>
+                                                                                <tr>
+                                                                                        <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                                                                <th/>
+                                                                                                <td>
+                                                                                                       <h:selectOneMenu id="attributeType" value="#{groupSearchScope.groupScope.object.objectType}" style="width: 200px; margin-left:0px;"
+                                                                                                            disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                                                                                            readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}">
+                                                                                                            <f:selectItems value="#{applicationObject.schemaObjectTypes}"/>
+                                                                                                       </h:selectOneMenu>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                        <h:inputText value="#{groupSearchScope.groupScope.object.searchDN}" style="width: 450px; margin-left:0px;"/>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                        <h:inputText value="#{groupSearchScope.groupScope.object.iterateSearchFilter}" style="width: 450px; margin-left:0px;"/>
+                                                                                                </td>
+                                                                                        </ui:fragment>
+                                                                                </tr>
+                                                                        </tfoot>
+                                                                        <tbody>
+                                                                                <ui:repeat value="#{groupSearchScope.LDAPScopes}" var="groupScopeObj">
+                                                                                        <tr>
+                                                                                                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                                                                    <td class="centeredColumn">
+                                                                                                        <h:selectBooleanCheckbox styleClass="toggleable" id="#{sp:escapeHTMLElementId(groupScopeObj.id)}checkbox" value="#{groupSearchScope.selectedScopes[groupScopeObj.id]}"/>
+                                                                                                    </td>
+                                                                                                </ui:fragment>
+                                                                                                <td>
+                                                                                                        <h:inputText value="#{groupScopeObj.object.objectType}" style="width: 200px; margin-left:0px;"/>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                        <h:inputText value="#{groupScopeObj.object.searchDN}" style="width: 450px; margin-left:0px;"/>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                        <h:inputText value="#{groupScopeObj.object.iterateSearchFilter}" style="width: 450px; margin-left:0px;"/>
+                                                                                                </td>
+                                                                                        </tr>
+                                                                                </ui:repeat>
+                                                                        </tbody>
+                                                                </table>
+
+                                                                <div class="buttonRow">
+                                                                        <p:commandButton id='removeGroupScope' value="#{msgs.button_delete}" styleClass="secondaryBtn" action="#{groupSearchScope.removeGroupScope}" update="@([id$=groupScopeTable])"/>
+                                                                        <p:commandButton id='addGroupScope' value="#{msgs.button_add}" styleClass="primaryBtn" action="#{groupSearchScope.addGroupScope}" update="@([id$=groupScopeTable])"/>
+                                                                </div>
+                                                        </div>
+                                                </td>
+                                        </tr>
+                                </table>
+                        </p:outputPanel>
+                </f:view>
+        </ui:composition>
+</body>
+</html>

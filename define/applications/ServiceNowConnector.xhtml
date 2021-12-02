@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+
+    <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'APPLICATION';
+
+        function getFieldValue(field) {
+            var val = null;
+            var fileName = Ext.getDom(field);
+            if ( fileName ) {
+               val = fileName.value;
+            }
+            return val;
+        }
+            
+        function toggleCredentials(authType) {
+            var clientIdObj = Ext.get('clientIdRow');
+            var clientSecretObj = Ext.get('clientSecretRow');
+            var refreshTokenObj = Ext.get('refreshTokenRow');
+            var userNameObj = Ext.get('userNameRow');
+            var passwordObj = Ext.get('passwordRow');
+            if (authType == "") {
+                authType = "Basic";
+            }
+            if (authType == "Basic") {
+                userNameObj.setVisibilityMode(Ext.Element.DISPLAY);
+                userNameObj.show();
+                passwordObj.setVisibilityMode(Ext.Element.DISPLAY);
+                passwordObj.show();
+                refreshTokenObj.setVisibilityMode(Ext.Element.DISPLAY);
+                refreshTokenObj.hide();
+                clientIdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientIdObj.hide();
+                clientSecretObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientSecretObj.hide();
+            } if (authType == "OAuth2") {
+                userNameObj.setVisibilityMode(Ext.Element.DISPLAY);
+                userNameObj.hide();
+                passwordObj.setVisibilityMode(Ext.Element.DISPLAY);
+                passwordObj.hide();
+                refreshTokenObj.setVisibilityMode(Ext.Element.DISPLAY);
+                refreshTokenObj.show();
+                clientIdObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientIdObj.show();
+                clientSecretObj.setVisibilityMode(Ext.Element.DISPLAY);
+                clientSecretObj.show();
+            }
+        }
+        
+        Ext.onReady(function () {
+           Ext.QuickTips.init();
+
+           var pageSize = getFieldValue('editForm:pageSize');
+           if (pageSize.length == 0) {
+               Ext.getDom('editForm:pageSize').value = '1000';
+           }
+           toggleCredentials('#{applicationObject.attributes['authtype']}');
+
+           // This is our validation hook
+           Page.on('beforeSave', function() {
+               if (!hasCredentialConfiguration()) {
+                   var authType = getFieldValue('editForm:authType');
+                   var uname = getFieldValue('editForm:uname');
+                   var pwd = getFieldValue('editForm:userpass');
+                   var refreshToken = getFieldValue('editForm:refreshToken');
+                   var clientId = getFieldValue('editForm:clientId');
+                   var clientSecret = getFieldValue('editForm:clientSecret');
+                   var snUrl = getFieldValue('editForm:url');
+                   Validator.validateNonBlankString(snUrl,"#{msgs.con_form_servicenow_error_message_url_null}");
+ 
+                   if (authType == "Basic" && (uname == '' || uname == null)) {
+                       Validator.validateNonBlankString(uname, "#{msgs.con_form_servicenow_error_message_username_null}");
+                   } if (authType == "Basic" && (pwd == '' || pwd == null)) {
+                       Validator.validateNonBlankString(pwd, "#{msgs.con_form_servicenow_error_message_password_null}");
+                   } if (authType == "OAuth2" && clientId == '' || clientId == null) {
+                       Validator.validateNonBlankString(clientId, "#{msgs.con_form_servicenow_error_message_client_id_null}");
+                   } if (authType == "OAuth2" && clientSecret == '' || clientSecret == null) {
+                       Validator.validateNonBlankString(clientSecret, "#{msgs.con_form_servicenow_error_message_client_secret_null}");
+                   } if (authType == "OAuth2" && refreshToken == '' || refreshToken == null) {
+                       Validator.validateNonBlankString(refreshToken, "#{msgs.con_form_servicenow_error_message_refresh_token_null}");
+                   }
+
+                   var errors = Validator.getErrors();
+                   if (errors && errors.length > 0) {
+                       var errorDivTop = Ext.getDom('formErrorsTop');
+                       var errorDivBottom = Ext.getDom('formErrorsBottom');
+                       Validator.displayErrors(errorDivBottom); 
+                       Validator.displayErrors(errorDivTop); 
+                       return false;
+                   }
+               }
+               //return false will kill cancel the save
+               return true;
+           });
+
+        });
+
+       //--><!]]>
+    </script>
+    <f:view>
+
+      <h:outputText styleClass="sectionHeader"
+        value="#{msgs.con_form_servicenow_settings}" />
+      <br />
+      <br />
+      <div id='formErrorsTop' class="formError" style="display: none" />
+
+      <div id="accountSettings" class='spContent'>
+        <table class="spTable" style="border: 0px" cellspacing="0">
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'><h:outputText
+                style='padding:5px'
+                value="#{msgs.con_form_servicenow_auth_type}" /></td>
+            <td class="certScheduleHelpCol"><h:graphicImage
+                id="imgHlpauthtype" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_servicenow_auth_type}" /></td>
+            <td><h:selectOneMenu id="authType"
+                value="#{applicationObject.attributes['authtype']}"
+                redisplay="true"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                onchange="toggleCredentials(this.value)">
+                <f:selectItem itemValue="Basic"
+                  itemLabel="#{msgs.con_form_servicenow_auth_type_normal}" />
+                <f:selectItem itemValue="OAuth2"
+                  itemLabel="#{msgs.con_form_servicenow_auth_type_oauth2}"/>
+              </h:selectOneMenu></td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px'
+                value="#{msgs.con_form_servicenow_url}" /> <h:outputText
+                styleClass="requiredText" value="*" /></td>
+
+            <td class="certScheduleHelpCol" valign="middle"><h:graphicImage
+                id="imgHlpUrl" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_servicenow_url}" /></td>
+            <td valign="center"><h:inputText id="url"
+                value="#{applicationObject.attributes['url']}" size="80"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                requiredMessage="URL cannot be null!" /></td>
+          </tr>
+
+          <tr id="userNameRow">
+            <td class='titleColumn certScheduleTitleCol'><h:outputText
+                style='padding:5px'
+                value="#{msgs.con_form_servicenow_user_name}" /> <h:outputText
+                styleClass="requiredText" value="*" /></td>
+            <td class="certScheduleHelpCol"><h:graphicImage
+                id="imgHlpUsername" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_servicenow_user_name}" /></td>
+            <td><h:inputText id="uname"
+                value="#{applicationObject.attributes['username']}"
+                size="20"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" /></td>
+          </tr>
+
+          <tr id="passwordRow">
+            <td class='titleColumn certScheduleTitleCol'><h:outputText
+                style='padding:5px'
+                value="#{msgs.con_form_servicenow_user_password}" /> <h:outputText
+                styleClass="requiredText" value="*" /></td>
+            <td class="certScheduleHelpCol"><h:graphicImage
+                id="imgHlpPassword" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_servicenow_user_password}" /></td>
+            <td><sp:inputSecret id="userpass" size="50"
+                value="#{applicationObject.attributes['password']}"
+                redisplay="true"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" /></td>
+          </tr>
+
+          <tr id="clientIdRow">
+            <td class='titleColumn certScheduleTitleCol'><h:outputText
+                style='padding:5px'
+                value="#{msgs.con_form_servicenow_client_id}" /> <h:outputText
+                styleClass="requiredText" value="*" /></td>
+            <td class="certScheduleHelpCol"><h:graphicImage
+                id="imgHlpClientId" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_servicenow_client_id}" /></td>
+            <td><h:inputText id="clientId"
+                value="#{applicationObject.attributes['clientId']}"
+                redisplay="true" size="20"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+          <tr id="clientSecretRow">
+            <td class='titleColumn certScheduleTitleCol'><h:outputText
+                style='padding:5px'
+                value="#{msgs.con_form_servicenow_client_secret}" /> <h:outputText
+                styleClass="requiredText" value="*" /></td>
+            <td class="certScheduleHelpCol"><h:graphicImage
+                id="imgHlpClientSecret" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_servicenow_client_secret}" /></td>
+            <td><sp:inputSecret id="clientSecret" size="50"
+                value="#{applicationObject.attributes['clientSecret']}"
+                redisplay="true"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+          <tr id="refreshTokenRow">
+            <td class='titleColumn certScheduleTitleCol'><h:outputText
+                style='padding:5px'
+                value="#{msgs.con_form_servicenow_refresh_token}" /> <h:outputText
+                styleClass="requiredText" value="*" /></td>
+            <td class="certScheduleHelpCol"><h:graphicImage
+                id="imgHlpRefreshToken" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_servicenow_refresh_token}" /></td>
+            <td><sp:inputSecret id="refreshToken"
+                value="#{applicationObject.attributes['refreshToken']}"
+                size="20" redisplay="true"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" /></td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'><h:outputText
+                style='padding:5px'
+                value="#{msgs.con_form_servicenow_page_size}" />
+            </td>
+            <td class="certScheduleHelpCol"><h:graphicImage
+                id="imgHlpPageSize" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_servicenow_page_size}" />
+            </td>
+            <td><h:inputText id="pageSize"
+                value="#{applicationObject.attributes['pageSize']}"
+                size="20"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" >
+                <f:validateLongRange minimum = "1" maximum = "10000" /> 
+                </h:inputText>
+            </td>
+          </tr>
+
+           <tr>
+             <td>
+               <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_servicenow_filter_attribute_string}" />
+             </td>
+           </tr>
+
+           <tr>
+            <td class='titleColumn certScheduleTitleCol'><h:outputText
+                style='padding:5px'
+                value="#{msgs.con_form_servicenow_filter_attribute_account}" />
+            </td>
+            <td class="certScheduleHelpCol"><h:graphicImage
+                id="imgHlpAccountFilter" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_servicenow_filter_attribute_account}" />
+            </td>
+            <td><h:inputText id="accountFilterAttribute"
+                value="#{applicationObject.attributes['accountFilterAttribute']}"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+           <tr>
+            <td class='titleColumn certScheduleTitleCol'><h:outputText
+                style='padding:5px'
+                value="#{msgs.con_form_servicenow_filter_attribute_group}" />
+            </td>
+            <td class="certScheduleHelpCol"><h:graphicImage
+                id="imgHlpGroupFilter" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_servicenow_filter_attribute_group}" />
+            </td>
+            <td><h:inputText id="groupFilterAttribute"
+                value="#{applicationObject.attributes['groupFilterAttribute']}"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol'><h:outputText
+                style='padding:5px'
+                value="#{msgs.con_form_servicenow_filter_attribute_role}" />
+            </td>
+            <td class="certScheduleHelpCol"><h:graphicImage
+                id="imgHlpRoleFilter" styleClass="helpIcon"
+                url="/images/icons/dashboard_help_16.png"
+                alt="#{help.help_con_servicenow_filter_attribute_role}" />
+            </td>
+            <td><h:inputText id="roleFilterAttribute"
+                value="#{applicationObject.attributes['roleFilterAttribute']}"
+                disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+            </td>
+          </tr>
+
+        </table>
+      </div>
+      <div id='formErrorsBottom' class="formError" style="display: none" />
+    </f:view>
+  </ui:composition>
+
+</body>
+</html>

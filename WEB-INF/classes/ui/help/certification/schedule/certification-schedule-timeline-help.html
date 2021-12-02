@@ -1,0 +1,260 @@
+<h2>Schedule Certification</h2>
+<h3>Start</h3>
+<p>
+<strong>Execution Frequency:</strong> If you want the certification to run on a recurring basis, choose the frequency.</p>
+<p>
+<strong>Start Date:</strong> The date the certification will be launched.</p>
+<p>
+<strong>Start Time:</strong> The time the certification will be launched.</p>
+<p>
+<strong>Run Now:</strong> Start the certification immediately after Schedule Certification is clicked. If this is a recurring
+certification, the subsequent certifications are scheduled accordingly.</p>
+<p>
+<strong>Enable Staging Period:</strong> A staging period is when the access reviews have been created but are not yet visible
+to certifiers, allowing the owner to review the certification before making it active.</p>
+<p>
+<strong>Initial Notification Email Template:</strong> The default email template to use for sending initial certification
+notices to certifier.</p>
+<p>
+<strong>Suppress Initial Notification:</strong> Do not send initial notification emails to certifiers.</p>
+<hr />
+<h3>Active</h3>
+<p>
+<strong>Active Period Duration:</strong> The amount of time allotted to certifiers to complete the access reviews, before the
+certification expires.</p>
+<p>
+<strong>Active Period Enter Rule:</strong> A rule to run when the certification enters the active period. Rules of type
+“CertificationPhaseChange” are included in this list.</p>
+<p>
+  <strong>Notifications and Reminders</strong>
+</p>
+<p>Reminders can be sent to the certifiers during the Active period if they have not yet completed and signed off on their
+access reviews. Escalations can be used to transfer responsibility to someone else (such as the certifier’s manager or the
+certification owner) when a certifier has not completed the access review and the end of the Active phase is near. Click 
+<strong>Add</strong> to create a reminder or escalation.</p>
+<ul>
+  <li>
+    <strong>Create a Reminder</strong>
+  </li>
+  <li>
+    <ul>
+      <li>
+      <strong>Send First Reminder Notification:</strong> When to send the first reminder email. 
+      <strong>After Start</strong> means days after the certification’s scheduled start date. 
+      <strong>Before Expiration</strong> means days before the Active or Challenge (if enabled) period ends.</li>
+      <li>
+      <strong>Reminder Frequency:</strong> How frequently email reminders are sent, until the request is completed or
+      expires.</li>
+      <li>
+      <strong>Reminder Email Template:</strong> The email template to use for reminder notifications.</li>
+      <li>
+        <strong>Additional Email Recipients</strong>
+      </li>
+      <li>
+        <ul>
+          <li>
+          <strong>Recipient Rule:</strong> To use a rule to add more email recipients, choose a rule from the list. Rules of
+          type “EmailRecipient” are included in this list.</li>
+          <li>
+          <strong>Select Additional Recipients:</strong> Add identities or workgroups who should receive email notifications
+          for this certification. You can choose multiple recipients.</li>
+        </ul>
+      </li>
+      <li>
+      <strong>Create Another:</strong> Check this box then click 
+      <strong>Add</strong> to create additional reminders.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Create an Escalation</strong>
+  </li>
+  <li>
+    <ul>
+      <li>
+      <strong>Escalate:</strong> When to trigger an escalation. You can only choose After Sending Reminders if at least one
+      reminder has been created. After Start means days after the certification’s scheduled start date. Before Expiration
+      means days before the Active or Challenge (if enabled) period ends.</li>
+      <li>
+      <strong>Escalation Rule:</strong> This rule transfers ownership of the access review to a different identity. Choose a
+      rule from the list; rules of type “WorkItemEscalationRule” are included in this list. The rule is run if the access
+      review has not yet been finished and signed off by the certifier at the time specified in the Escalate section
+      above.</li>
+      <li>
+      <strong>Escalation Email Template:</strong> The email template to use for escalation notifications.</li>
+      <li>
+        <strong>Additional Email Recipients</strong>
+      </li>
+      <li>
+        <ul>
+          <li>
+          <strong>Recipient Rule:</strong> To use a rule to add more email recipients, choose from the list. Rules of type
+          “EmailRecipient” are included in this list.</li>
+          <li>
+          <strong>Select Additional Recipients:</strong> Add identities or workgroups who should receive email notifications
+          for escalations. You can choose multiple recipients.</li>
+        </ul>
+      </li>
+      <li>
+      <strong>Create Another:</strong> Check this box then click Add to create additional escalations.</li>
+    </ul>
+  </li>
+</ul>
+<hr />
+<h3>End</h3>
+<p>
+  <strong>Enable Revocation Period</strong>
+</p>
+<p>Enabling a revocation period makes IdentityIQ periodically scan identities to determine whether the requested remediations
+have been carried out. Remediation occurs whether or not a Revocation period is enabled, but when the Revocation period is
+enabled, IdentityIQ monitors the status of remediation requests; when it is not enabled, remediation requests are processed but
+are not tracked.</p>
+<ul>
+  <li>
+  <strong>Revocation Period Duration:</strong> The length of the revocation period.</li>
+  <li>
+  <strong>Revocation Period Enter Rule:</strong> A rule to run when the certification enters the revocation period. Rules of
+  type “CertificationPhaseChange” are included in this list.</li>
+  <li>
+  <strong>Process Revokes Immediately:</strong> Specifies that revocations should happen immediately when a decision is made.
+  Otherwise, revocations are not launched until the certification is signed off.</li>
+</ul>
+<p>
+  <strong>Revocation Notifications</strong>
+</p>
+<p>Use this option to send email reminders or escalations before the revocation period expires. Reminders send emails as the
+end of the revocation period approaches. Escalations use rules to determine how the work item for the revocation is escalated
+(for example, by transferring responsibility to the certifier&#39;s manager). You can only add revocation notifications if 
+<strong>Enable Revocation Period</strong> is selected. Click 
+<strong>Add</strong> to create a reminder or escalation.</p>
+<ul>
+  <li>
+    <strong>Create Revocation Reminder</strong>
+  </li>
+  <li>
+    <ul>
+      <li>
+      <strong>Days Before Expiration to Send First Reminder Notification:</strong> When to send the first reminder email.</li>
+      <li>
+      <strong>Reminder Frequency:</strong> How frequently email reminders are sent, until the request is completed or
+      expires.</li>
+      <li>
+      <strong>Reminder Email Template:</strong> The email template to use for reminder notifications.</li>
+      <li>
+        <strong>Additional Email Recipients</strong>
+      </li>
+      <li>
+        <ul>
+          <li>
+          <strong>Recipient Rule:</strong> To use a rule to add more email recipients, choose from the list. Rules of type
+          “EmailRecipient” are included in this list.</li>
+          <li>
+          <strong>Select Additional Recipients:</strong> Add identities or workgroups who should receive email notifications
+          for revocations. You can choose multiple recipients.</li>
+        </ul>
+      </li>
+      <li>
+      <strong>Create Another:</strong> Check this box then click Add to create additional reminders.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Create Revocation Escalation</strong>
+  </li>
+  <li>
+    <ul>
+      <li>
+      <strong>Escalate:</strong> When to trigger an escalation. You can only choose After Sending Reminders if at least one
+      reminder has been created. Before Expiration means days before the Active or Challenge (if enabled) period ends.</li>
+      <li>
+      <strong>Escalation Rule:</strong> This rule transfers ownership of the access review to a different identity. Choose a
+      rule from the list; rules of type “WorkItemEscalationRule” are included in this list. The rule is run if the access
+      review has not yet been finished and signed off by the certifier at the time specified in the Escalate section
+      above.</li>
+      <li>
+      <strong>Escalation Email Template:</strong> The email template to use for escalation notifications.</li>
+      <li>
+        <strong>Additional Email Recipients</strong>
+      </li>
+      <li>
+        <ul>
+          <li>
+          <strong>Recipient Rule:</strong> To use a rule to add more email recipients, choose from the list. Rules of type
+          “EmailRecipient” are included in this list.</li>
+          <li>
+          <strong>Select Additional Recipients:</strong> Add identities or workgroups who should receive email notifications
+          for revocation escalations. You can choose multiple recipients.</li>
+        </ul>
+      </li>
+      <li>
+      <strong>Create Another:</strong> Check this box then click 
+      <strong>Add</strong> to create additional escalations.</li>
+    </ul>
+  </li>
+  <li>
+  <strong>Notify Users of Revocation:</strong> Send an email notification to identities whose access was revoked.</li>
+  <li>
+  <strong>End Period Enter Rule:</strong> A rule to run when the certification begins its end period. Rules of type
+  “CertificationPhaseChange” are included in this list.</li>
+</ul>
+<p>
+  <strong>Enable Challenge Period</strong>
+</p>
+<p>A challenge period allows users to be notified of revocation decisions affecting their access. The affected user has the
+duration of the challenge period to accept the loss of access, or to challenge the decision with a justification for continued
+access. The Challenge period begins when the Active Period ends. The certifier can consider a challenger’s justification and
+can change decisions based on the challenge.</p>
+<ul>
+  <li>
+  <strong>Challenge Period Duration:</strong> The length of the challenge period.</li>
+  <li>
+  <strong>Challenge Period Enter Rule:</strong> A rule to run when the certification enters the challenge period. Rules of type
+  “CertificationPhaseChange” are included in this list.</li>
+  <li>
+    <strong>Email Notifications</strong>
+  </li>
+  <li>
+  <strong>Challenge Period Start Notices to Certifiers:</strong> Email template for notifying certifiers when the challenge
+  period will start.</li>
+  <li>
+  <strong>Challenge Period End Notices To Certifiers:</strong> Email template for notifying certifiers when the challenge
+  period will end.</li>
+  <li>
+  <strong>Challenged Decision Notices To Certifiers:</strong> Email template for notifying certifiers when a decision has been
+  challenged.</li>
+  <li>
+  <strong>Challenge Decision Expiration Notices To Challengers And Certifiers:</strong> Email template for sending challenge
+  decision expiration notices to challengers and certifiers.</li>
+  <li>
+  <strong>Challenge Creation Notices To Challengers:</strong> Email template for notifying challengers that a challenge has
+  been created.</li>
+  <li>
+  <strong>Challenge Expiration Notices To Challengers:</strong> Email template for sending challenge expiration notices to
+  challengers.</li>
+  <li>
+  <strong>Challenge Accepted Notices To Challengers:</strong> Email template for notifying challengers that a challenge has
+  been accepted and agreed to by the certifier.</li>
+  <li>
+  <strong>Challenge Rejected Notices To Challengers:</strong> Email template for notifying challengers that their challenge has
+  been rejected by the certifier.</li>
+</ul>
+<p>
+  <strong>Enable Automatic Closing</strong>
+</p>
+<p>Automatic closing enables IdentityIQ to automatically complete and sign off access reviews that are unsigned by the access
+review’s expiration date. Automatic closing occurs after all the other phases that have been enabled for the certification
+are complete.</p>
+<ul>
+  <li>
+  <strong>Closing Rule:</strong> A rule to run at the beginning of the automatic closing process. Rules of type
+  “CertificationAutomaticClosing” are included in the list.</li>
+  <li>
+  <strong>Action Taken On Undecided Items:</strong> The action IdentityIQ will take on any undecided items when automatically
+  closing the access review.</li>
+  <li>
+  <strong>Automatic Closing Signer:</strong> An identity or workgroup to add as the signer of the access review when it is
+  automatically closed.</li>
+  <li>
+  <strong>Time After Certification Expiration:</strong> The amount of time following this certification’s expiration date
+  that IdentityIQ should wait before attempting to automatically close it.</li>
+  <li>
+  <strong>Comments:</strong> Include any comments to add to undecided items when automatically closing this access review.</li>
+</ul>

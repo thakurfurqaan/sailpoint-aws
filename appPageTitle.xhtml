@@ -1,0 +1,28 @@
+<!-- (c) Copyright 2016 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<!--
+  appPageTitle.xhtml is used by combination of Ext and Angular pages to define Title.
+  For Classic pages using extAppPage Template, Title is defined
+  in <ui:define> which is then inserted into bodyDivTitle.
+
+  Angular pages inserts Title from page controllers but
+  combination pages do not always have page controllers.
+  This page is used by following pages, currently only by FormEditor pages -
+      forms.xhtml
+      application.xhtml
+      roleEditor.xhtml
+-->
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <table id="appTable" class="dker titleAlign" width="100%" cellspacing="0" cellpadding="0">
+    <tr valign="top">
+      <td class="bodyHeaderDiv">
+        <div id="bodyDivTitle">
+          <h1><ui:insert name="title"></ui:insert></h1>
+          <ui:insert name="underTitle"></ui:insert>
+        </div>
+      </td>
+    </tr>
+  </table>
+</html>

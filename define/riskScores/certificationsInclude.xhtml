@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:t="http://myfaces.apache.org/tomahawk"
+  xmlns:p="http://primefaces.org/ui"
+    xmlns:sp="http://sailpoint.com/ui">
+
+<body>
+<ui:composition template="/appPage.xhtml">
+
+  <ui:define name="title">
+    #{msgs.score_def_certificationAge_name}
+  </ui:define>
+  <ui:define name="headerItems">
+    <sp:style serveOffset="#{base.requestContextPath}/css/sailpoint/web/define/risk-scores">
+      <src>risk-scores.css</src>
+    </sp:style>
+    <sp:script>
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/define/riskScores/sliderGroups.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/bandConfig.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/define/riskScores/compositeScoringConfig.js?#{debug.revision}</src>
+      <src>#{base.requestContextPath}/scripts/sailpoint/web/define/riskScores/riskSliders.js?#{debug.revision}</src>
+    </sp:script>
+    <script defer='defer'>
+      <!--//--><![CDATA[//><!--
+      var isPageDirty = false;
+      helpKey = 'RISK_SCORES';
+      //--><!]]>
+    </script>
+  </ui:define>
+  
+  <ui:define name="body">
+    <f:view>
+      <h:form id="editForm">
+        <div class="pageInfo">
+          <div id='CertificationCompensationInstructions' class="instructions">
+            <sp:outputText value="#{riskScoreConfig.certificationCompensationInstructions}"/>
+          </div>
+        </div>
+
+        <div class="spTabledContent">
+          <table class="spTable width100">
+            <tr class="even">
+              <td class="certificationsResponseLabelColumn">
+                <h:outputText value="#{msgs.label_risk_score_increase_days}"/>
+              </td>
+              <td>
+                <h:inputText id="certificationOffset" value="#{riskScoreConfig.certificationConfig.offset}" size="3" required="true" requiredMessage="#{msgs.err_required}" validatorMessage="#{msgs.err_invalid_number_entered}" onchange="isPageDirty = true;">
+                  <f:validateRegex pattern="^[1-9]*[1-9][0-9]*$"/>
+                </h:inputText>
+                <h:outputText value="&#160;" escape="false"/>
+                <h:message for="certificationOffset"/>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td class="certificationsResponseLabelColumn">
+                <h:outputText value="#{msgs.label_risk_score_reaches_max}"/>
+              </td>
+              <td>
+                <h:inputText id="certificationRange" value="#{riskScoreConfig.certificationConfig.range}" size="3" required="true" requiredMessage="#{msgs.err_required}" validatorMessage="#{msgs.err_invalid_number_entered}" onchange="isPageDirty = true;">
+                  <f:validateRegex pattern="^[1-9]*[1-9][0-9]*$"/>
+                </h:inputText>
+                <h:outputText value="&#160;" escape="false"/>
+                <h:message for="certificationRange"/>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="buttonRow">
+          <p:commandButton id="visibleSaveButton" onclick="confirmSave(false, 'editForm:stealthSaveButton');" value="#{msgs.button_save}" styleClass="primaryBtn" />
+          <p:commandButton id="visibleCancelButton" onclick="confirmCancel(false, 'editForm:stealthCancelButton');" value="#{msgs.button_cancel}" styleClass="secondaryBtn" />
+          <h:commandButton style="display:none" id="stealthSaveButton" action="#{riskScoreConfig.saveChangesAction}" />
+          <h:commandButton style="display:none" id="stealthCancelButton" action="#{riskScoreConfig.cancelChangesAction}" />
+        </div>   
+        
+      </h:form>
+    </f:view>
+  </ui:define>
+</ui:composition>
+
+</body>
+</html>

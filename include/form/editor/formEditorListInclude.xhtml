@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+<body>
+
+<ui:composition>  
+  <div style="margin:5px;">
+
+    <p class="pageInfo">
+      <h:outputFormat value="#{msgs.form_editor_intro}">
+          <f:param value="#{beanType}"/>
+      </h:outputFormat>
+    </p>
+
+    <p:outputPanel id="formsList">
+
+    <ui:fragment rendered="#{!empty formEditor.formDTOs}"> 
+      <table class="spLightBlueTable width100">
+        <tr>
+          <th></th>
+          <th>#{msgs.form_editor_form}</th>
+          <ui:fragment rendered="#{showApplication}">
+            <th>#{msgs.application}</th>
+          </ui:fragment>
+          <th>#{msgs.description}</th>
+        </tr>
+        <ui:repeat value="#{formEditor.formDTOs}" var="form">
+          <tr>
+            <td width="50" align="center">
+              <h:selectBooleanCheckbox value="#{formEditor.formSelections[form.id]}" />
+            </td>
+
+            <td>
+              <ui:fragment rendered="#{empty form.formRefDTO}">
+                <h:outputLink class="fakeLink" value="#"
+                            onclick="Ext.getDom('editForm:formId').value = '#{form.id}'; Ext.getDom('editForm:formLoadBtn').click(); return false;">
+                  <h:outputText value="#{form.name}" />
+                </h:outputLink>
+              </ui:fragment>
+              <ui:fragment rendered="#{!empty form.formRefDTO}">
+                <h:outputLink class="fakeLink" value="#"
+                            onclick="Ext.getDom('editForm:formId').value ='#{form.id}'; Ext.getDom('editForm:formLoadBtn1').click(); return false;">
+                  <h:outputText value="#{form.name}" />
+                </h:outputLink>
+              </ui:fragment>
+            </td>
+
+            <ui:fragment rendered="#{showApplication}">
+              <td><h:outputText value="#{sp:getDisplayNameForId('Application', form.applicationId)}"/></td>
+            </ui:fragment>
+
+            <td><h:outputText value="#{form.description}"/></td>
+          </tr>
+        </ui:repeat>
+      </table>
+    </ui:fragment>
+
+    <h:outputText rendered="#{empty formEditor.formDTOs}" value="#{msgs.form_editor_no_forms}"/>
+
+    </p:outputPanel>
+
+    <div class="buttonRow">
+
+      <h:inputHidden value="#{formEditor.formRefId}" name="formRefId" id="formRefId"/>
+      <h:inputHidden value="#{formEditor.formRefName}" name="formRefName" id="formRefName"/>
+
+      <p:commandButton action="#{formEditor.addForm}"
+                         id="formAddBtn"
+                         update="@([id$=formId],[id$=formName],[id$=formApplicationId],[id$=formApplicationName],[id$=formAttributes]"
+                         oncomplete="SailPoint.component.ReferenceFormPopup.showRole(
+                            '#{beanType}',
+                            'Role');"
+                         value="#{msgs.form_editor_add_form}"
+                         styleClass="secondaryBtn"/>
+
+      <p:commandButton action="#{formEditor.deleteForms}"
+                         id="formDeleteBtn"
+                         update="@([id$=formsList])"
+                         value="#{msgs.form_editor_delete_form}" 
+                         styleClass="secondaryBtn"
+                         oncomplete="Page.fireEvent('onFormEditorContentChanged');"/>    
+
+      <p:commandButton action="#{formEditor.loadForm}"
+                         id="formLoadBtn"
+                         update="@([id$=formId],[id$=formName],[id$=formApplicationId],[id$=formApplicationName],[id$=formAttributes])"
+                         oncomplete="SailPoint.form.editor.FormEditor.ShowEditorWindow('#{beanType}');"
+                         style="display:none"/>
+
+      <p:commandButton action="#{formEditor.loadForm}"
+                         id="formLoadBtn1"
+                         update="@([id$=formId],[id$=formName],[id$=formApplicationId],[id$=formApplicationName],[id$=formAttributes])"
+                         oncomplete="SailPoint.component.ReferenceFormPopup.showRole(
+                            '#{beanType}',
+                            'Role',
+                            'formRefId');"
+                         style="display:none"/>
+
+      <p:commandButton action="#{formEditor.addFormReference}"
+                       id="addFormRefBtn"
+                       name="addFormRefBtn"
+                       update="@([id$=formsList],[id$=formId],[id$=formName],[id$=formApplicationId],[id$=formApplicationName],[id$=formDescr])"
+                       style="display:none"
+                       oncomplete="Page.fireEvent('onFormEditorContentChanged');"/> 
+    </div>
+  </div>
+</ui:composition>
+
+</body>
+</html>

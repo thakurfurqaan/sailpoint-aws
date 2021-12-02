@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2018 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:sp="http://sailpoint.com/ui">
+<body>
+
+<ui:composition>
+
+  <sp:script>
+    <src>#{base.requestContextPath}/scripts/sailpoint/Suggest.js?#{debug.revision}</src>
+    <src>#{base.requestContextPath}/scripts/sailpoint/MultiSuggest.js?#{debug.revision}</src>
+  </sp:script>
+
+  <ui:fragment>
+    <script type="text/javascript">
+        updateTaskUI = function(selectObj){
+          if(selectObj.value === 'read') {
+            Ext.get('accountAggrOpertion').hide();
+            Ext.get('groupAggrOpertion').hide();
+            Ext.get('applicationsPerAggregationRow').hide();
+            Ext.get('skipTestConnectionRow').hide();
+          } else {
+            Ext.get('accountAggrOpertion').show();
+            Ext.get('groupAggrOpertion').show();
+            Ext.get('applicationsPerAggregationRow').show();
+            Ext.get('skipTestConnectionRow').show();
+          }
+        }
+    </script>
+    <div class="spContent">
+      <table id="accAggOptTable" class="argumentTbl argumentTblWithHelp customWidth paddedTbl" cellspacing="0">
+        <tr>
+          <th>
+            <h:outputText styleClass="spContentTitle" value="#{msgs.apps_builder_options}"/>
+          </th>
+        </tr>
+
+        <tr>
+          <td>
+            <sp:outputText value="#{taskDefinition.argMap['applicationType'].argument.prompt}"/>
+            <h:outputText styleClass="requiredText" value="*"/></td>
+          <td>
+            <h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['applicationType'].argument.name}" 
+            rendered="#{taskDefinition.argMap['applicationType'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+            alt="#{help[taskDefinition.argMap['applicationType'].argument.helpKey]}"/>
+          </td>
+          <td>
+            <h:selectOneMenu id="applicationType_select_menu" required="true" value="#{taskDefinition.argMap['applicationType'].value}">
+              <f:selectItem itemValue="" itemLabel="#{msgs.select_one}"/>
+              <f:selectItems value="#{applicationObject.applicationTypes}"/>
+            </h:selectOneMenu>
+            <p:outputPanel>
+              <p:autoUpdate />
+              <h:message styleClass="formError" for="applicationType_select_menu" />
+            </p:outputPanel>
+          </td>
+        </tr>
+
+        <tr>
+          <td><sp:outputText value="#{taskDefinition.argMap['operation'].argument.prompt}"/><h:outputText styleClass="requiredText" value="*"/></td>
+          <td><h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['operation'].argument.name}" 
+            rendered="#{taskDefinition.argMap['operation'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+            alt="#{help[taskDefinition.argMap['operation'].argument.helpKey]}"/>
+          </td>
+          <td>
+            <h:selectOneMenu id="operation" value="#{taskDefinition.argMap['operation'].value}" required="true" onchange="updateTaskUI(this);">
+              <f:selectItem itemValue="" itemLabel="#{msgs.select_one}"/>
+              <f:selectItem itemLabel="#{msgs.task_in_operation_create}" itemValue="create"></f:selectItem>
+              <f:selectItem itemLabel="#{msgs.task_in_operation_update}" itemValue="update"></f:selectItem>
+              <f:selectItem itemLabel="#{msgs.task_in_operation_read}" itemValue="read"></f:selectItem>
+            </h:selectOneMenu>
+            <p:outputPanel>
+              <p:autoUpdate />
+              <h:message styleClass="formError" for="operation" />
+            </p:outputPanel>
+          </td>
+        </tr>
+
+        <tr id="filePathRow">
+          <td><sp:outputText value="#{taskDefinition.argMap['filePath'].argument.prompt}"/>
+          <h:outputText styleClass="requiredText" value="*"/></td>
+                <td><h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['filePath'].argument.name}" 
+                rendered="#{taskDefinition.argMap['filePath'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                alt="#{help[taskDefinition.argMap['filePath'].argument.helpKey]}"/>
+          </td>
+          <td>
+            <h:inputText id="filePath" required="true" size="40" value="#{taskDefinition.argMap['filePath'].value}"/>
+            <p:outputPanel>
+              <p:autoUpdate />
+              <h:message styleClass="formError" for="filePath" />
+            </p:outputPanel>
+          </td>
+        </tr>
+
+        <tr id="accountAggrOpertion">
+          <td><sp:outputText  value="#{taskDefinition.argMap['triggerAccountAggregation'].argument.prompt}"/></td>
+          <td><h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['triggerAccountAggregation'].argument.name}" 
+                rendered="#{taskDefinition.argMap['triggerAccountAggregation'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                alt="#{help[taskDefinition.argMap['triggerAccountAggregation'].argument.helpKey]}"/>
+          </td>
+          <td>
+              <h:selectBooleanCheckbox id="triggerAccountAggregation" value="#{taskDefinition.argMap['triggerAccountAggregation'].booleanValue}"/>
+          </td>
+        </tr>
+
+        <tr id="groupAggrOpertion">
+          <td><sp:outputText  value="#{taskDefinition.argMap['triggerGroupAggregation'].argument.prompt}"/></td>
+          <td><h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['triggerGroupAggregation'].argument.name}" 
+                rendered="#{taskDefinition.argMap['triggerGroupAggregation'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                alt="#{help[taskDefinition.argMap['triggerGroupAggregation'].argument.helpKey]}"/>
+          </td>
+          <td>
+            <h:selectBooleanCheckbox id="triggerGroupAggregation" value="#{taskDefinition.argMap['triggerGroupAggregation'].booleanValue}"/>
+          </td>
+        </tr>
+
+        <tr id="applicationsPerAggregationRow">
+          <td><sp:outputText value="#{taskDefinition.argMap['applicationsPerAggregation'].argument.prompt}"/></td>
+                <td><h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['applicationsPerAggregation'].argument.name}" 
+                rendered="#{taskDefinition.argMap['applicationsPerAggregation'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                alt="#{help[taskDefinition.argMap['applicationsPerAggregation'].argument.helpKey]}"/>
+          </td>
+          <td>
+            <h:inputText size="30" value="#{taskDefinition.argMap['applicationsPerAggregation'].value}"/>
+          </td>
+        </tr>
+
+        <tr id="skipTestConnectionRow">
+          <td><sp:outputText  value="#{taskDefinition.argMap['skipTestConnection'].argument.prompt}"/></td>
+          <td><h:graphicImage id="imgHlpTaskDef#{taskDefinition.argMap['skipTestConnection'].argument.name}" 
+                rendered="#{taskDefinition.argMap['skipTestConnection'].argument.helpKey != null}" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                alt="#{help[taskDefinition.argMap['skipTestConnection'].argument.helpKey]}"/>
+          </td>
+          <td>
+            <h:selectBooleanCheckbox id="skipTestConnection" value="#{taskDefinition.argMap['skipTestConnection'].booleanValue}"/>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <script defer="defer">
+      // Update Task UI based on operation type
+      updateTaskUI(Ext.getDom("editForm:operation"));
+      makeTableMulticolored(Ext.getDom('accAggOptTable'),true,false, "even", "odd" );
+    </script>
+  </ui:fragment>
+</ui:composition>
+
+</body>
+</html>

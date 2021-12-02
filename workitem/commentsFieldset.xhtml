@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:sp="http://sailpoint.com/ui"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:c="http://java.sun.com/jstl/core" 
+  xmlns:f="http://java.sun.com/jsf/core" 
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui">
+<body>
+
+<ui:composition>
+
+  <div class="spTabledContent" style="margin:5px">
+    <table class="spTable" cellspacing="0">
+      <tr>
+        <th>
+          <h:outputText value="#{msgs.workitem_comment_requester}" rendered="#{workItem.ownerOrIsInWorkgroup}"/>
+          <h:outputText value="#{msgs.workitem_comment_owner}" rendered="#{!(workItem.ownerOrIsInWorkgroup)}"/>
+        </th>
+      </tr>
+      <tr>
+        <td>
+        <p:outputPanel id="a4jCommentsPanel">
+          <ui:include src="/workitem/commentsList.xhtml">
+            <ui:param name="commentsList" value="#{workItem.object.comments}" />
+          </ui:include>
+          <h:inputHidden id="newComment" value="#{workItem.newComment}" />
+       </p:outputPanel>
+          <div style="margin-top:15px;display:#{disableAddComments ? 'none' : ''}"> 
+            <h:commandButton onclick="addComment('editForm:addCommentBtn', '#{sp:escapeJavascript(msgs.dialog_add_comment)}', '#{sp:escapeJavascript(msgs.dialog_add_comment)}', false, true); return false;" 
+                             value="#{msgs.dialog_add_comment}" 
+                             styleClass="secondaryBtn"/>
+          </div>
+          
+          <p:commandButton id="addCommentBtn"
+                           style="display: none"
+                           action="#{workItem.addComment}"
+                           update="@([id$=a4jCommentsPanel])"
+                           oncomplete="if (Ext.MessageBox) { Ext.MessageBox.hide(); }"/>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</ui:composition>
+
+</body>
+</html>

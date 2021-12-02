@@ -1,0 +1,250 @@
+<h2>Tabs</h2>
+
+<p><strong>Important</strong> - items that require immediate attention: policy
+violations, challenge items, and delegated items that have been returned without
+a decision by the user they were delegated to. If the certification was
+configured to require Delegation Review, delegated items that have been completed
+and are ready for review will also appear on this tab. If you don't have any
+review items in these categories, the Important tab does not appear.</p>
+
+<p><strong>Open</strong> - items awaiting your attention, excluding any items
+listed on the Important tab.</p>
+
+<p><strong>Review</strong> - items that you have completed for this access
+review. Depending on your certification's settings and the phase, you can change
+decisions from this tab until the access review has been completed and signed
+off</p>
+
+<h3>Organizing How Items Are Displayed</h3>
+
+<p>Click <strong>Columns</strong> to choose what information is shown, and in
+what order. Drag column tiles to rearrange them, and click <strong>Add Column</strong> to
+add new columns or remove columns from the display. Some columns can not be removed. </p>
+
+<p><strong>Group By</strong> lets you organize your review items by a number
+of things - for example, by application or by user. When you choose an option
+for grouping items, the <strong>Group By</strong> button turns green and shows the group
+criteria, to indicate that grouping has been applied. To undo grouping, click the Group By button and clear the checkmark from the grouping choice.</p>
+
+<p>Use <strong>Filter</strong> to display a subset of your items. Some
+standard filter fields are provided; you can also add your own filtering option.
+Define your filter, then click <strong>Apply</strong>; the Filter button turns green when
+a filter is applied, to alert you that you are seeing a filtered subset of
+items. To clear the filter, click <strong>Filter</strong> again, then choose <strong>Clear</strong>.</p>
+
+<p>Use the <strong>List</strong> option in the upper left to view a list of
+items organized by entity, such as user, account group, or role (depending on
+the certification type). This is useful if you want to focus on, for example,
+one user at a time and see only that user's items.</p>
+
+<h3>Using the List Option</h3>
+
+<p>To review items by entity (such as a particular user or role),
+click <strong>List</strong> in the header row, on the left. This opens a list of the
+entities in the review, such as users, roles, or account groups, based on the
+type of review. </p>
+
+<p>Click the entity to display only the items for that entity.
+The List option also lets you see details about an entity. Click on the tab with
+the entity's name to see more information about the entity.</p>
+
+<p>The list view includes a <strong>Search</strong> and <strong>Filter</strong>
+options to help you find items in the list. For example, if you search for
+users with names beginning with A, you will see just those users in the list
+area. However, unless you actually click one of the users' name to select him
+or her, the main review page will still show you everyone's items.</p>
+
+<p>To go back to viewing items for all entities, click the <strong>List</strong>
+icon again then click <strong>All</strong>. </p>
+
+<h2>Making Access Decisions</h2>
+
+<p>These are the decisions you can make directly on an access
+review item:</p>
+
+<p><strong>Approve</strong> the access. This indicates that the user can have
+this access; no action will be taken, and the user's access will remain the
+same as it is now.</p>
+
+<p><strong>Revoke</strong> the access. When you revoke access, IdentityIQ
+removes the access in whatever way the system is configured to do so. Note that
+the revocation doesn't necessarily happen immediately. This option is
+configured by the person who set up the certification; it can be set up so that
+revocation happens as soon as you make the decision, or it can be set up so
+that nothing is revoked until the entire certification campaign is complete and 
+signed off. If you're unsure about when a revocation will take effect, check with
+the owner of the certification.</p>
+
+<p>You may have the option to <strong>revoke an account</strong>. This is
+similar to revoking an individual entitlement or role, but it lets you revoke
+both the account and all the entitlements associated with the account, at once.
+This is a configurable option, so whether you have this option or not will
+depend on how the certification was configured.</p>
+
+<p>There is a specific <strong>revoke</strong> option for <strong>separation of duties
+policy violations</strong>. This type of violation occurs when a user has two or
+more accesses that conflict with each other, in violation of a defined company
+policy. For separation of duties policy violations, revoking access involves
+choosing which of the conflicting accesses the user will keep, and which will
+be revoked.</p>
+
+<p><strong>Allow</strong> an exception to the access. Use this option to allow
+access for a fixed period of time, after which the access will be revisited and
+potentially revoked- for example, when someone is on a temporary assignment and
+needs time-limited access to a system. When you allow access, you may need to choose
+an end date for the access, depending on how the certification was configured.
+Allowing an exception is always an option on policy violation items, but only
+appears for other access review items if the certification is configured to
+include this option.</p>
+
+<h3>Item-by-Item vs Bulk Decisions</h3>
+
+<p>The certification can be configured to allow you to make decisions
+one at a time, or in bulk; bulk decision-making can be turned off or on, both
+per certification, and globally. If bulk decisions are enabled for your review,
+a <strong>Bulk Decisions</strong> button appears in the header row of the listing of
+items.</p>
+
+<p>To select the items you want to process in bulk, select them
+one by one using the checkboxes, or click in the header row to select either
+all the items on the current page, or all the items in the entire access
+review. You can deselect in the same way.</p>
+
+<p>Once you've chosen your items, click <strong>Bulk Decisions</strong> and
+choose whether to approve, revoke, or allow. </p>
+
+<h3>Saving Decisions</h3>
+
+<p>As you make decisions, you are prompted to save them. When
+you save decisions you've made, they move from the <strong>Important</strong> or <strong>Open</strong>
+tabs to the <strong>Review</strong> tab, where they can still be edited until the review
+is signed off.</p>
+
+<h3>Changing Decisions</h3>
+
+<p>Until you have signed off on the review, you can to change
+the decisions you have made. You can do this immediately when you make a
+decision, before saving it, by re-clicking the decision button or unchecking
+the decision from the flyout menu. Once a decision has been saved, you can go
+to the <strong>Review</strong> tab and make changes there. Click the 3-line menu beside
+the item, then choose <strong>Undo Decision</strong> from the flyout menu. Note that you
+have to <strong>Save</strong> changes you make to completed items, just as you do for
+open items. Also note that changing certain saved decisions may not be an
+option, depending on how the configuration was configured.</p>
+
+<h3>Comments, History, and Details</h3>
+
+<p>Each item in the review can show comments, history and
+details. These are accessed via the 3-line menu at the right of the item.</p>
+
+<p><strong>Comments</strong>: You can enter comments at any time on an
+item</p>
+
+<p><strong>History</strong>: Shows the history of the review item, including comments
+and previous owner history.</p>
+
+<p><strong>Details</strong>: Shows details about the access this item applies
+to, such as role name, type, and hierarchy for roles or application name, type,
+and owner for entitlements. This option is called 'Details' for roles, and
+'Account Details' for entitlements.</p>
+
+<h3>Passing Access Reviews to Other Users</h3>
+
+<p>If you need someone else's input on an access review, or you
+need someone else to handle the review entirely, you can pass a review to
+someone else. There are several ways to do this and each involves different
+levels of ownership or responsibility both for you and for the person you pass
+it to. Your options for passing a review to others are configured by the system
+administrator or certification owner, so you may or may not have all these
+options on any given review.</p>
+
+<p><strong>Delegating</strong>: When you delegate a review item to someone
+else, they can make the decisions and then return the review to you, so that
+you can review it, accept or change their decision, and sign off. With
+delegation, the original reviewer still retains ultimate control of the
+decision and the sign-off. The certification can be configured to let you
+delegate an entire entity, or individual items one by one. To delegate an
+entity, click <strong>List</strong> then select the entity and choose <strong>Delegate</strong>
+from the <strong>Bulk</strong> menu. To delegate items, click the <strong>3-line menu</strong> for
+the item and choose <strong>Delegate</strong>. Choose who to delegate to; you can also add
+comments to explain why you've delegated, or to give instructions. <br>
+Delegated items are listed in your <strong>Open</strong> tab and are labeled as
+delegated. The 3-line menu gives you options for viewing history, details, and
+comments.</p>
+
+<p><strong>Reassigning</strong>: Reassigning is different from delegating in
+that reassigned items are no longer the responsibility of the original
+reviewer. The person the items are reassigned to assumes full responsibility
+for all decisions on those items, and must sign off on the decisions
+themselves. However, the original owner of the overall access review (that is,
+the person doing the reassigning) typically still retains responsibility for
+making sure the person the items were reassigned to completes the review. You
+can reassign either a whole entity, a single line item, or a specific set of
+items in bulk. Reassigning is done through the <strong>Bulk Decisions</strong> option,
+even if you only want to reassign one item.<br>
+When you reassign items, they no longer appear in your own access review view.
+The default behavior for a reassignment is that the person who reassigns the
+items cannot sign off on their own review until the reassigned items are
+completed and signed off by the person they were reassigned to. However, a
+configuration setting in the certification can override this requirement, so
+that the original owner can sign off on his or her own review even if some or
+all of the reassigned items are still pending.</p>
+
+<p><strong>Forwarding:</strong> Forwarding means you relinquish all
+responsibility for the access review. You can't retract or monitor the review -
+you pass all responsibility to the new owner, including the ability to change
+any decisions you may have already made. Forwarding is done at the overall
+review level, from the main access review listing. You can forward an entire
+review, but you can't forward individual line items or identities within a
+review. <strong>Automatic forwarding</strong> can be set up for an individual, or at the
+certification level, and is typically used in an out-of-office scenario.</p>
+
+<h3>Undoing Delegation and Reassignment</h3>
+
+<p>If you need recall a review that you have delegated or
+reassigned:</p>
+
+<p>For <strong>delegated items</strong>, click the 3-line menu for the item
+and choose <strong>Undo Decision</strong>. When you undo a delegation, any decisions made
+by the person you delegated to are undone. You can only undo individual line
+item delegations if the items were delegated individually; if you delegated an
+entire entity, you can't recall items one by one; you must undo the delegation
+of the entire entity.</p>
+
+<p>For <strong>entire entities that were delegated</strong>, go to the <strong>List</strong>
+view, click the circular &quot;undo&quot; arrow beside the entity you've delegated, and
+undo the delegation. When you undo a delegation, any decisions made by the
+person you delegated to are undone.</p>
+
+<p><strong>Items or entities that have been reassigned</strong> work a little
+differently. If the person you reassigned something to has made a decision, you
+can still undo or change the decision, until the reassignment owner has
+completely signed off on his or her review. To change or recall reassigned reviews,
+click the <strong>info</strong> icon at the top of the UI, then click <strong>Additional
+Reviews</strong>. The initial listing shows all the reviews that have been
+reassigned; to <strong>recall</strong> everything that has been reassigned, click the <strong>Return</strong>
+button and confirm that you want to return the access review to yourself. You
+can also use the <strong>Email</strong> icon to send an email message to the reviewer you
+have reassigned the review to. To see <strong>individual items</strong> that have been
+reassigned, click on the linked name of the review; items appear on either the
+Open tab or on the Review tab, depending on whether or not the new reviewer has
+made decisions on them. If the reassigned reviewer has not yet signed off on
+the review, you can make or change decisions on each item. If the reassigned
+reviewer has signed off on the review, you can still make changes to their
+decisions, by using the <strong>Return</strong> button at the entity (&quot;top&quot;) level of the
+reassignment, to return the review to yourself.</p>
+
+<h2>Signing Off on a Review</h2>
+
+<p>When decisions have been made for everything in your review,
+you can <strong>sign off</strong>. Signing off indicates that the review is fully
+complete, and it cannot occur until all items in the access review have been
+decided, including any delegated or reassigned items (unless the certification
+was specifically configured to allow sign-off despite incomplete reassignments).
+Also, if a challenge period is enabled, sign-off can't be completed until the
+challenge period is over.</p>
+
+<p>A <strong>green</strong> Sign-Off button on your review means that the
+review is complete. A <strong>red</strong> Sign-Off button means that you have finished
+the items you are responsible for, but subordinate or reassigned reviews
+haven't been completed yet.</p>

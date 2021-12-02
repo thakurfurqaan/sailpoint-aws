@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<!-- (c) Copyright 2016 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html lang="en"
+    xmlns:sp="http://sailpoint.com/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html">
+<body>
+
+<ui:composition template="/ngAppPage.xhtml">
+<ui:define name="title">#{msgs.menu_label_oauth_config}</ui:define>
+<ui:define name="headerItems">
+
+  <ui:include src="../ui/scriptData.xhtml" />
+
+  <script type="text/javascript">
+    SailPoint.OAUTH_CLIENT_FULL_ACCESS = #{sp:hasRight(facesContext, "FullAccessOAuthClientConfiguration")};
+  </script>
+  <ui:include src="../ui/jspmInclude.xhtml" />
+
+  <script type="text/javascript">
+  System.import('#{base.requestContextPath}/ui/js/systemSetup/APIAuthenticationAppModule.js');
+  </script>
+</ui:define>
+
+<ui:define name="body">
+  <div class="sp-ui-app">
+    <sp-uib-tabset type="tabs" class="bg-light">
+      <sp-uib-tab heading="{{ 'ui_oauth_client_management' | spTranslate }}">
+        <div id="oauth-client-root-div" ng-controller="OAuthClientConfigPageCtrl as ctrl">
+          <section class="container-fluid">
+            <div class="row">
+              <div class="col-xs-8">
+                <h3>{{ 'ui_oauth_client_management' | spTranslate }}</h3>
+              </div>
+              <div class="col-xs-4 text-right m-t">
+                <button class="btn btn-white btn-sm" ng-if="ctrl.isEditEnabled()" ng-click="ctrl.showCreateModal()">{{ 'ui_oauth_button_create' | spTranslate }}</button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 m-t">
+                <sp-data-table sp-items-func="ctrl.getItems(startIdx, itemsPerPage)"
+                       sp-table-config="ctrl.getDataTableConfig()"/>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <a href="./index.jsf" id="returnButton1" class="btn secondaryBtn btn-margin" >{{ 'ui_button_return_to_system_setup' | spTranslate }}</a>
+      </sp-uib-tab>
+
+      <sp-uib-tab heading="{{ 'ui_oauth_general_setting' | spTranslate }}">
+        <form name="oauthGeneralSettingForm">
+          <div id="oauth-settings-root-div" ng-controller="OAuthConfigurationPageCtrl as configCtrl">
+            <section class="container-fluid min-height-300px">
+              <div class="row">
+                <div class="col-xs-8">
+                  <h3>{{ 'ui_oauth_general_setting' | spTranslate }}</h3>
+                </div>
+              </div>
+              <div>
+                <label >{{ 'ui_oauth_access_token_expires_in_seconds' | spTranslate }}</label>
+                <input type="number" name="accessTokenExpiresInSeconds" ng-model="configCtrl.data.accessTokenExpiresInSeconds"
+                    min="0" max="2147483647" ng-disabled="!configCtrl.isEditEnabled()"></input>
+                <span class="has-error" ng-show="!oauthGeneralSettingForm.accessTokenExpiresInSeconds.$valid">
+                  {{ 'ui_err_invalid_number_entered' | spTranslate }}</span>
+              </div>
+            </section>
+
+            <a href="./index.jsf" id="returnButton2" class="btn secondaryBtn btn-margin">{{ 'ui_button_return_to_system_setup' | spTranslate }}</a>
+            <a id="saveConfig" ng-show="configCtrl.isEditEnabled()" ng-disabled="!oauthGeneralSettingForm.$valid" class="btn primaryBtn btn-margin" ng-click="configCtrl.save()">{{ 'ui_button_save' | spTranslate }}</a>
+          </div>
+        </form>
+      </sp-uib-tab>
+    </sp-uib-tabset>
+  </div>
+</ui:define>
+</ui:composition>
+
+</body>
+</html>

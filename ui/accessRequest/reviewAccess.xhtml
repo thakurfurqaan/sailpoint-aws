@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:sp="http://sailpoint.com/ui">
+<sp:loadBundle basename="sailpoint.web.messages.iiqMessages" var="msgs"/>
+  <h:body>
+    <div ng-if="reviewCtrl.hasError">
+      <div id="notificationDiv" class="sr-only" role="alert" aria-live="assertive"></div>
+      <sp-notification />
+    </div>
+    <section class="review container-fluid" sp-scroller="reviewCtrl.isSubmitting"
+             ng-class="{ 'single-item-mb-xs' : reviewCtrl.hasSingleItem() }"
+             sp-scroller-options="reviewCtrl.scrollerOptions">
+      <div class="row m-b-sm m-t-sm" ng-controller="AccessRequestFlowCtrl as flowCtrl">
+        <div class="col-xs-12" ng-controller="AccessRequestSelectedIdentitiesCtrl as identitiesCtrl">
+          <sp-selected-identities-button ng-if="!flowCtrl.isSelfService()"
+                                         sp-id="selectedIdentitiesTopBtn"
+                                         sp-identities="identitiesCtrl.getIdentities()"
+                                         sp-on-click="identitiesCtrl.showSelectedIdentities().then(reviewCtrl.initializeAttachmentConfigs.bind(reviewCtrl))"
+                                         sp-disabled="!reviewCtrl.isInterfaceEnabled()"/>
+          <div class="pull-right">
+
+            <sp-priority-button sp-id="priorityBtn"
+                                sp-on-click="reviewCtrl.setPriority(priority)"
+                                sp-priority="reviewCtrl.getPriority()"
+                                ng-if="reviewCtrl.isPriorityEnabled"
+                                sp-disabled="!reviewCtrl.isInterfaceEnabled()"/>
+          </div>
+        </div>
+      </div>
+
+      <sp-aria-errors></sp-aria-errors>
+
+      <div ng-show="reviewCtrl.getItemsMissingAccountSelections().length > 0" class="reader-error row">
+        <div class="col-xs-12">
+          <div class="alert alert-danger m-b-none m-t-xs">
+            <h4>
+              <i class="fa fa-minus-circle m-r-sm" role="presentation"></i>
+              {{ 'ui_access_items_missing_account_selections' | spTranslate }}
+            </h4>
+            <ul class="warning-message-left-padding">
+              <li ng-repeat="itemName in reviewCtrl.getItemsMissingAccountSelections() | orderBy:'toString()'">
+                {{ itemName }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div ng-show="reviewCtrl.getItemsAlreadyAssigned().length > 0" class="row reader-error">
+        <div class="col-xs-12">
+          <div class="alert alert-danger m-b-none m-t-xs">
+            <h4>
+              <i class="fa fa-minus-circle m-r-sm" role="presentation"></i>
+              {{ 'ui_access_items_existing_assignments' | spTranslate }}
+            </h4>
+            <ul class="warning-message-left-padding">
+              <li ng-repeat="itemName in reviewCtrl.getItemsAlreadyAssigned() | orderBy:'toString()'">
+                {{ itemName }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div ng-show="reviewCtrl.hasPolicyViolations()" class="reader-error row">
+          <div class="col-xs-12">
+              <div class="alert alert-danger m-b-none m-t-xs">
+                  <h4 ng-if="reviewCtrl.hasPolicyViolations()" role="alert" aria-live="assertive">
+                      <i class="fa fa-minus-circle m-r-sm" role="presentation"></i>
+                      {{ 'ui_access_policy_violations' | spTranslate }}
+                  </h4>
+                  <ul class="warning-message-left-padding">
+                      <li ng-repeat="violation in reviewCtrl.getPolicyViolations() | orderBy:'toString()'">
+                          <a href="" class="text-danger"
+                             onclick="return false;" ng-click="reviewCtrl.showViolationDetails(violation.workItemId, violation)">
+                            {{ violation.policyName}} : {{ violation.ruleName}}</a>
+                      </li>
+                  </ul>
+                <div ng-if="reviewCtrl.isAllowViolations()">
+                  <br/>
+                  <button id="submitWithViolationsBtn" class="btn btn-sm btn-danger" role="button" type="button"
+                          ng-disabled="reviewCtrl.isApprovalItemRemoved()"
+                          sp-focus-snatcher="reviewCtrl.focusSubmitWithViolations"
+                          ng-click="reviewCtrl.submitWithViolations()">
+                    {{ 'ui_access_submit_with_violations' | spTranslate }}
+                  </button>
+                </div>
+              </div>
+          </div>
+      </div>
+      
+      <div class="row animated fadeInRightBig" sp-loading-mask="reviewCtrl.isPageReady()">
+        <div class="col-xs-12">
+          <!-- ADDED ITEMS -->
+          <div class="row m-t-sm m-b-sm sp-animate fade-out-right" ng-if="reviewCtrl.hasRequestedItems()">
+            <div class="col-xs-10 col-sm-11">
+              <h4 class="dark-text" >
+                {{'ui_access_add_access' | spTranslate}}
+                <span class="badge bg-success">{{ reviewCtrl.getRequestedItems().length }}</span>
+                <span class="sr-only">{{'ui_access_items_selected_sr' | spTranslate}}</span>
+              </h4>
+            </div>
+            <div class="col-xs-2 col-sm-1 text-right m-t-xs">
+              <button id="reviewActivationDatesAllBtn" ng-click="reviewCtrl.showGlobalSunriseSunsetDialog(reviewCtrl.getRequestedItems())" class="btn btn-sm" type="button"
+                      ng-disabled="!reviewCtrl.isInterfaceEnabled()" ng-if="reviewCtrl.useSunriseDates()"
+                      aria-label="{{ reviewCtrl.areGlobalDatesSet(reviewCtrl.getRequestedItems()) ? ('ui_508_button_global_sunrise_set' | spTranslate) : ('ui_508_button_global_sunrise' | spTranslate) }}"
+                      ng-class="{ 'btn-white': !reviewCtrl.areGlobalDatesSet(reviewCtrl.getRequestedItems()), 'btn-success': reviewCtrl.areGlobalDatesSet(reviewCtrl.getRequestedItems()) }">
+                 <i class="fa fa-calendar" role="presentation"></i>
+              </button>
+            </div>
+          </div>
+          <div class="panel sp-animate fade-out-right" ng-repeat="requestedItem in reviewCtrl.getTopLevelRequestedItems() | orderBy:'item.displayableName' | sortByPolicyViolation:reviewCtrl">
+            <div class="panel-heading bg-light lter">
+              <div class="header-cell">
+                <sp-select-button
+                    sp-selected="false"
+                    sp-on-click="reviewCtrl.removeRequestedItem(requestedItem)"
+                    sp-label="{{'ui_access_remove' | spTranslate}} {{requestedItem.item.getDisplayableName()}}"
+                    sp-button-style="Remove"/>
+              </div>
+              <div class="v-middle h5 header-cell-text">
+                <b>{{ requestedItem.item.getDisplayableName() || requestedItem.item.getName() }}</b>
+              </div>
+              <!-- classifications -->
+              <div ng-if="requestedItem.item.hasClassifications()" class="header-cell-button v-middle">
+                <sp-access-item-classification-icon sp-item="requestedItem.item" />
+              </div>
+              <div class="header-cell-button">
+                <button id="reviewRequestItemActivationDateBtn"
+                        ng-click="reviewCtrl.showSunriseSunsetDialog(requestedItem)" class="btn btn-sm m-l-xs" ng-if="reviewCtrl.useSunriseDates()" type="button"
+                        ng-disabled="!reviewCtrl.isInterfaceEnabled()"
+                        aria-label="{{ (requestedItem.getSunriseDate() || requestedItem.getSunsetDate()) ? ('ui_508_button_item_sunrise_set' | spTranslate : requestedItem.item.getDisplayableName()) : ('ui_508_button_item_sunrise' | spTranslate : requestedItem.item.getDisplayableName()) }}"
+                        ng-class="{'btn-white': !(requestedItem.getSunriseDate() || requestedItem.getSunsetDate()), 'btn-success': (requestedItem.getSunriseDate() || requestedItem.getSunsetDate())}">
+                  <i class="fa fa-calendar" role="presentation"></i>
+                </button>
+              </div>
+              <!-- attachment overlay button -->
+              <div class="header-cell-button" ng-controller="AccessRequestSelectedIdentitiesCtrl as identitiesCtrl"
+                   title="{{ (identitiesCtrl.getIdentities().length > 1) ? ('attachments_button_disabled_aria_label' | spTranslate) : undefined }}">
+                <button ng-click="reviewCtrl.showAttachmentOverlay(requestedItem.item)" type="button"
+                        aria-label="{{reviewCtrl.getAttachmentButtonAriaLabel(requestedItem.item, identitiesCtrl.getIdentities().length > 1)}}"
+                        ng-disabled="identitiesCtrl.getIdentities().length > 1 || !reviewCtrl.isInterfaceEnabled()"
+                        ng-show="reviewCtrl.isAttachmentsEnabled()"
+                        class="btn btn-sm m-l-xs"
+                        ng-class="{'btn-white': reviewCtrl.getAttachmentsCount(requestedItem.item) === 0, 'btn-success': reviewCtrl.getAttachmentsCount(requestedItem.item) > 0}">
+                    <i class="fa fa-paperclip" role="presentation"></i>
+                    {{reviewCtrl.getAttachmentButtonLabel(requestedItem.item)}}
+                </button>
+              </div>
+              <div class="header-cell-button">
+                <button ng-click="reviewCtrl.showCommentDialog(requestedItem)" type="button"
+                        ng-disabled="!reviewCtrl.isInterfaceEnabled()"
+                        aria-label="{{ requestedItem.hasCommentsOrNotes() ? ('ui_508_button_comments_exist' | spTranslate : requestedItem.item.getDisplayableName()) : ('ui_508_button_comments' | spTranslate : requestedItem.item.getDisplayableName()) }}"
+                        ng-class="{'btn-success' : requestedItem.hasCommentsOrNotes(),  'btn-white' : !requestedItem.hasCommentsOrNotes()}"
+                        class="btn btn-sm m-l-xs" ><i class="fa fa-comment" role="presentation"></i></button>
+               </div>
+              <div class="header-cell-button">
+                <button aria-label="{{'ui_access_request_current_access_details_btn_sr' | spTranslate : (requestedItem.item.getDisplayableName() || requestedItem.item.getName()) }}"
+                        class="btn btn-white btn-sm m-l-xs"
+                        ng-click="reviewCtrl.showItemDetails(requestedItem.item, false)"
+                        ng-if="!!requestedItem.item.id"
+                        type="button">
+                  {{'ui_access_request_current_access_details_btn' | spTranslate }}
+                </button>
+              </div>
+            </div>
+            <!-- PERMITTED ROLES EXPANDO -->
+            <div ng-if="reviewCtrl.getRequestedPermittedItems(requestedItem).length > 0">
+              <!-- HEADER -->
+              <header class="panel-heading bg-info no-radius animated fadeInDown clickable"
+                      ng-click="reviewCtrl.toggleShowPermittedRoles(requestedItem)" role="button">
+                  <span class="h5">
+                    {{ reviewCtrl.getRequestedPermittedItems(requestedItem).length > 1 ? 'ui_access_permitted_roles_selected_hdr' : 'ui_access_permitted_role_selected_hdr' |
+                      spTranslate : reviewCtrl.getRequestedPermittedItems(requestedItem).length }}
+                  </span>
+                  <i class="fa fa-chevron-down" role="presentation"></i>
+                  <span class="sr-only" ng-if="!reviewCtrl.isShowPermittedRoles(requestedItem)">{{'ui_access_show_permits' | spTranslate}}</span>
+                  <span class="sr-only" ng-if="reviewCtrl.isShowPermittedRoles(requestedItem)">{{'ui_access_hide_permits' | spTranslate}}</span>
+              </header>
+              <!-- /HEADER -->
+
+              <!-- PERMITTED ROLES LIST -->
+              <div id="permitsList{{requestedItem.item.id}}" uib-collapse="!reviewCtrl.isShowPermittedRoles(requestedItem)">
+                <div class="panel-body bg-light-blue">
+                  <!-- PERMITTED ROLE -->
+                  <div class="panel sp-animate fade-out-right" ng-repeat="permittedItem in reviewCtrl.getRequestedPermittedItems(requestedItem) | orderBy:'item.displayableName' | sortByPolicyViolation:reviewCtrl">
+                    <div class="panel-heading bg-light lter">
+                      <div class="header-cell">
+                        <sp-select-button
+                            sp-selected="false"
+                            sp-on-click="reviewCtrl.removeRequestedItem(permittedItem)"
+                            sp-label="{{'ui_access_remove' | spTranslate}} {{permittedItem.item.getDisplayableName()}}"
+                            sp-button-style="Remove"/>
+                      </div>
+                      <div class="v-middle h5 header-cell-text">
+                        <b>{{ permittedItem.item.getDisplayableName() || permittedItem.item.getName() }}</b>
+                      </div>
+                      <div ng-if="permittedItem.item.hasClassifications()" class="v-middle header-cell-button">
+                        <sp-access-item-classification-icon sp-item="permittedItem.item" />
+                      </div>
+                      <div class="header-cell-button">
+                        <button ng-click="reviewCtrl.showSunriseSunsetDialog(permittedItem)" class="btn btn-sm m-l-xs" ng-if="reviewCtrl.useSunriseDates()"
+                                ng-disabled="!reviewCtrl.isInterfaceEnabled()"
+                                aria-label="{{ (permittedItem.getSunriseDate() || permittedItem.getSunsetDate()) ? ('ui_508_button_item_sunrise_set' | spTranslate : permittedItem.item.getDisplayableName()) : ('ui_508_button_item_sunrise' | spTranslate : permittedItem.item.getDisplayableName()) }}"
+                                ng-class="{'btn-white': !(permittedItem.getSunriseDate() || permittedItem.getSunsetDate()), 'btn-success': (permittedItem.getSunriseDate() || permittedItem.getSunsetDate())}"
+                                type="button"><i class="fa fa-calendar" role="presentation"></i></button>
+                      </div>
+                        <div class="header-cell-button" ng-controller="AccessRequestSelectedIdentitiesCtrl as identitiesCtrl"
+                             title="{{ (identitiesCtrl.getIdentities().length > 1) ? ('attachments_button_disabled_aria_label' | spTranslate) : undefined }}">
+                            <button ng-click="reviewCtrl.showAttachmentOverlay(permittedItem.item)" type="button"
+                                    aria-label="{{reviewCtrl.getAttachmentButtonAriaLabel(permittedItem.item, identitiesCtrl.getIdentities().length > 1)}}"
+                                    ng-disabled="identitiesCtrl.getIdentities().length > 1 || !reviewCtrl.isInterfaceEnabled()"
+                                    ng-show="reviewCtrl.isAttachmentsEnabled()"
+                                    class="btn btn-sm m-l-xs"
+                                    ng-class="{'btn-white': reviewCtrl.getAttachmentsCount(permittedItem.item) === 0, 'btn-success': reviewCtrl.getAttachmentsCount(permittedItem.item) > 0}">
+                                <i class="fa fa-paperclip" role="presentation"></i>
+                                {{reviewCtrl.getAttachmentButtonLabel(permittedItem.item)}}
+                            </button>
+                        </div>
+                      <div class="header-cell-button">
+                        <button ng-click="reviewCtrl.showCommentDialog(permittedItem)"
+                                ng-disabled="!reviewCtrl.isInterfaceEnabled()"
+                                aria-label="{{ permittedItem.hasCommentsOrNotes() ? ('ui_508_button_comments_exist' | spTranslate : permittedItem.item.getDisplayableName()) : ('ui_508_button_comments' | spTranslate : permittedItem.item.getDisplayableName()) }}"
+                                ng-class="{'btn-success' : permittedItem.hasCommentsOrNotes(),  'btn-white' : !permittedItem.hasCommentsOrNotes()}"
+                                class="btn btn-sm m-l-xs" type="button"><i class="fa fa-comment" role="presentation"></i></button>
+                      </div>
+                      <div class="header-cell-button" ng-if="permittedItem.item.isRole()">
+                        <button class="btn btn-white btn-sm m-l-xs" ng-click="reviewCtrl.showItemDetails(permittedItem.item, false)" role="button" type="button">
+                          <span aria-hidden="true">{{'ui_access_request_current_access_details_btn' | spTranslate }}</span>
+                          <span class="sr-only">
+                            {{'ui_access_request_current_access_details_btn_sr' | spTranslate : (permittedItem.item.getDisplayableName() || permittedItem.item.getName()) }}
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <sp-configurable-details ng-model="permittedItem.item" sp-col-configs="reviewCtrl.getColumnConfig(permittedItem.item)">
+                        <p class="text-danger" ng-if="reviewCtrl.hasPolicyViolation(permittedItem)">
+                            <i class="fa fa-minus-circle m-r-sm" role="presentation"></i>
+                            {{'ui_access_violation_detected' | spTranslate }}
+                        </p>
+                    </sp-configurable-details>
+
+                    <sp-selected-account-panel sp-requested-item="permittedItem" sp-on-click="reviewCtrl.editAccountSelections(permittedItem)"
+                                               sp-disabled="!reviewCtrl.isInterfaceEnabled()"/>
+                  </div>
+                  <!-- PERMITTED ROLE -->
+                </div>
+              </div>
+              <!-- /PERMITTED ROLES LIST -->
+            </div>
+            <!-- /PERMITTED ROLES EXPANDO -->
+
+            <sp-configurable-details ng-model="requestedItem.item" sp-col-configs="reviewCtrl.getColumnConfig(requestedItem.item)">
+                <p class="text-danger" ng-if="reviewCtrl.hasPolicyViolation(requestedItem)">
+                    <i class="fa fa-minus-circle m-r-sm" role="presentation"></i>
+                    {{'ui_access_violation_detected' | spTranslate }}
+                </p>
+            </sp-configurable-details>
+              
+            <sp-selected-account-panel sp-requested-item="requestedItem" sp-on-click="reviewCtrl.editAccountSelections(requestedItem)"
+                                       sp-disabled="!reviewCtrl.isInterfaceEnabled()"/>
+          </div>
+          <!-- /CARD -->
+
+          <!-- REMOVED ITEMS -->
+          <div class="row m-t-sm m-b-sm sp-animate fade-out-right" ng-if="reviewCtrl.hasRemovedCurrentAccessItems()">
+            <div class="col-xs-10 col-sm-11" >
+              <h4 class="dark-text">
+                {{'ui_access_remove_access' | spTranslate}}
+                <span class="badge bg-danger">{{ reviewCtrl.getRemovedCurrentAccessItems().length }}</span>
+                <span class="sr-only">{{'ui_access_items_selected_sr' | spTranslate}}</span>
+              </h4>
+            </div>
+            <div class="col-xs-2 col-sm-1 text-right m-t-xs">
+              <button id="reviewRemovedSunsetDatesAllBtn" ng-click="reviewCtrl.showGlobalSunriseSunsetDialog(reviewCtrl.getRemovedCurrentAccessItems(), true)" class="btn btn-sm" role="button" type="button"
+                      ng-disabled="!reviewCtrl.isInterfaceEnabled()" ng-if="reviewCtrl.useSunriseDates()"
+                      aria-label="{{ reviewCtrl.areGlobalDatesSet(reviewCtrl.getRemovedCurrentAccessItems()) ? ('ui_508_button_global_sunset_set' | spTranslate) : ('ui_508_button_global_sunset' | spTranslate) }}"
+                      ng-class="{ 'btn-white': !reviewCtrl.areGlobalDatesSet(reviewCtrl.getRemovedCurrentAccessItems()), 'btn-success': reviewCtrl.areGlobalDatesSet(reviewCtrl.getRemovedCurrentAccessItems()) }">
+                <i class="fa fa-calendar" role="presentation"></i>
+              </button>
+            </div>
+          </div>
+          <div class="panel sp-animate fade-out-right" ng-repeat="removedItem in reviewCtrl.getRemovedCurrentAccessItems() | orderBy:'displayableName'">
+            <div class="panel-heading bg-light lter">
+              <div class="header-cell">
+                <sp-select-button
+                    sp-selected="false"
+                    sp-on-click="reviewCtrl.removeRemovedCurrentAccessItem(removedItem)"
+                    sp-label="{{'ui_access_remove' | spTranslate}} {{removedItem.item.getDisplayableName()}}"
+                    sp-button-style="Remove" />
+              </div>
+              <div class="v-middle h5 header-cell-text">
+                <b>{{ removedItem.item.getDisplayableName() || removedItem.item.getName() }}</b>
+              </div>
+              <!-- classifications -->
+              <div ng-if="removedItem.item.hasClassifications()" class="v-middle header-cell-button">
+                <sp-access-item-classification-icon sp-item="removedItem.item" />
+              </div>
+              <div class="header-cell-button">
+                <button ng-click="reviewCtrl.showSunriseSunsetDialog(removedItem, true)" class="btn btn-sm m-l-xs" ng-if="reviewCtrl.useSunriseDates()" role="button" type="button"
+                        ng-disabled="!reviewCtrl.isInterfaceEnabled()"
+                        aria-label="{{ (removedItem.getSunsetDate()) ? ('ui_508_button_item_sunset_set' | spTranslate : removedItem.item.getDisplayableName()) : ('ui_508_button_item_sunset' | spTranslate : removedItem.item.getDisplayableName()) }}"
+                        ng-class="{'btn-white': !(removedItem.getSunsetDate()), 'btn-success': (removedItem.getSunsetDate())}">
+                  <i class="fa fa-calendar" role="presentation"></i>
+                </button>
+              </div>
+              <!-- attachment overlay button -->
+              <div class="header-cell-button" ng-controller="AccessRequestSelectedIdentitiesCtrl as identitiesCtrl"
+                   title="{{ (identitiesCtrl.getIdentities().length > 1) ? ('attachments_button_disabled_aria_label' | spTranslate) : undefined }}">
+                <button ng-click="reviewCtrl.showAttachmentOverlay(removedItem.item)" type="button"
+                        aria-label="{{reviewCtrl.getAttachmentButtonAriaLabel(removedItem.item, identitiesCtrl.getIdentities().length > 1)}}"
+                        ng-disabled="identitiesCtrl.getIdentities().length > 1 || !reviewCtrl.isInterfaceEnabled()"
+                        ng-show="reviewCtrl.isAttachmentsEnabled()"
+                        class="btn btn-sm m-l-xs"
+                        ng-class="{'btn-white': reviewCtrl.getAttachmentsCount(removedItem.item) === 0, 'btn-success': reviewCtrl.getAttachmentsCount(removedItem.item) > 0}">
+                    <i class="fa fa-paperclip" role="presentation"></i>
+                    {{reviewCtrl.getAttachmentButtonLabel(removedItem.item)}}
+                </button>
+              </div>
+              <div class="header-cell-button">
+                <button ng-click="reviewCtrl.showCommentDialog(removedItem)" role="button" type="button"
+                        ng-disabled="!reviewCtrl.isInterfaceEnabled()"
+                        aria-label="{{ removedItem.hasCommentsOrNotes() ? ('ui_508_button_comments_exist' | spTranslate : removedItem.item.getDisplayableName()) : ('ui_508_button_comments' | spTranslate : removedItem.item.getDisplayableName()) }}"
+                        ng-class="{'btn-success' : removedItem.hasCommentsOrNotes(),  'btn-white' : !removedItem.hasCommentsOrNotes()}"
+                        class="btn btn-sm m-l-xs" ><i class="fa fa-comment" role="presentation"></i></button>
+              </div>
+              <div class="header-cell-button">
+                <button aria-label="{{'ui_access_request_current_access_details_btn_sr' | spTranslate : (removedItem.item.getDisplayableName() || removedItem.item.getName()) }}"
+                        class="btn btn-white btn-sm m-l-xs"
+                        ng-click="reviewCtrl.showItemDetails(removedItem.item, true)"
+                        ng-if="!!removedItem.item.id"
+                        type="button">
+                  {{'ui_access_request_current_access_details_btn' | spTranslate }}
+                </button>
+              </div>
+            </div>
+            <sp-configurable-details ng-model="removedItem.item" sp-col-configs="reviewCtrl.getColumnConfig(removedItem.item)"/>
+          </div>
+          <!-- /CARD -->
+        </div>
+
+        <div class="sr-only" role="status" aria-live="assertive">
+          <span ng-repeat="message in reviewCtrl.screenReaderMessages">{{message}}</span>
+        </div>
+      </div>
+      <!-- /ROW -->
+    </section>
+    <!-- /CONTAINER-FLUID -->
+
+    <script>
+      SailPoint.configData.ACCESS_REQUEST_ALLOW_PRIORITY_EDITING = #{sp:getSystemConfigurationValue('allowPriorityEditing', false)};
+      SailPoint.configData.USE_SUNRISE_DATES = #{uiDashboard.useSunriseDates};
+    </script>
+  </h:body>
+</html>

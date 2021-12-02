@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:t="http://myfaces.apache.org/tomahawk"
+  xmlns:sp="http://sailpoint.com/ui">
+
+<body>
+
+<ui:composition template="/appPage.xhtml">
+  <ui:define name="title">#{msgs.iai_config_title}</ui:define>
+
+  <ui:define name="body">
+    <h:outputText style="display:none" value="#{msgs[iaiConfigBean.pluginInstalled]}"/>
+    <h:messages id="messages" infoClass="formInfo" warnClass="formWarn" errorClass="formError" fatalClass="formError"/>
+    <h:form id="iaiConfigForm" styleClass="form" enctype="multipart/form-data" >
+    <div class="spContent"> 
+      <div class="spContentTitle">
+        <h:outputText value="#{msgs.iai_config_connection_title}"/>
+      </div>
+
+      <p>
+        <h:panelGrid columns="4" styleClass="spPaddedTable nowidth">
+          <h:outputText styleClass="requiredText" value="*"/>
+          <h:outputText value="#{msgs.iai_config_hostname}"/>
+          <h:graphicImage id="imgHelpHostName" width="12px" title="#{help.help_iai_config_hostname}" height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px" url="/images/icons/dashboard_help_16.png" />
+          <h:inputText id="hostname" size="40" value='#{iaiConfigBean.hostname}' requiredMessage="#{msgs.iai_config_hostname_required}" required="true"/>
+          <h:outputText styleClass="requiredText" value="*"/>
+          <h:outputText value="#{msgs.iai_config_client_id}"/>
+          <h:graphicImage id="imgHelpClientId" width="12px" title="#{help.help_iai_client_id}" height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px" url="/images/icons/dashboard_help_16.png" />
+          <h:inputText id="client_id" size="40" value='#{iaiConfigBean.clientId}' requiredMessage="#{msgs.iai_config_client_id_required}" required="true"/>
+          <h:outputText styleClass="requiredText" value="*"/>
+          <h:outputText value="#{msgs.iai_config_client_secret}"/>
+          <h:graphicImage id="imgHelpClientSecret" width="12px" title="#{help.help_iai_client_secret}" height="12px" style="cursor:pointer;padding: 0px 7px 0px 7px" url="/images/icons/dashboard_help_16.png" />
+          <h:inputSecret id="client_secret" size="40" value='#{iaiConfigBean.clientSecret}' requiredMessage="#{msgs.iai_config_client_secret_required}" redisplay="true" required="true"/>
+        </h:panelGrid>
+      </p>
+
+      <div class="spContentTitle">
+        <h:outputText value="#{msgs.iai_config_advanced_title}"/>
+      </div>
+      <p>
+        <h:panelGrid columns="3" styleClass="spPaddedTable nowidth">
+          <h:outputText value="#{msgs.iai_config_read_timeout}"/>
+          <h:inputText id="readTimeoutSeconds" size="5" value='#{iaiConfigBean.readTimeoutSeconds}'  required="false"/>
+          <h:outputText value="#{msgs.seconds}"/>
+          <h:outputText value="#{msgs.iai_config_connect_timeout}"/>
+          <h:inputText id="connectTimeoutSeconds" size="5" value='#{iaiConfigBean.connectTimeoutSeconds}' required="false"/>
+          <h:outputText value="#{msgs.seconds}"/>
+        </h:panelGrid>
+        <h:panelGrid columns="3" styleClass="spPaddedTable nowidth">
+          <h:commandButton styleClass="secondaryBtn" value="#{msgs.button_test_connection}" action="#{iaiConfigBean.testAction}"/>
+        </h:panelGrid>
+      </p>
+
+      <div class="buttonRow">
+        <h:commandButton styleClass="primaryBtn" value="#{msgs.button_save}" action="#{iaiConfigBean.saveAction}"/>
+        <h:commandButton styleClass="secondaryBtn" value="#{msgs.button_return_to_system_setup}" action="#{iaiConfigBean.cancelAction}" immediate="true"/>
+      </div>
+    </div>
+    </h:form>
+  </ui:define>
+</ui:composition>
+
+</body>
+</html>

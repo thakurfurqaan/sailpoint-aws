@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2010 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:t="http://myfaces.apache.org/tomahawk"
+  xmlns:sp="http://sailpoint.com/ui"
+  xmlns:p="http://primefaces.org/ui">
+<body>
+
+<ui:composition>
+  <td width="100"><h:outputText value="#{matchTerm.typeLabel}" /></td>
+  <td>
+      <ui:fragment rendered="#{matchTerm.applicationName != null}">
+          <h:outputText value="#{matchTerm.applicationName}" />
+      </ui:fragment>
+      <ui:fragment rendered="#{matchTerm.targetSourceName != null}">
+          <h:outputText value="#{matchTerm.targetSourceName}" />
+      </ui:fragment>
+  </td>
+  <td>
+    <ui:fragment rendered="#{!matchTerm.renderAsPermission}">
+        <div id="#{prefix}SelectorNameDiv" class="#{prefix}attrSelect"/>
+        <h:inputHidden value="#{matchTerm.name}" id="#{prefix}SelectorNameValue" class="#{prefix}SelectorNameValue" />
+        <h:inputHidden value="#{matchTerm.allowedNamesTrimmedJSON}" id="#{prefix}nameAllowedValues" />
+    </ui:fragment>
+    <ui:fragment rendered="#{matchTerm.renderAsPermission}">
+        <h:inputText value="#{matchTerm.name}" size="20" disabled="#{readOnly == true}" onchange="Page.fireEvent('selectorPanelChanged');"/>
+    </ui:fragment>
+  </td>
+  <td>
+    <ui:fragment rendered="#{showNewOperators}">
+	    <h:selectOneMenu id="#{prefix}_matchTermOperator" disabled="#{readOnly == true}" 
+	      value="#{matchTerm.operator}" onchange="#{prefix}disableAssociatedTextBoxForSelect(this); Page.fireEvent('selectorPanelChanged');">
+	      <f:selectItems value="#{matchTerm.operators}" />
+	    </h:selectOneMenu>
+    </ui:fragment>
+  </td>
+  <td>
+    <ui:fragment rendered='#{matchTerm.applicationId == "IIQ" }'>
+  		<h:inputText value="#{matchTerm.value}" size="60" class="matchListValue" disabled="#{readOnly || matchTerm.isNull}" onchange="Page.fireEvent('selectorPanelChanged');"/>
+    </ui:fragment>
+  	<ui:fragment rendered='#{matchTerm.applicationId != "IIQ" and (matchTerm.renderAsPermission or !enableValueSelect)}'>
+  		<h:inputText value="#{matchTerm.value}" size="60" class="matchListValue" disabled="#{readOnly || matchTerm.isNull}" onchange="Page.fireEvent('selectorPanelChanged');"/>
+  	</ui:fragment>
+  	<ui:fragment rendered='#{matchTerm.applicationId != "IIQ" and (!matchTerm.renderAsPermission and enableValueSelect)}'>
+  	    <div class="#{prefix}attrValueSelect" applicationId="#{matchTerm.applicationId}" defaultDisplayValue="#{matchTerm.displayValue}"></div>
+  		<h:inputHidden value="#{matchTerm.value}" disabled="#{matchTerm.isNull}" onchange="Page.fireEvent('selectorPanelChanged');"/>
+  	</ui:fragment>
+  </td>
+  <td width="50" align="center">
+	  <ui:fragment rendered="#{!showNewOperators}">
+	    <h:selectBooleanCheckbox value="#{matchTerm.isNull}" onchange="Page.fireEvent('selectorPanelChanged');" onclick="#{prefix}disableAssociatedTextBox(this);" class="#{prefix}nullCheck" disabled="#{readOnly == true}" />
+	  </ui:fragment>
+  </td>
+</ui:composition>
+
+</body>
+</html>

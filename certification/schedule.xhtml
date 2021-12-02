@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2017 SailPoint Technologies, Inc., All Rights Reserved. -->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<body>
+
+<ui:composition template="/ngAppPage.xhtml">
+    <sp:loadBundle basename="sailpoint.web.messages.iiqMessages" var="msgs"/>
+
+    <ui:define name="title">#{msgs.ui_certification_schedule_title}</ui:define>
+    <ui:define name="headerItems">
+
+        <sp:style serveOffset="#{base.requestContextPath}/ui/css">
+            <src>ng-sortable.css</src>
+        </sp:style>
+
+        <ui:include src="../ui/scriptData.xhtml" />
+        <ui:include src="../ui/jspmInclude.xhtml" />
+
+        <script type="text/javascript">
+            System.import('#{base.requestContextPath}/ui/js/certification/schedule/CertificationScheduleAppModule.js');
+        </script>
+
+    </ui:define>
+
+    <ui:define name="body">
+        <div class="sp-ui-app" >
+            <sp-register-config sp-config-key="contextualHelpCertificationScheduleEntityURL"
+                                sp-config-value="#{sp:getContextualHelpJSON('certificationScheduleEntityURL')}" />
+            <sp-register-config sp-config-key="contextualHelpCertificationScheduleItemURL"
+                                sp-config-value="#{sp:getContextualHelpJSON('certificationScheduleItemURL')}" />
+            <sp-register-config sp-config-key="contextualHelpCertificationScheduleCertifierURL"
+                                sp-config-value="#{sp:getContextualHelpJSON('certificationScheduleCertifierURL')}" />
+            <sp-register-config sp-config-key="contextualHelpCertificationScheduleTimelineURL"
+                                sp-config-value="#{sp:getContextualHelpJSON('certificationScheduleTimelineURL')}" />
+            <sp-register-config sp-config-key="contextualHelpCertificationScheduleAdditionalOptionsURL"
+                                sp-config-value="#{sp:getContextualHelpJSON('certificationScheduleAdditionalOptionsURL')}" />
+
+            <div ui-view="" sp-fit-container="{ top: '#spHeaderPanelDiv', bottom: '#bodyDivFooter' }">
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
+</body>
+</html>

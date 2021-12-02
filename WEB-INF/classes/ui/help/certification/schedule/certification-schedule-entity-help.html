@@ -1,0 +1,10 @@
+<h2>Who Do You Want to Certify</h2>
+<p>To narrow down the identities to certify, choose an option for selecting identities. To certify all identities in your system, don’t define any selection criteria.</p>
+<ul>
+  <li><strong>Filter:</strong> filter identities by attribute, using operations like Equals, Not Equals, or Starts With. You can choose the values for the filter from a list, or type them in. You can only type in valid values.<li>
+  <li>You can choose more than one value for any one filter. When you do this, the criteria works as an “or” operation, so the certification will include all identities meeting any of the criteria. For example, filtering on Department Equals and entering two departments will select identities from both those departments.</li>
+  <li>Add more filters if you want to filter on more than one attribute using an “and” condition. With multiple filters, identities have to meet each of the sets of filter criteria in order to be included. For example, filtering on Department Equals Accounting and Location Equals Berlin will select only identities that are in the Accounting department in Berlin.</li>
+  <li><strong>Population:</strong> choose from the populations that have been defined in your IdentityIQ system. Populations are saved queries based on searches run from the Identity Search feature of Advanced Analytics.</li>
+  <li><strong>Rule:</strong> choose a rule that will select identities. The Targeted Certification does not include a rule editor, so you are limited to choosing existing rules from the list. Only rules with a rule type of “CertificationScheduleEntitySelector” are included in this list.</li>
+</ul>
+<p>Check <strong>Exclude Inactive Identities</strong> to omit identities flagged as Inactive from the certification.</p>

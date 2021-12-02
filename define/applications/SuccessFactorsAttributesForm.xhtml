@@ -1,0 +1,368 @@
+<!DOCTYPE html PUBLIC
+                "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sp="http://sailpoint.com/ui"
+      xmlns:c="http://java.sun.com/jstl/core">
+<body>
+
+<ui:composition>
+
+    <script type="text/javascript">
+      <!--//--><![CDATA[//><!--
+        helpKey = 'APPLICATION';
+
+        function getFieldValue(field) {
+            var val = null;
+            var fileName = Ext.getDom(field);
+            if ( fileName ) {
+               val = fileName.value;
+            }
+            return val;
+        }
+        
+
+function getTablePrefixForToggle(toggleId) {
+    var endOfPrefix = toggleId.lastIndexOf(':selectAllToggle');
+    return toggleId.substring(0, endOfPrefix);
+}
+
+ 
+   toggleAll = function(toggleId, newValue, filterClass) {
+    var tableId = getTablePrefixForToggle(toggleId);
+    var inputs;
+    inputs = Ext.getDom(tableId).getElementsByClassName(filterClass);
+    for (var i = 0; i < inputs.length; ++i) {
+        if (inputs[i].type == 'checkbox' && inputs[i].disabled == false ) {
+            inputs[i].checked = newValue;
+        }
+    }
+}
+        Ext.onReady(function () {
+           Ext.QuickTips.init();
+
+           // This is our validation hook
+           Page.on('beforeSave', function() {
+               if (!hasCredentialConfiguration()) {
+                   var baseUrl = getFieldValue('editForm:baseUrl');
+                   Validator.validateNonBlankString(baseUrl, "Base Company URL cannot be null!");
+
+                   var companyId = getFieldValue('editForm:companyId');
+                   Validator.validateNonBlankString(companyId, "Company ID cannot be null!");
+
+                   var username = getFieldValue('editForm:userName');
+                   Validator.validateNonBlankString(username, "User Name cannot be null!");
+
+                   var password = getFieldValue('editForm:password');
+                   Validator.validateNonBlankString(password, "Password cannot be null!");
+
+                   var clientID = getFieldValue('editForm:clientID');
+                   Validator.validateNonBlankString(clientID, "Client ID cannot be null!");
+
+                   var privatekey = getFieldValue('editForm:private_key');
+                   Validator.validateNonBlankString(privatekey, "Private Key cannot be null!");
+
+                   var plmValue = getFieldValue('editForm:picklistMapping').trim();
+                   if(plmValue){
+                      Validator.validateDelimitedKeyValuePair(plmValue, "#{msgs.con_form_successfactor_picklist_mapping_invalid}");            
+                   } 
+                   
+                   var errors = Validator.getErrors();
+                   if (errors && errors.length > 0) {
+                       Validator.displayErrors('appErrorsTop');
+                       return false;
+                   }
+               }
+               //return false will kill cancel the save
+               return true;
+           });
+
+        });
+
+       //--><!]]>
+    </script>
+
+    <f:view>
+
+      <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_successfactor_settings}"/><br/><br/>
+
+
+      <div id="accountSettings" class='spContent'>
+        <table class="spTable" style="border:0px" cellspacing="0">
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_successfactor_BaseURL}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpBaseUrl" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_successfactor_baseURL}"/>
+
+            </td>
+            <td valign="center">
+              <h:inputText id="baseUrl"
+                           value="#{applicationObject.attributes['baseUrl']}"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_successfactor_CompanyId}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpCompanyId" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_successfactor_companyName}"/>
+
+            </td>
+            <td valign="center">
+              <h:inputText id="companyId"
+                           value="#{applicationObject.attributes['companyId']}"
+                           redisplay="true"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+           <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_successfactor_UserName}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpUserName" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_successfactor_userName}"/>
+
+            </td>
+            <td valign="center">
+              <h:inputText id="userName"
+                           value="#{applicationObject.attributes['userName']}"
+                           redisplay="true"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+          <tr>
+              <td class='titleColumn certScheduleTitleCol' valign="center">
+                  <h:outputText style='padding:5px' value="#{msgs.con_form_successfactor_Password}"/>
+                  <h:outputText styleClass="requiredText" value="*"/>
+              </td>
+
+              <td class="certScheduleHelpCol" valign="middle">
+                  <h:graphicImage id="imgHlpPassword" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                  alt="#{help.help_con_successfactor_password}"/>
+
+              </td>
+              <td valign="center">
+                  <sp:inputSecret id="password"
+                               value="#{applicationObject.attributes['password']}"
+                               redisplay="true"
+                               size="80"
+                               disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                               readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+              </td>
+          </tr>
+
+          <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_successfactor_ClientID}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpClientID" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_successfactor_clientID}"/>
+
+            </td>
+            <td valign="center">
+              <h:inputText id="clientID"
+                           value="#{applicationObject.attributes['clientID']}"
+                           redisplay="true"
+                           size="80"
+                           disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                           readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+            </td>
+          </tr>
+
+            <tr>
+            <td class='titleColumn certScheduleTitleCol' valign="center">
+              <h:outputText style='padding:5px' value="#{msgs.con_form_successfactor_PrivateKey}"/>
+              <h:outputText styleClass="requiredText" value="*"/>
+            </td>
+
+            <td class="certScheduleHelpCol" valign="middle">
+              <h:graphicImage id="imgHlpHostName" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" 
+                              alt="#{help.help_con_successfactor_privateKey}"/>
+
+            </td>
+            <td valign="center">
+               <c:if test="#{empty applicationObject.attributes['privateKey']}">
+                                <sp:inputSecret id="private_key"
+                                    value="#{applicationObject.attributes['private_key']}"
+                                    redisplay="true" size="500"
+                                    disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                    readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+              </c:if> 
+              <c:if test="#{!empty applicationObject.attributes['privateKey']}">
+                                <sp:inputSecret id="private_key"
+                                    value="#{applicationObject.attributes['privateKey']}"
+                                    redisplay="true" size="500"
+                                    disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                    readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}" />
+              </c:if>
+            </td>
+          </tr>
+
+            <tr>
+                <td class='titleColumn certScheduleTitleCol'>
+                    <h:outputText value="#{msgs.con_form_successfactor_aggregate_future_hires}"/>
+                </td>
+                <td class="certScheduleHelpCol">
+                    <h:graphicImage id="imgHlpAggFutureHires" styleClass="helpIcon"
+                                    url="/images/icons/dashboard_help_16.png"
+                                    alt="#{help.help_con_successfactor_aggregate_future_hires}"/>
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox id="aggregate_future_hires"
+                                             value="#{applicationObject.attributes['aggregate_future_hires']}"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td class='titleColumn certScheduleTitleCol'>
+                    <h:outputText value="#{msgs.con_form_successfactor_aggregate_inactive_employees}"/>
+                </td>
+                <td class="certScheduleHelpCol">
+                    <h:graphicImage id="imgHlpAggInactiveEmployees" styleClass="helpIcon"
+                                    url="/images/icons/dashboard_help_16.png"
+                                    alt="#{help.help_con_successfactor_aggregate_inactive_employees}"/>
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox id="aggregate_inactive_employees"
+                                             value="#{applicationObject.attributes['aggregate_inactive_employees']}"/>
+                </td>
+            </tr>
+          
+            <tr>
+                <td class='titleColumn certScheduleTitleCol'>
+                    <h:outputText style='padding:5px' value="#{msgs.con_form_successfactor_picklist_mapping}"/>
+                </td>
+                <td class="certScheduleHelpCol">
+                    <h:graphicImage id="imgHlpAsp" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png"
+                                    alt="#{msgs.help_con_successfactor_picklist_mapping}"/>
+                </td>
+                <td>
+                    <h:inputTextarea converter="NewLineList" id="picklistMapping" rows="4" style="width:300px;" value="#{applicationObject.attributes['picklistMapping']}"
+                                     disabled="#{!sp:hasRight(facesContext, 'ManageApplication')}"
+                                     readonly="#{!sp:hasRight(facesContext, 'ManageApplication')}"/>
+                </td>
+            </tr>
+          
+        </table>
+
+      </div>
+      <div>
+            <h:outputText styleClass="sectionHeader" value="#{msgs.con_form_successfactor_additional_schema}"/>
+                <h:graphicImage id="imgHlpSchema"
+                styleClass="helpIcon" 
+                url="/images/icons/dashboard_help_16.png" 
+                alt="#{msgs.help_con_successfactor_additional_schema}"/>
+
+                <p:outputPanel id="schemaResultsPanel">
+                    <div id="schemaResultsDiv" class="#{manageSFSchema.schemaSuccess ? 'successText' : 'failText'}">
+                        <h:outputText value="#{manageSFSchema.result}"/>
+                    </div>
+                </p:outputPanel>
+ 
+                <p:outputPanel id="schemaTable" >
+                    <table class="width100" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td>
+                                <div class="spTabledContent">
+                                    <table class="spTable" cellspacing="0" style="width: 345px;">
+                                        <thead>
+                                            <tr>
+                                                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                    <th style="text-align:center;">
+                                                        <h:selectBooleanCheckbox id="selectAllToggleForSchema" value="false" onclick="toggleAll(this.id, this.checked, 'schemaTableToggleable');"/>
+                                                    </th>
+                                                </ui:fragment>
+                                                <th style="text-align:left">
+                                                    <h:outputText value="#{msgs.con_form_SF_schema_attribute}"/>
+                                                    <h:graphicImage id="imgHlpSchmeaName" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_SF_schema_name}"/>
+                                                </th>
+
+                                                <th style="text-align:left">
+                                                    <h:outputText value="#{msgs.con_form_sf_api_path}"/>
+                                                    <h:graphicImage id="imgHlpAPIPath" styleClass="helpIcon" url="/images/icons/dashboard_help_16.png" alt="#{help.help_con_form_SF_api_path}"/>
+                                                </th>
+                                            </tr>
+                                        </thead>
+ 
+                                        <tfoot>
+                                            <tr>
+                                                <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                    <th/>
+                                                        <td>
+                                                            <h:inputText id="schemaName"  value="#{manageSFSchema.schemaName}"  style="width: 220px; margin-left:0px;"/>
+                                                        </td>
+                                                        <td>
+                                                            <h:inputText id="schemaPath" value="#{manageSFSchema.schemaPath}" style="width: 500px; margin-left:0px;"/>
+                                                        </td>
+                                                </ui:fragment>
+                                            </tr>
+                                        </tfoot>
+
+                                        <tbody>
+                                            <p:repeat value="#{manageSFSchema.schemaExtMap}" var="addAttrMap" id="schemaInfo"  rowKeyVar=" ">
+                                                <tr>
+                                                    <ui:fragment rendered="#{sp:hasRight(facesContext, 'ManageApplication')}">
+                                                        <td class="centeredColumn" style="width: 5px;">
+                                                            <h:selectBooleanCheckbox styleClass="schemaTableToggleable" name="schemaAttribute" id="checkbox"  value="#{manageSFSchema.selectedSchema[addAttrMap.key]}" />
+                                                        </td>
+                                                    </ui:fragment>
+                                                    <td style="width: 130px;">
+                                                        <h:inputText value="#{addAttrMap.key}" disabled="true"   style="width: 220px; margin-left:0px; margin-right:0px;"/>      
+                                                    </td>
+                                                    <td style="width: 130px;">
+                                                        <h:inputText value="#{addAttrMap.value}" disabled="true"   style="width: 500px; margin-left:0px;"/>      
+                                                    </td>
+                                                </tr>
+                                            </p:repeat>
+                                        </tbody>
+
+                                    </table>
+                                <div class="buttonRow">
+                                    <p:commandButton id='removeSchemaData' value="#{msgs.button_delete}" styleClass="secondaryBtn" action="#{manageSFSchema.removeXPathData}" update="@([id$=schemaTable],[id$=schemaResultsPanel])"/>
+                                    <p:commandButton id='addSchematData' value="#{msgs.button_add}" styleClass="primaryBtn" action="#{manageSFSchema.addXPathData}" update="@([id$=schemaTable],[id$=schemaResultsPanel])"/>
+                                </div>
+                                <div id="itemselector" class='spContent'/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </p:outputPanel>
+      </div>
+    </f:view>
+</ui:composition>
+
+</body>
+</html>
